@@ -1,0 +1,13 @@
+DROP TABLE skierowania;
+DROP TABLE historia_medyczna;
+DROP TABLE wydarzenia_medyczne;
+DROP TABLE wizyty_planowane;
+DROP TABLE wizyty_odbyte;
+DROP TABLE cele_wizyty;
+DROP TABLE pracownicy_role;
+DROP TABLE role;
+DROP TABLE pacjenci_lpk;
+DROP TABLE lekarze_specjalizacje;
+DROP TABLE specjalizacje;
+DROP TABLE pracownicy;
+DROP TABLE pacjenci;
