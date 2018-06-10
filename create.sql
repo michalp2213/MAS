@@ -161,9 +161,9 @@ CREATE TABLE skierowania
 
 CREATE TABLE ankiety_lekarze
 (
-  id_ankiety       SERIAL PRIMARY KEY,
-  id_lekarza       INTEGER REFERENCES pracownicy (id_pracownika),
-  data             DATE NOT NULL,
+  id_ankiety       SERIAL  NOT NULL PRIMARY KEY,
+  id_lekarza       INTEGER NOT NULL REFERENCES pracownicy (id_pracownika),
+  data             DATE    NOT NULL,
   uprzejmosc       INTEGER CHECK (uprzejmosc >= 1 AND uprzejmosc <= 5),
   opanowanie       INTEGER CHECK (opanowanie >= 1 AND opanowanie <= 5),
   informacyjnosc   INTEGER CHECK (informacyjnosc >= 1 AND informacyjnosc <= 5),
