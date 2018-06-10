@@ -1,192 +1,171 @@
-create table pacjenci
+DROP TABLE IF EXISTS ankiety_lekarze CASCADE;
+DROP TABLE IF EXISTS skierowania CASCADE;
+DROP TABLE IF EXISTS historia_medyczna CASCADE;
+DROP TABLE IF EXISTS wydarzenia_medyczne CASCADE;
+DROP TABLE IF EXISTS wizyty_planowane CASCADE;
+DROP TABLE IF EXISTS wizyty_odbyte CASCADE;
+DROP TABLE IF EXISTS cele_wizyty CASCADE;
+DROP TABLE IF EXISTS pracownicy_role CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS pacjenci_lpk CASCADE;
+DROP TABLE IF EXISTS lekarze_specjalizacje CASCADE;
+DROP TABLE IF EXISTS specjalizacje CASCADE;
+DROP TABLE IF EXISTS pracownicy CASCADE;
+DROP TABLE IF EXISTS pacjenci CASCADE;
+
+CREATE TABLE pacjenci
 (
-  id_pacjenta    serial  not null
-    constraint pacjenci_pkey
-    primary key,
-  imie           varchar not null,
-  nazwisko       varchar not null,
-  pesel          char(11)
-    constraint pacjenci_pesel_key
-    unique,
-  nr_paszportu   varchar
-    constraint pacjenci_nr_paszportu_key
-    unique,
-  data_urodzenia date    not null,
-  plec           char(1)    not null
-    constraint pacjenci_plec_check
-    check ((plec = 'M' :: bpchar) OR (plec = 'F' :: bpchar)),
-  constraint pacjenci_check
-  check ((pesel IS NOT NULL) OR (nr_paszportu IS NOT NULL))
+  id_pacjenta    SERIAL  NOT NULL
+    PRIMARY KEY,
+  imie           VARCHAR NOT NULL,
+  nazwisko       VARCHAR NOT NULL,
+  pesel          CHAR(11)
+    UNIQUE,
+  nr_paszportu   VARCHAR
+    UNIQUE,
+  data_urodzenia date    NOT NULL,
+  plec           CHAR(1) NOT NULL
+    CHECK ((plec = 'M' :: bpCHAR) OR (plec = 'F' :: bpCHAR)),
+  CHECK ((pesel IS NOT NULL) OR (nr_paszportu IS NOT NULL))
 );
 
-create table pracownicy
+CREATE TABLE pracownicy
 (
-  id_pracownika serial   not null
-    constraint pracownicy_pkey
-    primary key,
-  imie          varchar  not null,
-  nazwisko      varchar  not null,
-  pesel         char(11) not null
-    constraint pracownicy_pesel_key
-    unique
+  id_pracownika SERIAL   NOT NULL
+    PRIMARY KEY,
+  imie          VARCHAR  NOT NULL,
+  nazwisko      VARCHAR  NOT NULL,
+  pesel         CHAR(11) NOT NULL
+    UNIQUE
 );
 
-create table specjalizacje
+CREATE TABLE specjalizacje
 (
-  id_specjalizacji serial  not null
-    constraint specjalizacje_pkey
-    primary key,
-  nazwa            varchar not null
-    constraint specjalizacje_nazwa_key
-    unique
+  id_specjalizacji SERIAL  NOT NULL
+    PRIMARY KEY,
+  nazwa            VARCHAR NOT NULL
+    UNIQUE
 );
 
-create table lekarze_specjalizacje
+CREATE TABLE lekarze_specjalizacje
 (
-  id_lekarza       integer not null
-    constraint lekarze_specjalizacje_id_lekarza_fkey
-    references pracownicy,
-  id_specjalizacji integer not null
-    constraint lekarze_specjalizacje_id_specjalizacji_fkey
-    references specjalizacje,
-  constraint lekarze_specjalizacje_pkey
-  primary key (id_lekarza, id_specjalizacji)
+  id_lekarza       INTEGER NOT NULL
+    REFERENCES pracownicy (id_pracownika),
+  id_specjalizacji INTEGER NOT NULL
+    REFERENCES specjalizacje (id_specjalizacji),
+  PRIMARY KEY (id_lekarza, id_specjalizacji)
 );
 
-create table pacjenci_lpk
+CREATE TABLE pacjenci_lpk
 (
-  id_pacjenta integer not null
-    constraint pacjenci_lpk_id_pacjenta_fkey
-    references pacjenci,
-  id_lekarza  integer not null
-    constraint pacjenci_lpk_id_lekarza_fkey
-    references pracownicy,
-  od          date    not null,
+  id_pacjenta INTEGER NOT NULL
+    REFERENCES pacjenci (id_pacjenta),
+  id_lekarza  INTEGER NOT NULL
+    REFERENCES pracownicy (id_pracownika),
+  od          date    NOT NULL,
   "do"        date,
-  constraint pacjenci_lpk_pkey
-  primary key (id_pacjenta, od)
+  PRIMARY KEY (id_pacjenta, od)
 );
 
 
-
-create table role
+CREATE TABLE role
 (
-  id_roli serial  not null
-    constraint role_pkey
-    primary key,
-  nazwa   varchar not null
-    constraint role_nazwa_key
-    unique
+  id_roli SERIAL  NOT NULL
+    PRIMARY KEY,
+  nazwa   VARCHAR NOT NULL
+    UNIQUE
 );
 
-create table pracownicy_role
+CREATE TABLE pracownicy_role
 (
-  id_roli       integer not null
-    constraint pracownicy_role_id_roli_fkey
-    references role,
-  id_pracownika integer not null
-    constraint pracownicy_role_id_pracownika_fkey
-    references pracownicy,
-  constraint pracownicy_role_pkey
-  primary key (id_roli, id_pracownika)
+  id_roli       INTEGER NOT NULL
+    REFERENCES role (id_roli),
+  id_pracownika INTEGER NOT NULL
+    REFERENCES pracownicy (id_pracownika),
+  PRIMARY KEY (id_roli, id_pracownika)
 );
 
-create table cele_wizyty
+CREATE TABLE cele_wizyty
 (
-  id_celu serial  not null
-    constraint cele_wizyty_pkey
-    primary key,
-  nazwa   varchar not null
-    constraint cele_wizyty_nazwa_key
-    unique
+  id_celu SERIAL  NOT NULL
+    PRIMARY KEY,
+  nazwa   VARCHAR NOT NULL
+    UNIQUE
 );
 
-create table wizyty_odbyte
+CREATE TABLE wizyty_odbyte
 (
-  id_wizyty    integer   not null
-    constraint wizyty_odbyte_pkey
-    primary key,
-  id_pacjenta  integer   not null
-    constraint wizyty_odbyte_id_pacjenta_fkey
-    references pacjenci,
-  id_lekarza   integer   not null
-    constraint wizyty_odbyte_id_lekarza_fkey
-    references pracownicy,
-  cel          integer   not null
-    constraint wizyty_odbyte_cel_fkey
-    references cele_wizyty,
-  data         timestamp not null,
-  czas_trwania interval,
-  constraint wizyty_odbyte_id_pacjenta_id_lekarza_data_key
-  unique (id_pacjenta, id_lekarza, data)
+  id_wizyty    INTEGER   NOT NULL
+    PRIMARY KEY,
+  id_pacjenta  INTEGER   NOT NULL
+    REFERENCES pacjenci (id_pacjenta),
+  id_lekarza   INTEGER   NOT NULL
+    REFERENCES pracownicy (id_pracownika),
+  cel          INTEGER   NOT NULL
+    REFERENCES cele_wizyty (id_celu),
+  data         TIMESTAMP NOT NULL,
+  czas_trwania INTERVAL,
+  UNIQUE (id_pacjenta, id_lekarza, data)
 );
 
-create table wizyty_planowane
+CREATE TABLE wizyty_planowane
 (
-  id_wizyty      serial    not null
-    constraint wizyty_planowane_pkey
-    primary key,
-  id_pacjenta    integer   not null
-    constraint wizyty_planowane_id_pacjenta_fkey
-    references pacjenci,
-  id_lekarza     integer   not null
-    constraint wizyty_planowane_id_lekarza_fkey
-    references pracownicy,
-  cel            integer   not null
-    constraint wizyty_planowane_cel_fkey
-    references cele_wizyty,
-  data           timestamp not null,
-  szacowany_czas interval,
-  constraint wizyty_planowane_id_pacjenta_id_lekarza_data_key
-  unique (id_pacjenta, id_lekarza, data)
+  id_wizyty      SERIAL    NOT NULL
+    PRIMARY KEY,
+  id_pacjenta    INTEGER   NOT NULL
+    REFERENCES pacjenci (id_pacjenta),
+  id_lekarza     INTEGER   NOT NULL
+    REFERENCES pracownicy (id_pracownika),
+  cel            INTEGER   NOT NULL
+    REFERENCES cele_wizyty (id_celu),
+  data           TIMESTAMP NOT NULL,
+  szacowany_czas INTERVAL,
+  UNIQUE (id_pacjenta, id_lekarza, data)
 );
 
-create table wydarzenia_medyczne
+CREATE TABLE wydarzenia_medyczne
 (
-  id_wydarzenia serial  not null
-    constraint wydarzenia_medyczne_pkey
-    primary key,
-  nazwa         varchar not null
-    constraint wydarzenia_medyczne_nazwa_key
-    unique
+  id_wydarzenia SERIAL  NOT NULL
+    PRIMARY KEY,
+  nazwa         VARCHAR NOT NULL
+    UNIQUE
 );
 
-create table historia_medyczna
+CREATE TABLE historia_medyczna
 (
-  id_pacjenta   integer   not null
-    constraint historia_medyczna_id_pacjenta_fkey
-    references pacjenci,
-  id_wydarzenia integer   not null
-    constraint historia_medyczna_id_wydarzenia_fkey
-    references wydarzenia_medyczne,
-  wizyta        integer
-    constraint historia_medyczna_wizyta_fkey
-    references wizyty_odbyte,
-  od            timestamp not null,
-  "do"          timestamp,
-  constraint historia_medyczna_pkey
-  primary key (id_pacjenta, id_wydarzenia, od),
-  constraint historia_medyczna_check
-  check (od < "do")
+  id_pacjenta   INTEGER   NOT NULL
+    REFERENCES pacjenci (id_pacjenta),
+  id_wydarzenia INTEGER   NOT NULL
+    REFERENCES wydarzenia_medyczne (id_wydarzenia),
+  wizyta        INTEGER
+    REFERENCES wizyty_odbyte (id_wizyty),
+  od            TIMESTAMP NOT NULL,
+  "do"          TIMESTAMP,
+  PRIMARY KEY (id_pacjenta, id_wydarzenia, od),
+  CHECK (od < "do")
 );
 
-create table skierowania
+CREATE TABLE skierowania
 (
-  nr_skierowania  integer not null
-    constraint skierowania_pkey
-    primary key,
-  wizyta          integer not null
-    constraint skierowania_wizyta_fkey
-    references wizyty_odbyte,
-  specjalizacja   integer not null
-    constraint skierowania_specjalizacja_fkey
-    references specjalizacje,
-  cel_skierowania integer not null
-    constraint skierowania_cel_skierowania_fkey
-    references cele_wizyty,
-  opis            varchar not null,
-  constraint skierowania_wizyta_specjalizacja_cel_skierowania_key
-  unique (wizyta, specjalizacja, cel_skierowania)
+  nr_skierowania  INTEGER NOT NULL
+    PRIMARY KEY,
+  wizyta          INTEGER NOT NULL
+    REFERENCES wizyty_odbyte (id_wizyty),
+  specjalizacja   INTEGER NOT NULL
+    REFERENCES specjalizacje (id_specjalizacji),
+  cel_skierowania INTEGER NOT NULL
+    REFERENCES cele_wizyty (id_celu),
+  opis            VARCHAR NOT NULL,
+  UNIQUE (wizyta, specjalizacja, cel_skierowania)
 );
 
-
+CREATE TABLE ankiety_lekarze
+(
+  id_ankiety       SERIAL PRIMARY KEY,
+  id_lekarza       INTEGER REFERENCES pracownicy (id_pracownika),
+  data             DATE NOT NULL,
+  uprzejmosc       INTEGER CHECK (uprzejmosc >= 1 AND uprzejmosc <= 5),
+  opanowanie       INTEGER CHECK (opanowanie >= 1 AND opanowanie <= 5),
+  informacyjnosc   INTEGER CHECK (informacyjnosc >= 1 AND informacyjnosc <= 5),
+  dokladnosc_badan INTEGER CHECK (dokladnosc_badan >= 1 AND dokladnosc_badan <= 5)
+);
