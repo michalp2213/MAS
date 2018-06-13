@@ -11,4 +11,162 @@
             fx:controller="Control.GUIController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <HBox fx:id="mainMenuButtons">
+
+        <Button fx:id="modyfikujOsobyButton"
+                text="Modyfikuj&#13;&#10;osoby"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleOsoby"
+                onMouseExited="#hideTabeleOsoby"/>
+
+        <Button fx:id="modyfikujRelacjeButton"
+                text="Modyfikuj&#13;&#10;relacje"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleRelacje"
+                onMouseExited="#hideTabeleRelacje"/>
+
+        <Button fx:id="modyfikujMetadaneButton"
+                text="Modyfikuj&#13;&#10;metadane"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleMetadane"
+                onMouseExited="#hideTabeleMetadane"/>
+
+        <Button fx:id="historiaMedycznaButton"
+                text="Historia&#13;&#10;medyczna"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="wizytyButton"
+                text="Wizyty"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="ankietyButton"
+                text="Ankiety"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+    </HBox>
+
+    <VBox fx:id="tabeleOsoby"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleOsoby"
+          onMouseExited="#hideTabeleOsoby">
+
+        <Button fx:id="pracownicyButton"
+                text="Pracownicy"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="pacjenciButton"
+                text="Pacjenci"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+    </VBox>
+
+    <VBox fx:id="tabeleRelacje"
+          AnchorPane.leftAnchor="70"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleRelacje"
+          onMouseExited="#hideTabeleRelacje">
+
+        <Button fx:id="pracownicyRoleButton"
+                text="Role"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="lekarzeSpecjalizacjeButton"
+                text="Specjalizacje"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="LPKButton"
+                text="LPK"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+    </VBox>
+
+    <VBox fx:id="tabeleMetadane"
+          AnchorPane.leftAnchor="140"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleMetadane"
+          onMouseExited="#hideTabeleMetadane">
+
+        <Button fx:id="roleButton"
+                text="Role"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="specjalizacjeButton"
+                text="Specjalizacje"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="celeWizytButton"
+                text="Cele wizyt"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="wydarzeniaMedyczneButton"
+                text="Wydarz. med."
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+    </VBox>
+
+    <TableView fx:id="tableView"
+            AnchorPane.topAnchor="50"
+            visible="false"/>
 </AnchorPane>
