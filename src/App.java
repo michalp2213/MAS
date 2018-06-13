@@ -17,7 +17,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("View/GUI.fxml"));
         Parent root = loader.load();
         Scene mainScene = new Scene(root, resolutionX, resolutionY);
-        //mainScene.getStylesheets().add(App.class.getResource("css/Style.css").toExternalForm());
+        mainScene.getStylesheets().add(App.class.getResource("View/Style.css").toExternalForm());
         primaryStage.setTitle("MAS");
         primaryStage.setScene(mainScene);
         primaryStage.show();
