@@ -235,16 +235,18 @@ END;
 $$
 language plpgsql;
 
-CREATE OR REPLACE FUNCTION pesel_check(pesel CHAR(11))
+CREATE OR REPLACE FUNCTION pesel_check(p CHAR(11))
   RETURNS BOOLEAN AS
 $$
 DECLARE
+  pesel CHAR[];
   s INTEGER;
 BEGIN
-  s = pesel [1] :: INT + pesel [2] :: INT * 3 + pesel [3] :: INT * 7 + pesel [4] * 9 + pesel [5] :: INT * 1 +
+  pesel = string_to_array(p, NULL);
+  s = (pesel [1] :: INT) + (pesel [2] :: INT) * 3 + (pesel [3] :: INT) * 7 + (pesel [4]::INT) * 9 + pesel [5] :: INT * 1 +
       pesel [6] :: INT * 3 + pesel [7] :: INT * 7 + pesel [8] :: INT * 9 + pesel [9] :: INT + pesel [10] :: INT * 3;
   s = s % 10;
-  RETURN s = pesel [11] :: INT;
+  RETURN (10-s) = pesel [11] :: INT;
 END;
 $$
 language plpgsql;
@@ -368,7 +370,7 @@ DECLARE r   RECORD;
         id  INTEGER;
 BEGIN
   IF NEW.data < current_time
-  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean ';
+  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean';
   END IF;
   s = 0;
   val = 0;
@@ -462,6 +464,20 @@ END;
 $$
 language plpgsql;
 
+CREATE OR REPLACE FUNCTION lekarze_specjalizacje_check()
+  RETURNS TRIGGER AS $lekarze_specjalizacje_check$
+  BEGIN
+  IF czy_aktywny_lekarz(NEW.id_lekarza)  THEN RETURN NEW;
+    ELSE RAISE EXCEPTION 'Nie jest lekarzem';
+    END IF;
+  END;
+$lekarze_specjalizacje_check$
+  language plpgsql;
+
+CREATE TRIGGER lekarze_specjalizacje_check
+  BEFORE INSERT OR UPDATE ON lekarze_specjalizacje
+  FOR EACH ROW EXECUTE PROCEDURE lekarze_specjalizacje_check();
+
 CREATE OR REPLACE FUNCTION ranking_cecha(d1 DATE, d2 DATE, cecha VARCHAR)
   RETURNS TABLE(id_lekarza INTEGER, imie VARCHAR, nazwisko VARCHAR, wynik NUMERIC(3, 2))
 AS
@@ -472,7 +488,7 @@ BEGIN
   d2 = coalesce(d2, max((SELECT data
                          FROM ankiety_lekarze)));
   IF cecha <> 'dokladnosc_badan' AND cecha <> 'informacyjnosc' AND cecha <> 'opanowanie' AND cecha <> 'uprzejmosc'
-  THEN RAISE EXCEPTION 'Nie mamy takiej cechy.';
+  THEN RAISE EXCEPTION 'Nie mamy takiej cechy';
   END IF;
   IF cecha = 'dokladnosc_badan'
   THEN
@@ -592,3 +608,249 @@ language plpgsql;
 
 INSERT INTO role (nazwa) VALUES ('lekarz');
 INSERT INTO role (nazwa) VALUES ('zwolniony');
+INSERT INTO role (nazwa) VALUES ('panek');
+INSERT INTO role (nazwa) VALUES ('pielęgniarka');
+INSERT INTO role (nazwa) VALUES ('pracownik techniczny');
+INSERT INTO role (nazwa) VALUES ('ochroniarz');
+INSERT INTO role (nazwa) VALUES ('zarząd');
+INSERT INTO role (nazwa) VALUES ('konserwator powierzchni płaskich');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Józef', 'Wasilewski', '67102435341','24.10.1967', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Mateusz', 'Wójcik', '59091439262','14.09.1959', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Waldemar', 'Wysocki', '02312279846','22.11.2002', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Janusz', 'Kozłowski', '60051035989','10.05.1960', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Tadeusz', 'Wojciechowski', '88042172628','21.04.1988', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Wojciech', 'Górski', '63120726568','07.12.1963', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Grzegorz', 'Bąk', '82013145947','31.01.1982', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Władysław', 'Brzeziński', '71091543282','15.09.1971', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Robert', 'Szewczyk', '61032585921','25.03.1961', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jacek', 'Sikorski', '83081848167','18.08.1983', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Marcin', 'Jakubowski', '93100778683','07.10.1993', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Janusz', 'Szymański', '64101132385','11.10.1964', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Kazimierz', 'Rutkowski', '97111842447','18.11.1997', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Tomasz', 'Krawczyk', '72112067189','20.11.1972', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jan', 'Jankowski', '54111394541','13.11.1954', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Ryszard', 'Wiśniewski', '58050737223','07.05.1958', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Łukasz', 'Borkowski', '94070365284','03.07.1994', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Mariusz', 'Witkowski', '45071191965','11.07.1945', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Michał', 'Stępień', '79081091469','10.08.1979', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Michał', 'Rutkowski', '57073131241','31.07.1957', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Piotr', 'Baranowski', '64111922549','19.11.1964', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Waldemar', 'Kucharski', '65121145243','11.12.1965', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Rafał', 'Brzeziński', '91100759288','07.10.1991', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Józef', 'Kwiatkowski', '50030653145','06.03.1950', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Sebastian', 'Wasilewski', '49110391446','03.11.1949', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Grzegorz', 'Borkowski', '90080555547','05.08.1990', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jarosław', 'Chmielewski', '58072845467','28.07.1958', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Przemysław', 'Witkowski', '65032579265','25.03.1965', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Zdzisław', 'Kowalski', '56051759721','17.05.1956', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jarosław', 'Zając', '80070626324','06.07.1980', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jakub', 'Baranowski', '93120789665','07.12.1993', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Wiesław', 'Wilk', '63012813747','28.01.1963', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Artur', 'Adamski', '67032997483','29.03.1967', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Marian', 'Wieczorek', '44091647447','16.09.1944', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Kamil', 'Wiśniewski', '74102872445','28.10.1974', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Daniel', 'Zakrzewski', '75101422167','14.10.1975', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Roman', 'Chmielewski', '52052714268','27.05.1952', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Marcin', 'Ostrowski', '55031924845','19.03.1955', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jacek', 'Czarnecki', '78092095862','20.09.1978', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Grzegorz', 'Kozłowski', '87111153764','11.11.1987', 'M');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Monika', 'Zakrzewska', '73110429148','04.11.1973', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Urszula', 'Kucharska', '57062384649','23.06.1957', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Patrycja', 'Baranowska', '74031472882','14.03.1974', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Krystyna', 'Czerwińska', '64071584865','15.07.1964', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Janina', 'Stępień', '02280826686','08.08.2002', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Marzena', 'Gajewska', '44080853181','08.08.1944', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Stefania', 'Nowakowska', '75040438984','04.04.1975', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Stefania', 'Jasińska', '68081285925','12.08.1968', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Aleksandra', 'Wojciechowska', '51122641628','26.12.1951', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Danuta', 'Szewczyk', '75071711588','17.07.1975', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Danuta', 'Mazur', '56082443983','24.08.1956', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Magdalena', 'Ziółkowska', '60051975885','19.05.1960', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Marzena', 'Rutkowska', '50110998663','09.11.1950', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Natalia', 'Nowicka', '89011363366','13.01.1989', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Dorota', 'Wieczorek', '63040163625','01.04.1963', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Aneta', 'Głowacka', '77012219441','22.01.1977', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Grażyna', 'Malinowska', '93122243424','22.12.1993', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Grażyna', 'Sokołowska', '00272628786','26.07.2000', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Teresa', 'Czarnecka', '60041452422','14.04.1960', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Halina', 'Jankowska', '95112456168','24.11.1995', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Jolanta', 'Kowalska', '84100214424','02.10.1984', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Ewelina', 'Michalska', '68081254727','12.08.1968', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Irena', 'Szulc', '62050988183','09.05.1962', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Bożena', 'Malinowska', '59041562549','15.04.1959', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Danuta', 'Zalewska', '53081336146','13.08.1953', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Stefania', 'Borkowska', '43020735262','07.02.1943', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Teresa', 'Duda', '43082686586','26.08.1943', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Justyna', 'Wiśniewska', '87112327267','23.11.1987', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Agata', 'Lis', '65031015368','10.03.1965', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Elżbieta', 'Sikorska', '62022645687','26.02.1962', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Agnieszka', 'Kowalczyk', '84102329267','23.10.1984', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Natalia', 'Szewczyk', '49052319982','23.05.1949', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Dorota', 'Gajewska', '90022063644','20.02.1990', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Agata', 'Szczepańska', '90112128882','21.11.1990', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Patrycja', 'Ziółkowska', '57112476285','24.11.1957', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Bożena', 'Sikorska', '81053097227','30.05.1981', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Danuta', 'Kaźmierczak', '54122515924','25.12.1954', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Danuta', 'Kaczmarek', '78031127261','11.03.1978', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Aleksandra', 'Tomaszewska', '97122423246','24.12.1997', 'F');
+INSERT INTO pacjenci(imie, nazwisko, pesel, data_urodzenia, plec) VALUES('Alicja', 'Kucharska', '49010814683','08.01.1949', 'F');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Kazimierz', 'Kalinowski', '67102435341');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Maciej', 'Zając', '59091439262');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Czesław', 'Mazur', '02312279846');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Ryszard', 'Baranowski', '60051035989');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Waldemar', 'Chmielewski', '88042172628');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Tadeusz', 'Duda', '63120726568');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Michał', 'Stępień', '82013145947');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Władysław', 'Marciniak', '71091543282');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jakub', 'Szymczak', '61032585921');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Kamil', 'Majewski', '83081848167');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jan', 'Szewczyk', '93100778683');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Mieczysław', 'Dąbrowski', '64101132385');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Henryk', 'Walczak', '97111842447');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Rafał', 'Duda', '72112067189');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Marek', 'Wasilewski', '54111394541');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Zbigniew', 'Szczepański', '58050737223');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Józef', 'Piotrowski', '94070365284');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jerzy', 'Nowicki', '45071191965');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Piotr', 'Olszewski', '79081091469');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Adam', 'Sikorski', '57073131241');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Mateusz', 'Wysocki', '64111922549');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Mateusz', 'Wiśniewski', '65121145243');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Michał', 'Adamski', '91100759288');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Kamil', 'Gajewski', '50030653145');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Henryk', 'Lis', '49110391446');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Roman', 'Ziółkowski', '90080555547');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Marcin', 'Pawłowski', '58072845467');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jakub', 'Malinowski', '65032579265');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Wojciech', 'Lis', '56051759721');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Michał', 'Piotrowski', '80070626324');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Ryszard', 'Brzeziński', '93120789665');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Dariusz', 'Zawadzki', '63012813747');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Mirosław', 'Kowalski', '67032997483');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Henryk', 'Wróbel', '44091647447');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Andrzej', 'Kaźmierczak', '74102872445');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Maciej', 'Wojciechowski', '75101422167');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Dawid', 'Andrzejewski', '52052714268');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Roman', 'Kubiak', '55031924845');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Mateusz', 'Kowalczyk', '78092095862');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Stanisław', 'Wojciechowski', '87111153764');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Ewa', 'Lewandowska', '73110429148');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Grażyna', 'Makowska', '57062384649');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Ewelina', 'Bąk', '74031472882');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Paulina', 'Rutkowska', '64071584865');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Monika', 'Pietrzak', '02280826686');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Wiesława', 'Kalinowska', '44080853181');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Janina', 'Zalewska', '75040438984');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Danuta', 'Kwiatkowska', '68081285925');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Stefania', 'Zakrzewska', '51122641628');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Halina', 'Borkowska', '75071711588');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Izabela', 'Grabowska', '56082443983');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Izabela', 'Baranowska', '60051975885');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Ewelina', 'Witkowska', '50110998663');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Krystyna', 'Nowak', '89011363366');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Marta', 'Lis', '63040163625');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jadwiga', 'Wojciechowska', '77012219441');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Stefania', 'Głowacka', '93122243424');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jadwiga', 'Nowakowska', '00272628786');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Patrycja', 'Szczepańska', '60041452422');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Agata', 'Sobczak', '95112456168');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Barbara', 'Baran', '84100214424');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Stefania', 'Baran', '68081254727');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Aneta', 'Pawłowska', '62050988183');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Jolanta', 'Zając', '59041562549');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Maria', 'Wiśniewska', '53081336146');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Magdalena', 'Zając', '43020735262');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Marta', 'Duda', '43082686586');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Agata', 'Andrzejewska', '87112327267');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Bożena', 'Sikorska', '65031015368');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Grażyna', 'Adamska', '62022645687');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Dorota', 'Adamczyk', '84102329267');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Kazimiera', 'Wróbel', '49052319982');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Bożena', 'Wiśniewska', '90022063644');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Agnieszka', 'Baran', '90112128882');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Grażyna', 'Majewska', '57112476285');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Helena', 'Baran', '81053097227');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Patrycja', 'Michalska', '54122515924');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Paulina', 'Cieślak', '78031127261');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Katarzyna', 'Duda', '97122423246');
+INSERT INTO pracownicy(imie, nazwisko, pesel) VALUES('Magdalena', 'Kaczmarek', '49010814683');
+INSERT INTO pracownicy_role VALUES(8, 1);
+INSERT INTO pracownicy_role VALUES(1, 2);
+INSERT INTO pracownicy_role VALUES(5, 3);
+INSERT INTO pracownicy_role VALUES(1, 4);
+INSERT INTO pracownicy_role VALUES(8, 5);
+INSERT INTO pracownicy_role VALUES(1, 6);
+INSERT INTO pracownicy_role VALUES(6, 7);
+INSERT INTO pracownicy_role VALUES(1, 8);
+INSERT INTO pracownicy_role VALUES(8, 9);
+INSERT INTO pracownicy_role VALUES(1, 10);
+INSERT INTO pracownicy_role VALUES(7, 11);
+INSERT INTO pracownicy_role VALUES(1, 12);
+INSERT INTO pracownicy_role VALUES(5, 13);
+INSERT INTO pracownicy_role VALUES(4, 14);
+INSERT INTO pracownicy_role VALUES(6, 15);
+INSERT INTO pracownicy_role VALUES(1, 16);
+INSERT INTO pracownicy_role VALUES(7, 17);
+INSERT INTO pracownicy_role VALUES(4, 18);
+INSERT INTO pracownicy_role VALUES(6, 19);
+INSERT INTO pracownicy_role VALUES(4, 20);
+INSERT INTO pracownicy_role VALUES(7, 21);
+INSERT INTO pracownicy_role VALUES(1, 22);
+INSERT INTO pracownicy_role VALUES(6, 23);
+INSERT INTO pracownicy_role VALUES(1, 24);
+INSERT INTO pracownicy_role VALUES(5, 25);
+INSERT INTO pracownicy_role VALUES(1, 26);
+INSERT INTO pracownicy_role VALUES(6, 27);
+INSERT INTO pracownicy_role VALUES(1, 28);
+INSERT INTO pracownicy_role VALUES(7, 29);
+INSERT INTO pracownicy_role VALUES(4, 30);
+INSERT INTO pracownicy_role VALUES(7, 31);
+INSERT INTO pracownicy_role VALUES(1, 32);
+INSERT INTO pracownicy_role VALUES(7, 33);
+INSERT INTO pracownicy_role VALUES(1, 34);
+INSERT INTO pracownicy_role VALUES(7, 35);
+INSERT INTO pracownicy_role VALUES(1, 36);
+INSERT INTO pracownicy_role VALUES(5, 37);
+INSERT INTO pracownicy_role VALUES(4, 38);
+INSERT INTO pracownicy_role VALUES(5, 39);
+INSERT INTO pracownicy_role VALUES(4, 40);
+INSERT INTO pracownicy_role VALUES(5, 41);
+INSERT INTO pracownicy_role VALUES(4, 42);
+INSERT INTO pracownicy_role VALUES(6, 43);
+INSERT INTO pracownicy_role VALUES(1, 44);
+INSERT INTO pracownicy_role VALUES(8, 45);
+INSERT INTO pracownicy_role VALUES(1, 46);
+INSERT INTO pracownicy_role VALUES(8, 47);
+INSERT INTO pracownicy_role VALUES(1, 48);
+INSERT INTO pracownicy_role VALUES(5, 49);
+INSERT INTO pracownicy_role VALUES(4, 50);
+INSERT INTO pracownicy_role VALUES(6, 51);
+INSERT INTO pracownicy_role VALUES(4, 52);
+INSERT INTO pracownicy_role VALUES(5, 53);
+INSERT INTO pracownicy_role VALUES(1, 54);
+INSERT INTO pracownicy_role VALUES(6, 55);
+INSERT INTO pracownicy_role VALUES(1, 56);
+INSERT INTO pracownicy_role VALUES(8, 57);
+INSERT INTO pracownicy_role VALUES(4, 58);
+INSERT INTO pracownicy_role VALUES(6, 59);
+INSERT INTO pracownicy_role VALUES(1, 60);
+INSERT INTO pracownicy_role VALUES(5, 61);
+INSERT INTO pracownicy_role VALUES(4, 62);
+INSERT INTO pracownicy_role VALUES(8, 63);
+INSERT INTO pracownicy_role VALUES(4, 64);
+INSERT INTO pracownicy_role VALUES(5, 65);
+INSERT INTO pracownicy_role VALUES(1, 66);
+INSERT INTO pracownicy_role VALUES(8, 67);
+INSERT INTO pracownicy_role VALUES(1, 68);
+INSERT INTO pracownicy_role VALUES(8, 69);
+INSERT INTO pracownicy_role VALUES(1, 70);
+INSERT INTO pracownicy_role VALUES(5, 71);
+INSERT INTO pracownicy_role VALUES(4, 72);
+INSERT INTO pracownicy_role VALUES(5, 73);
+INSERT INTO pracownicy_role VALUES(4, 74);
+INSERT INTO pracownicy_role VALUES(6, 75);
+INSERT INTO pracownicy_role VALUES(1, 76);
+INSERT INTO pracownicy_role VALUES(8, 77);
+INSERT INTO pracownicy_role VALUES(4, 78);
+INSERT INTO pracownicy_role VALUES(5, 79);
+INSERT INTO pracownicy_role VALUES(4, 80);
