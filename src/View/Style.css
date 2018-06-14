@@ -1,0 +1,11 @@
+#pracownicyMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#pacjenciMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}

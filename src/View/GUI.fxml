@@ -11,4 +11,321 @@
             fx:controller="Control.GUIController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <HBox fx:id="mainMenuButtons">
+
+        <Button fx:id="modyfikujOsobyButton"
+                text="Modyfikuj&#13;&#10;osoby"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleOsoby"
+                onMouseExited="#hideTabeleOsoby"/>
+
+        <Button fx:id="modyfikujRelacjeButton"
+                text="Modyfikuj&#13;&#10;relacje"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleRelacje"
+                onMouseExited="#hideTabeleRelacje"/>
+
+        <Button fx:id="modyfikujMetadaneButton"
+                text="Modyfikuj&#13;&#10;metadane"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"
+                onMouseEntered="#showTabeleMetadane"
+                onMouseExited="#hideTabeleMetadane"/>
+
+        <Button fx:id="historiaMedycznaButton"
+                text="Historia&#13;&#10;medyczna"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="wizytyButton"
+                text="Wizyty"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="ankietyButton"
+                text="Ankiety"
+                maxWidth="70"
+                minWidth="70"
+                maxHeight="50"
+                minHeight="50"
+                textAlignment="CENTER"/>
+
+    </HBox>
+
+    <VBox fx:id="tabeleOsoby"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleOsoby"
+          onMouseExited="#hideTabeleOsoby">
+
+        <Button fx:id="pracownicyButton"
+                text="Pracownicy"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"
+                onAction="#showPracownicyMenu"/>
+
+        <Button fx:id="pacjenciButton"
+                text="Pacjenci"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"
+                onAction="#showPacjenciMenu"/>
+
+    </VBox>
+
+    <VBox fx:id="tabeleRelacje"
+          AnchorPane.leftAnchor="70"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleRelacje"
+          onMouseExited="#hideTabeleRelacje">
+
+        <Button fx:id="pracownicyRoleButton"
+                text="Role"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="lekarzeSpecjalizacjeButton"
+                text="Specjalizacje"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="LPKButton"
+                text="LPK"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+    </VBox>
+
+    <VBox fx:id="tabeleMetadane"
+          AnchorPane.leftAnchor="140"
+          AnchorPane.topAnchor="50"
+          visible="false"
+          onMouseEntered="#showTabeleMetadane"
+          onMouseExited="#hideTabeleMetadane">
+
+        <Button fx:id="roleButton"
+                text="Role"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="specjalizacjeButton"
+                text="Specjalizacje"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="celeWizytButton"
+                text="Cele wizyt"
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+
+        <Button fx:id="wydarzeniaMedyczneButton"
+                text="Wydarz. med."
+                maxWidth="100"
+                minWidth="100"
+                maxHeight="25"
+                minHeight="25"
+                textAlignment="CENTER"/>
+    </VBox>
+
+    <GridPane fx:id="pracownicyMenu"
+            AnchorPane.topAnchor="150"
+            AnchorPane.leftAnchor="150"
+            visible="false">
+
+            <Label text="Imię"
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="0"
+                maxWidth="100"
+                minWidth="100"/>
+
+            <Label text="Nazwisko"
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="0"
+                   maxWidth="100"
+                   minWidth="100"/>
+
+            <Label text="Pesel"
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="0"
+                   maxWidth="100"
+                   minWidth="100"/>
+
+            <Button fx:id="closePracownicyMenuButton"
+                text="Zamknij"
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="0"
+                GridPane.halignment="CENTER"
+                onAction="#hidePracownicyMenu"/>
+
+            <TextField fx:id="pracownicyImieField"
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="1"
+                />
+
+            <TextField fx:id="pracownicyNazwiskoField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+            <TextField fx:id="pracownicyPeselField"
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="1"/>
+
+            <Button fx:id="pracownicyInsertButton"
+                    text="Dodaj"
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="1"
+                    GridPane.halignment="CENTER"/>
+
+            <ListView fx:id="pracownicyList"
+                GridPane.rowIndex="2"
+                GridPane.columnIndex="0"
+                GridPane.columnSpan="3"
+                maxWidth="450"
+                minWidth="450"
+                maxHeight="70"/>
+
+            <Button fx:id="pracownicyDeleteButton"
+                    text="Usuń"
+                GridPane.rowIndex="2"
+                GridPane.columnIndex="3"
+                    GridPane.halignment="CENTER"/>
+    </GridPane>
+
+    <GridPane fx:id="pacjenciMenu"
+              AnchorPane.topAnchor="150"
+              AnchorPane.leftAnchor="100"
+              visible="false">
+
+        <Label text="Imię"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Nazwisko"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Pesel"
+               GridPane.columnIndex="2"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Nr paszportu"
+               GridPane.columnIndex="3"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Data urodzenia"
+               GridPane.columnIndex="4"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Płeć"
+               GridPane.columnIndex="5"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Button fx:id="closePacjenciMenuButton"
+                text="Zamknij"
+                GridPane.columnIndex="6"
+                GridPane.rowIndex="0"
+                GridPane.halignment="CENTER"
+                onAction="#hidePacjenciMenu"/>
+
+        <TextField fx:id="pacjenciImieField"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"/>
+
+        <TextField fx:id="pacjenciNazwiskoField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+        <TextField fx:id="pacjenciPeselField"
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="1"/>
+
+        <TextField fx:id="pacjenciNrPaszportuField"
+                   GridPane.columnIndex="3"
+                   GridPane.rowIndex="1"/>
+
+        <TextField fx:id="pacjenciDataUrodzeniaField"
+                   GridPane.columnIndex="4"
+                   GridPane.rowIndex="1"/>
+
+        <TextField fx:id="pacjenciPlecField"
+                   GridPane.columnIndex="5"
+                   GridPane.rowIndex="1"/>
+
+        <Button fx:id="pacjenciInsertButton"
+                text="Dodaj"
+                GridPane.columnIndex="6"
+                GridPane.rowIndex="1"
+                GridPane.halignment="CENTER"/>
+
+        <ListView fx:id="pacjenciList"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="6"
+                  maxWidth="900"
+                  minWidth="900"
+                  maxHeight="70"/>
+
+        <Button fx:id="pacjenciDeleteButton"
+                text="Usuń"
+                GridPane.rowIndex="2"
+                GridPane.columnIndex="6"
+                GridPane.halignment="CENTER"/>
+    </GridPane>
+
+    <TableView fx:id="tableView"
+            AnchorPane.topAnchor="50"
+            visible="false"/>
 </AnchorPane>
