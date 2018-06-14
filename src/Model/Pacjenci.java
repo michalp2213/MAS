@@ -7,23 +7,32 @@ public class Pacjenci implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO Auto-generated method stub
-		return null;
+		return Database.executeQuery("SELECT * from pacjenci;");
 	}
 	
 	public boolean deleteItem (int id) {
-		//TODO
-		return false;
+		return Database.executeUpdate("DELETE FROM pacjenci WHERE id_pacjenta = " + id + ";") != 0;
 	}
 	
 	public boolean insertItem (String name, String surname, String pesel, String passportNo, Date birthDate, String sex) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO pacjenci VALUES ("
+				+ "DEFAULT,"
+				+ name + ","
+				+ surname + ","
+				+ pesel + ","
+				+ passportNo + ","
+				+ birthDate + ","
+				+ sex + ");";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean setLPK (int pacjentId, int lekarzId) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO pacjenci_lpk VALUES ("
+				+ pacjentId + ","
+				+ "now(),"
+				+ lekarzId + ","
+				+ "NULL);";
+		return Database.executeUpdate(sql) != 0;
 	}
 
 }

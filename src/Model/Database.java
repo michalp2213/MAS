@@ -9,14 +9,14 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 
 public class Database {
-	Connection dbConn = null;
-	String addr;
+	private static Connection dbConn = null;
+	private static String addr;
 
-	public Database(String serverAddr) {
+	public static void setServerAddr(String serverAddr) {
 		addr = serverAddr;
 	}
 
-	public void connect(String uname, String passwd) throws IOException {
+	public static void connect(String uname, String passwd) throws IOException {
 		try {
 			Class.forName("org.postgresql.Driver");
 			dbConn = DriverManager.getConnection(addr, uname, passwd);
@@ -27,24 +27,21 @@ public class Database {
 		}
 	}
 
-	public void disconnect() throws IOException {
+	public static void disconnect() {
 		try {
 			dbConn.close();
 			dbConn = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			throw new IOException(e);
 		}
 	}
 
-	public ResultSet executeQuery(String sql) {
+	public static ResultSet executeQuery(String sql) {
 		Statement stmt = null;
 		try {
 			stmt = dbConn.createStatement();
-			if (stmt.execute(sql)) {
-				return stmt.getResultSet();
-			}
+			return stmt.executeQuery (sql);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -57,5 +54,24 @@ public class Database {
 			}
 		}
 		return null;
+	}
+	
+	public static int executeUpdate(String sql) {
+		Statement stmt = null;
+		try {
+			stmt = dbConn.createStatement();
+			return stmt.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+		}
+		return 0;
 	}
 }

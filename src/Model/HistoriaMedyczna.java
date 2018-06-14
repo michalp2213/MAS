@@ -7,18 +7,25 @@ public class HistoriaMedyczna implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO Auto-generated method stub
-		return null;
+		return Database.executeQuery("SELECT * FROM historia_medyczna;");
 	}
 	
 	public boolean deleteItem (int pacjentId, int wydarzenieId, Date from) {
-		//TODO
-		return false;
+		String sql = "DELETE FROM historia_medyczna WHERE "
+				+ "id_pacjenta = " + pacjentId + ","
+				+ "id_wydarzenia = " + wydarzenieId + ","
+				+ "od = " + from + ";";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean insertItem (int pacjentId, int wydarzenieId, Date from, Date to, int wizytaId) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO historia_medyczna VALUES ("
+				+ pacjentId + ","
+				+ wydarzenieId + ","
+				+ from + ","
+				+ wizytaId + ","
+				+ to + ");";
+		return Database.executeUpdate(sql) != 0;
 	}
 
 }

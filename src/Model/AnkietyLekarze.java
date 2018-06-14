@@ -7,33 +7,35 @@ public class AnkietyLekarze implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO Auto-generated method stub
-		return null;
+		return Database.executeQuery("SELECT * FROM ankiety_lekarze;");
 	}
 	
 	public boolean deleteItem (int id) {
-		//TODO
-		return false;
+		return Database.executeUpdate("DELETE FROM ankiety_lekarze WHERE id_ankiety = " + id + ";") != 0;
 	}
 	
 	public boolean insertItem (int lekarzId, Date date, int uprzejmosc, int opanowanie, int informacyjnosc, int dokladnosc_badan) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO ankiety_lekarze VALUES ("
+				+ "DEFAULT,"
+				+ lekarzId + ","
+				+ date + ","
+				+ uprzejmosc + ","
+				+ opanowanie + ","
+				+ informacyjnosc + ","
+				+ dokladnosc_badan + ");";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public ResultSet alphabeticRanking () {
-		//TODO
-		return null;
+	public ResultSet alphabeticRanking (Date from, Date to, int specjalizacjaId) {
+		return Database.executeQuery("SELECT * from ranking_alfabetyczny (" + from + ", " + to + ", " + specjalizacjaId + ");");
 	}
 	
-	public ResultSet bestIn (String cecha) {
-		//TODO
-		return null;
+	public ResultSet bestIn (Date from, Date to, String cecha) {
+		return Database.executeQuery("SELECT * from ranking_cecha (" + from + ", " + to + ", " + cecha + ");");
 	}
 	
-	public ResultSet bestAvg () {
-		//TODO
-		return null;
+	public ResultSet bestAvg (Date from, Date to, int specjalizacjaId) {
+		return Database.executeQuery("SELECT * from ranking_specjalizacje (" + from + ", " + to + ", " + specjalizacjaId + ");");
 	}
 
 }
