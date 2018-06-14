@@ -235,16 +235,18 @@ END;
 $$
 language plpgsql;
 
-CREATE OR REPLACE FUNCTION pesel_check(pesel CHAR(11))
+CREATE OR REPLACE FUNCTION pesel_check(p CHAR(11))
   RETURNS BOOLEAN AS
 $$
 DECLARE
+  pesel CHAR[];
   s INTEGER;
 BEGIN
-  s = pesel [1] :: INT + pesel [2] :: INT * 3 + pesel [3] :: INT * 7 + pesel [4] * 9 + pesel [5] :: INT * 1 +
+  pesel = string_to_array(p, NULL);
+  s = (pesel [1] :: INT) + (pesel [2] :: INT) * 3 + (pesel [3] :: INT) * 7 + (pesel [4]::INT) * 9 + pesel [5] :: INT * 1 +
       pesel [6] :: INT * 3 + pesel [7] :: INT * 7 + pesel [8] :: INT * 9 + pesel [9] :: INT + pesel [10] :: INT * 3;
   s = s % 10;
-  RETURN s = pesel [11] :: INT;
+  RETURN (10-s) = pesel [11] :: INT;
 END;
 $$
 language plpgsql;
@@ -368,7 +370,7 @@ DECLARE r   RECORD;
         id  INTEGER;
 BEGIN
   IF NEW.data < current_time
-  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean ';
+  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean';
   END IF;
   s = 0;
   val = 0;
@@ -472,7 +474,7 @@ BEGIN
   d2 = coalesce(d2, max((SELECT data
                          FROM ankiety_lekarze)));
   IF cecha <> 'dokladnosc_badan' AND cecha <> 'informacyjnosc' AND cecha <> 'opanowanie' AND cecha <> 'uprzejmosc'
-  THEN RAISE EXCEPTION 'Nie mamy takiej cechy.';
+  THEN RAISE EXCEPTION 'Nie mamy takiej cechy';
   END IF;
   IF cecha = 'dokladnosc_badan'
   THEN
@@ -592,3 +594,9 @@ language plpgsql;
 
 INSERT INTO role (nazwa) VALUES ('lekarz');
 INSERT INTO role (nazwa) VALUES ('zwolniony');
+INSERT INTO role (nazwa) VALUES ('panek');
+INSERT INTO role (nazwa) VALUES ('pracownik techniczny');
+INSERT INTO role (nazwa) VALUES ('ochroniarz');
+INSERT INTO role (nazwa) VALUES ('pielęgniarka');
+INSERT INTO role (nazwa) VALUES ('zarząd');
+INSERT INTO role (nazwa) VALUES ('konserwator powierzchni płaskich');
