@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import Control.GUIController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -5,12 +7,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import Model.Database;
+
 public class App extends Application {
     private final int resolutionX = 800;
     private final int resolutionY = 600;
 
     public static void main( String[] args ) {
+    	Database.setServerAddr("jdbc:postgresql://localhost:5432/mas"); // set this up for your db config
+    	try {
+			Database.connect("mas", "testpass");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1); // cannot work without DB connection
+		}
+    	
         launch(args);
+        
+        Database.disconnect();
     }
 
     public void start(Stage primaryStage) throws Exception{

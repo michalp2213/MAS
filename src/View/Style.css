@@ -9,3 +9,33 @@
     -fx-border-style:solid;
     -fx-padding: 5px 5px 5px 5px;
 }
+
+#roleMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#specjalizacjeMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#celeWizytMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#wydarzeniaMedyczneMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#pracownicyRoleMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}

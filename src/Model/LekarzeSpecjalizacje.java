@@ -6,23 +6,28 @@ public class LekarzeSpecjalizacje implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO Auto-generated method stub
-		return null;
+		return Database.executeQuery("SELECT * from lekarze_specjalizacje;");
 	}
 	
 	public boolean deleteItem (String specjalizacjaName, int lekarzId) {
-		//TODO
-		return false;
+		String sql = "DELETE FROM lekarze_specjalizacje WHERE "
+				+ "id_lekarza = " + lekarzId
+				+ " AND (SELECT nazwa FROM specjalizacje WHERE "
+					+ "id_specjalizacji = lekarze_specjalizacje.id_specjalizacji"
+				+ ") = " + specjalizacjaName + ";";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean insertItem (String specjalizacjaName, int lekarzId) {
-		//TODO
+		String sql = "INSERT INTO lekarze_specjalizacje VALUES ("
+				+ lekarzId + ","
+				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE "
+					+ "nazwa = " + specjalizacjaName + "));";
 		return false;
 	}
 	
 	public ResultSet getSpecjalizacje (int lekarzId) {
-		//TODO
-		return null;
+		return Database.executeQuery("SELECT * FROM specjalizacje_lekarza(" + lekarzId + ");");
 	}
 
 }

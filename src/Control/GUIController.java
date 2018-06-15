@@ -19,6 +19,49 @@ import java.util.Set;
 
 public class GUIController {
     public TableView tableView;
+    public Button pracownicyUpdateButton;
+    public ComboBox pracownicyBox;
+    public Button pacjenciUpdateButton;
+    public ComboBox pacjenciBox;
+    public GridPane roleMenu;
+    public Button closeRoleMenuButton;
+    public TextField roleNazwaField;
+    public Button roleInsertButton;
+    public ComboBox roleBox;
+    public Button roleUpdateButton;
+    public ListView roleList;
+    public Button roleDeleteButton;
+    public Button specjalizacjeDeleteButton;
+    public ListView specjalizacjeList;
+    public Button specjalizacjeUpdateButton;
+    public ComboBox specjalizacjeBox;
+    public Button specjalizacjeInsertButton;
+    public TextField specjalizacjeNazwaField;
+    public Button closeSpecjalizacjeMenuButton;
+    public GridPane specjalizacjeMenu;
+    public GridPane celeWizytMenu;
+    public Button closeCeleWizytMenuButton;
+    public TextField celeWizytNazwaField;
+    public Button celeWizytInsertButton;
+    public ComboBox celeWizytBox;
+    public Button celeWizytUpdateButton;
+    public ListView celeWizytList;
+    public Button celeWizytDeleteButton;
+    public GridPane wydarzeniaMedyczneMenu;
+    public Button closeWydarzeniaMedyczneMenuButton;
+    public TextField wydarzeniaMedyczneNazwaField;
+    public ComboBox wydarzeniaMedyczneBox;
+    public Button wydarzeniaMedyczneInsertButton;
+    public Button wydarzeniaMedyczneUpdateButton;
+    public ListView wydarzeniaMedyczneList;
+    public Button wydarzeniaMedyczneDeleteButton;
+    public GridPane pracownicyRoleMenu;
+    public ComboBox pracownicyRolePracownicyComboBox;
+    public Button closePracownicyRoleButton;
+    public ListView pracownicyRoleRoleList;
+    public Button pracownicyRoleDeleteButton;
+    public ComboBox pracownicyRoleRoleComboBox;
+    public Button pracownicyRoleInsertButton;
 
     //public ListView<CheckBox> testi;
     private ObservableList<ObservableList> tableData = FXCollections.observableArrayList();
@@ -122,7 +165,57 @@ public class GUIController {
     public void hidePacjenciMenu() {
         pacjenciMenu.setVisible(false);
     }
+    
+    @FXML
+    public void showPracownicyRoleMenu() {
+        pracownicyRoleMenu.setVisible(true);
+    }
 
+    @FXML
+    public void hidePracownicyRoleMenu() {
+        pracownicyRoleMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showRoleMenu() {
+        roleMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideRoleMenu() {
+        roleMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSpecjalizacjeMenu() {
+        specjalizacjeMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSpecjalizacjeMenu() {
+        specjalizacjeMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showCeleWizytMenu() {
+        celeWizytMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideCeleWizytMenu() {
+        celeWizytMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWydarzeniaMedyczneMenu() {
+        wydarzeniaMedyczneMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWydarzeniaMedyczneMenu() {
+        wydarzeniaMedyczneMenu.setVisible(false);
+    }
+    
     /*public void comboBoxTest() {
         ArrayList<CheckBox> arr = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
