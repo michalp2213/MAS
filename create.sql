@@ -30,6 +30,7 @@ DROP FUNCTION IF EXISTS terminarz_insert();
 DROP FUNCTION IF EXISTS specjalizacje_lekarza( INTEGER );
 DROP FUNCTION IF EXISTS wizyta_odbyta_check();
 DROP FUNCTION IF EXISTS wizyta_planowana_check();
+DROP FUNCTION IF EXISTS nulls(ANYARRAY);
 
 CREATE TABLE pacjenci
 (
@@ -193,6 +194,25 @@ CREATE TABLE ankiety_lekarze
   CHECK (uprzejmosc IS NOT NULL OR opanowanie IS NOT NULL OR
          informacyjnosc IS NOT NULL OR dokladnosc_badan IS NOT NULL)
 );
+
+create function nulls(VARIADIC a anyarray)
+  returns integer
+language plpgsql
+as $$
+DECLARE amount NUMERIC;
+        i      INTEGER;
+BEGIN
+  amount = 0;
+  FOR i IN 1..array_length(a, 1) LOOP
+    IF a[i] IS NULL
+    THEN amount = amount + 1;
+    END IF;
+  END LOOP;
+  RETURN amount;
+END;
+$$;
+
+
 
 CREATE OR REPLACE FUNCTION role_pracownika(id INTEGER)
   RETURNS TABLE(id_roli INTEGER, nazwa VARCHAR)
@@ -451,7 +471,7 @@ CREATE TRIGGER terminarz_insert
   FOR EACH ROW EXECUTE PROCEDURE terminarz_insert();
 
 CREATE OR REPLACE FUNCTION ranking(d1 DATE, d2 DATE)
-  RETURNS TABLE(id_lekarza INTEGER, imie VARCHAR, nazwisko VARCHAR, wynik NUMERIC(3, 2))
+  RETURNS TABLE(id_lekarza INTEGER, imie VARCHAR, nazwisko VARCHAR, wynik NUMERIC(3,2))
 AS
 $$
 BEGIN
@@ -480,14 +500,14 @@ BEGIN
       GROUP BY al.id_lekarza
   )
   SELECT
-    p.id_pracownika,
+    id,
     p.imie,
     p.nazwisko,
-    (v1 + v2 + v3 + v4) / (count(nullif(v1, 0)) + count(nullif(v2, 0)) + count(nullif(v3, 0)) + count(nullif(v4, 0)))
+    ((v1 + v2 + v3 + v4) / (nulls(nullif(v1, 0)) + nulls(nullif(v2, 0)) + nulls(nullif(v3, 0)) + nulls(nullif(v4, 0))))::NUMERIC(3,2)
   FROM temp
     JOIN pracownicy p ON id = p.id_pracownika
   ORDER BY (v1 + v2 + v3 + v4) /
-           (count(nullif(v1, 0)) + count(nullif(v2, 0)) + count(nullif(v3, 0)) + count(nullif(v4, 0))) DESC, id;
+           (nulls(nullif(v1, 0)) + nulls(nullif(v2, 0)) + nulls(nullif(v3, 0)) + nulls(nullif(v4, 0))) DESC, id;
 END;
 $$
 language plpgsql;
@@ -526,7 +546,7 @@ BEGIN
     WITH temp AS (
         SELECT
           al.id_lekarza                                                      AS id,
-          sum(coalesce(al.dokladnosc_badan, 0)) / count(al.dokladnosc_badan) AS v
+          (sum(coalesce(al.dokladnosc_badan, 0)) / count(al.dokladnosc_badan))::NUMERIC(3,2) AS v
         FROM ankiety_lekarze al
         WHERE data >= d1 AND data <= d2
         GROUP BY al.id_lekarza
@@ -546,7 +566,7 @@ BEGIN
       WITH temp AS (
           SELECT
             al.id_lekarza                                                  AS id,
-            sum(coalesce(al.informacyjnosc, 0)) / count(al.informacyjnosc) AS v
+            (sum(coalesce(al.informacyjnosc, 0)) / count(al.informacyjnosc))::NUMERIC(3,2) AS v
           FROM ankiety_lekarze al
           WHERE data >= d1 AND data <= d2
           GROUP BY al.id_lekarza
@@ -566,7 +586,7 @@ BEGIN
       WITH temp AS (
           SELECT
             al.id_lekarza                                          AS id,
-            sum(coalesce(al.opanowanie, 0)) / count(al.opanowanie) AS v
+            (sum(coalesce(al.opanowanie, 0)) / count(al.opanowanie))::NUMERIC(3,2) AS v
           FROM ankiety_lekarze al
           WHERE data >= d1 AND data <= d2
           GROUP BY al.id_lekarza
@@ -585,7 +605,7 @@ BEGIN
     WITH temp AS (
         SELECT
           al.id_lekarza                                          AS id,
-          sum(coalesce(al.uprzejmosc, 0)) / count(al.uprzejmosc) AS v
+          (sum(coalesce(al.uprzejmosc, 0)) / count(al.uprzejmosc))::NUMERIC(3,2) AS v
         FROM ankiety_lekarze al
         WHERE data >= d1 AND data <= d2
         GROUP BY al.id_lekarza
@@ -636,14 +656,14 @@ END;
 $$
 language plpgsql;
 
-INSERT INTO role (nazwa) VALUES ('lekarz');
-INSERT INTO role (nazwa) VALUES ('zwolniony');
-INSERT INTO role (nazwa) VALUES ('panek');
-INSERT INTO role (nazwa) VALUES ('pielęgniarka');
-INSERT INTO role (nazwa) VALUES ('pracownik techniczny');
-INSERT INTO role (nazwa) VALUES ('ochroniarz');
-INSERT INTO role (nazwa) VALUES ('zarząd');
-INSERT INTO role (nazwa) VALUES ('konserwator powierzchni płaskich');
+INSERT INTO role (nazwa) VALUES ('Lekarz');
+INSERT INTO role (nazwa) VALUES ('Zwolniony');
+INSERT INTO role (nazwa) VALUES ('Panek');
+INSERT INTO role (nazwa) VALUES ('Pielęgniarka');
+INSERT INTO role (nazwa) VALUES ('Pracownik techniczny');
+INSERT INTO role (nazwa) VALUES ('Ochroniarz');
+INSERT INTO role (nazwa) VALUES ('Zarząd');
+INSERT INTO role (nazwa) VALUES ('Konserwator powierzchni płaskich');
 INSERT INTO pacjenci (imie, nazwisko, pesel, data_urodzenia, plec)
 VALUES ('Józef', 'Wasilewski', '67102435341', '24.10.1967', 'M');
 INSERT INTO pacjenci (imie, nazwisko, pesel, data_urodzenia, plec)
@@ -1039,3 +1059,186 @@ INSERT INTO lekarze_specjalizacje VALUES (70, 11);
 INSERT INTO lekarze_specjalizacje VALUES (70, 7);
 INSERT INTO lekarze_specjalizacje VALUES (76, 21);
 INSERT INTO lekarze_specjalizacje VALUES (76, 20);
+INSERT INTO cele_wizyty(nazwa) VALUES ('Profilaktyka');
+INSERT INTO cele_wizyty(nazwa) VALUES ('Badanie');
+INSERT INTO cele_wizyty(nazwa) VALUES ('');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Ciąża');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Złamanie ręki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Złamanie nogi');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Złamanie kręgosłupa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Złamanie szyi');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES ('Złamanie palca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Padaczka');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Stwardnienie zanikowe boczne');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba i zespół Parkinsona');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba Alzheimera');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba Huntingtona');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba Creutzfeldta-Jakoba');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Zespół Guillaina-Barrégo');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Stwardnienie rozsiane');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Migrena');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Klasterowy ból głowy');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Udar mózgu');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Zapalenie opon mózgowych');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Encefalopatia wątrobowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Kiła');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Rzeżączka');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Chlamydiozy');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Wrzód weneryczny');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Czerwonka bakteryjna');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Ziarniniak pachwinowy');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Mycoplasma genitalium');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('AIDS');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Opryszczka genitaliów, opryszczka wargowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('WZW');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Kłykciny kończyste');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('HTLV');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Kandydoza');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Rzęsistkowica');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Świerzb');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Wszawica łonowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Ameboza');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Toczeń rumieniowaty układowy');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Twardzina');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Układowe zapalenia naczyń');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Reumatoidalne zapalenie stawów');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Reaktywne zapalenie stawów');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Zesztywniające zapalenie stawów kręgosłupa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Łuszczycowe zapalenie stawów');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Miażdżyca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba niedokrwienna serca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Zaburzenia rytmu i przewodzenia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Wady serca (wrodzone i nabyte)');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby wsierdzia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby mięśnia sercowego');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby osierdzia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Nowotwór serca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Niewydolność serca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Nadciśnienie tętnicze');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Nadciśnienie płucne');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby aorty i naczyń obwodowych');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby żył obwodowych');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Żylna choroba zakrzepowo-zatorowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby mikrokrążenia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroby naczyń chłonnych');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Jęczmyk');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Ropień powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Półpasiec powieki i gałki ocznej');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Ospica');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Zapalenie brzegów powiek');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Kępki żółte');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Brodawka powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Naczyniak powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Rak powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Niedomykalność szpary powiekowej');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Wywinięcie powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Podwinięcie powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Nieprawidłowy wzrost rzęs');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Tik powieki');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Nadmierne częste mruganie');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Akrofobia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Alkoholowy zespół abstynencyjny');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Anhedonia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Anoreksja');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Anxiety neurosis');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Autyzm');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Bezsenność');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Błędne koło');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Bulimia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba afektywna');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Choroba sieroca');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Ciąża rzekoma');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Depresja');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Depresja poporodowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Dysgrafia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Dyskalkulia rozwojowa');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Dysortografia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Dystymia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Egocentryzm');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Fobia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Hipochondria');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Histeria');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Homofobia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Jadłowstręt psychiczny');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Klaustrofobia');
+INSERT INTO wydarzenia_medyczne(nazwa) VALUES('Lęk');
+INSERT INTO pacjenci_lpk VALUES(1, 68, DATE '1967-10-24' + INTERVAL '10 YEARS', DATE '1967-10-24' + INTERVAL '10 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(2, 68, DATE '1959-09-14' + INTERVAL '16 YEARS', DATE '1959-09-14' + INTERVAL '16 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(3, 68, DATE '2002-11-22' + INTERVAL '20 YEARS', DATE '2002-11-22' + INTERVAL '20 YEARS'+ INTERVAL '3 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(4, 60, DATE '1960-05-10' + INTERVAL '11 YEARS', DATE '1960-05-10' + INTERVAL '11 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(5, 12, DATE '1988-04-21' + INTERVAL '17 YEARS', DATE '1988-04-21' + INTERVAL '17 YEARS'+ INTERVAL '17 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(6, 54, DATE '1963-12-07' + INTERVAL '9 YEARS', DATE '1963-12-07' + INTERVAL '9 YEARS'+ INTERVAL '17 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(7, 70, DATE '1982-01-31' + INTERVAL '9 YEARS', DATE '1982-01-31' + INTERVAL '9 YEARS'+ INTERVAL '5 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(8, 26, DATE '1971-09-15' + INTERVAL '14 YEARS', DATE '1971-09-15' + INTERVAL '14 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(9, 36, DATE '1961-03-25' + INTERVAL '14 YEARS', DATE '1961-03-25' + INTERVAL '14 YEARS'+ INTERVAL '1 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(10, 28, DATE '1983-08-18' + INTERVAL '12 YEARS', DATE '1983-08-18' + INTERVAL '12 YEARS'+ INTERVAL '2 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(11, 36, DATE '1993-10-07' + INTERVAL '17 YEARS', DATE '1993-10-07' + INTERVAL '17 YEARS'+ INTERVAL '13 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(12, 44, DATE '1964-10-11' + INTERVAL '11 YEARS', DATE '1964-10-11' + INTERVAL '11 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(13, 56, DATE '1997-11-18' + INTERVAL '10 YEARS', DATE '1997-11-18' + INTERVAL '10 YEARS'+ INTERVAL '2 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(14, 54, DATE '1972-11-20' + INTERVAL '15 YEARS', DATE '1972-11-20' + INTERVAL '15 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(15, 26, DATE '1954-11-13' + INTERVAL '14 YEARS', DATE '1954-11-13' + INTERVAL '14 YEARS'+ INTERVAL '17 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(16, 32, DATE '1958-05-07' + INTERVAL '20 YEARS', DATE '1958-05-07' + INTERVAL '20 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(17, 6, DATE '1994-07-03' + INTERVAL '13 YEARS', DATE '1994-07-03' + INTERVAL '13 YEARS'+ INTERVAL '15 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(18, 16, DATE '1945-07-11' + INTERVAL '14 YEARS', DATE '1945-07-11' + INTERVAL '14 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(19, 56, DATE '1979-08-10' + INTERVAL '20 YEARS', DATE '1979-08-10' + INTERVAL '20 YEARS'+ INTERVAL '15 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(20, 36, DATE '1957-07-31' + INTERVAL '15 YEARS', DATE '1957-07-31' + INTERVAL '15 YEARS'+ INTERVAL '19 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(21, 48, DATE '1964-11-19' + INTERVAL '11 YEARS', DATE '1964-11-19' + INTERVAL '11 YEARS'+ INTERVAL '9 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(22, 54, DATE '1965-12-11' + INTERVAL '14 YEARS', DATE '1965-12-11' + INTERVAL '14 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(23, 6, DATE '1991-10-07' + INTERVAL '9 YEARS', DATE '1991-10-07' + INTERVAL '9 YEARS'+ INTERVAL '12 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(24, 44, DATE '1950-03-06' + INTERVAL '15 YEARS', DATE '1950-03-06' + INTERVAL '15 YEARS'+ INTERVAL '16 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(25, 26, DATE '1949-11-03' + INTERVAL '18 YEARS', DATE '1949-11-03' + INTERVAL '18 YEARS'+ INTERVAL '15 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(26, 76, DATE '1990-08-05' + INTERVAL '20 YEARS', DATE '1990-08-05' + INTERVAL '20 YEARS'+ INTERVAL '12 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(27, 16, DATE '1958-07-28' + INTERVAL '11 YEARS', DATE '1958-07-28' + INTERVAL '11 YEARS'+ INTERVAL '16 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(28, 70, DATE '1965-03-25' + INTERVAL '13 YEARS', DATE '1965-03-25' + INTERVAL '13 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(29, 48, DATE '1956-05-17' + INTERVAL '10 YEARS', DATE '1956-05-17' + INTERVAL '10 YEARS'+ INTERVAL '3 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(30, 36, DATE '1980-07-06' + INTERVAL '17 YEARS', DATE '1980-07-06' + INTERVAL '17 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(31, 22, DATE '1993-12-07' + INTERVAL '12 YEARS', DATE '1993-12-07' + INTERVAL '12 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(32, 22, DATE '1963-01-28' + INTERVAL '13 YEARS', DATE '1963-01-28' + INTERVAL '13 YEARS'+ INTERVAL '19 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(33, 8, DATE '1967-03-29' + INTERVAL '14 YEARS', DATE '1967-03-29' + INTERVAL '14 YEARS'+ INTERVAL '1 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(34, 32, DATE '1944-09-16' + INTERVAL '20 YEARS', DATE '1944-09-16' + INTERVAL '20 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(35, 12, DATE '1974-10-28' + INTERVAL '20 YEARS', DATE '1974-10-28' + INTERVAL '20 YEARS'+ INTERVAL '2 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(36, 34, DATE '1975-10-14' + INTERVAL '9 YEARS', DATE '1975-10-14' + INTERVAL '9 YEARS'+ INTERVAL '20 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(37, 32, DATE '1952-05-27' + INTERVAL '9 YEARS', DATE '1952-05-27' + INTERVAL '9 YEARS'+ INTERVAL '15 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(38, 76, DATE '1955-03-19' + INTERVAL '11 YEARS', DATE '1955-03-19' + INTERVAL '11 YEARS'+ INTERVAL '4 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(39, 56, DATE '1978-09-20' + INTERVAL '15 YEARS', DATE '1978-09-20' + INTERVAL '15 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(40, 12, DATE '1987-11-11' + INTERVAL '20 YEARS', DATE '1987-11-11' + INTERVAL '20 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(41, 56, DATE '1973-11-04' + INTERVAL '14 YEARS', DATE '1973-11-04' + INTERVAL '14 YEARS'+ INTERVAL '10 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(42, 34, DATE '1957-06-23' + INTERVAL '20 YEARS', DATE '1957-06-23' + INTERVAL '20 YEARS'+ INTERVAL '5 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(43, 10, DATE '1974-03-14' + INTERVAL '19 YEARS', DATE '1974-03-14' + INTERVAL '19 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(44, 76, DATE '1964-07-15' + INTERVAL '9 YEARS', DATE '1964-07-15' + INTERVAL '9 YEARS'+ INTERVAL '4 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(45, 4, DATE '2002-08-08' + INTERVAL '9 YEARS', DATE '2002-08-08' + INTERVAL '9 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(46, 56, DATE '1944-08-08' + INTERVAL '17 YEARS', DATE '1944-08-08' + INTERVAL '17 YEARS'+ INTERVAL '19 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(47, 66, DATE '1975-04-04' + INTERVAL '20 YEARS', DATE '1975-04-04' + INTERVAL '20 YEARS'+ INTERVAL '20 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(48, 28, DATE '1968-08-12' + INTERVAL '20 YEARS', DATE '1968-08-12' + INTERVAL '20 YEARS'+ INTERVAL '7 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(49, 66, DATE '1951-12-26' + INTERVAL '14 YEARS', DATE '1951-12-26' + INTERVAL '14 YEARS'+ INTERVAL '11 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(50, 22, DATE '1975-07-17' + INTERVAL '20 YEARS', DATE '1975-07-17' + INTERVAL '20 YEARS'+ INTERVAL '19 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(51, 54, DATE '1956-08-24' + INTERVAL '16 YEARS', DATE '1956-08-24' + INTERVAL '16 YEARS'+ INTERVAL '4 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(52, 10, DATE '1960-05-19' + INTERVAL '17 YEARS', DATE '1960-05-19' + INTERVAL '17 YEARS'+ INTERVAL '7 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(53, 60, DATE '1950-11-09' + INTERVAL '10 YEARS', DATE '1950-11-09' + INTERVAL '10 YEARS'+ INTERVAL '10 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(54, 12, DATE '1989-01-13' + INTERVAL '20 YEARS', DATE '1989-01-13' + INTERVAL '20 YEARS'+ INTERVAL '8 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(55, 4, DATE '1963-04-01' + INTERVAL '20 YEARS', DATE '1963-04-01' + INTERVAL '20 YEARS'+ INTERVAL '16 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(56, 48, DATE '1977-01-22' + INTERVAL '11 YEARS', DATE '1977-01-22' + INTERVAL '11 YEARS'+ INTERVAL '10 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(57, 16, DATE '1993-12-22' + INTERVAL '13 YEARS', DATE '1993-12-22' + INTERVAL '13 YEARS'+ INTERVAL '7 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(58, 10, DATE '2000-07-26' + INTERVAL '11 YEARS', DATE '2000-07-26' + INTERVAL '11 YEARS'+ INTERVAL '16 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(59, 36, DATE '1960-04-14' + INTERVAL '9 YEARS', DATE '1960-04-14' + INTERVAL '9 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(60, 10, DATE '1995-11-24' + INTERVAL '15 YEARS', DATE '1995-11-24' + INTERVAL '15 YEARS'+ INTERVAL '3 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(61, 32, DATE '1984-10-02' + INTERVAL '12 YEARS', DATE '1984-10-02' + INTERVAL '12 YEARS'+ INTERVAL '18 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(62, 22, DATE '1968-08-12' + INTERVAL '11 YEARS', DATE '1968-08-12' + INTERVAL '11 YEARS'+ INTERVAL '7 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(63, 12, DATE '1962-05-09' + INTERVAL '14 YEARS', DATE '1962-05-09' + INTERVAL '14 YEARS'+ INTERVAL '2 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(64, 70, DATE '1959-04-15' + INTERVAL '10 YEARS', DATE '1959-04-15' + INTERVAL '10 YEARS'+ INTERVAL '12 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(65, 60, DATE '1953-08-13' + INTERVAL '16 YEARS', DATE '1953-08-13' + INTERVAL '16 YEARS'+ INTERVAL '20 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(66, 34, DATE '1943-02-07' + INTERVAL '9 YEARS', DATE '1943-02-07' + INTERVAL '9 YEARS'+ INTERVAL '13 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(67, 76, DATE '1943-08-26' + INTERVAL '20 YEARS', DATE '1943-08-26' + INTERVAL '20 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(68, 22, DATE '1987-11-23' + INTERVAL '17 YEARS', DATE '1987-11-23' + INTERVAL '17 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(69, 66, DATE '1965-03-10' + INTERVAL '11 YEARS', DATE '1965-03-10' + INTERVAL '11 YEARS'+ INTERVAL '14 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(70, 28, DATE '1962-02-26' + INTERVAL '17 YEARS', DATE '1962-02-26' + INTERVAL '17 YEARS'+ INTERVAL '17 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(71, 4, DATE '1984-10-23' + INTERVAL '17 YEARS', DATE '1984-10-23' + INTERVAL '17 YEARS'+ INTERVAL '12 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(72, 10, DATE '1949-05-23' + INTERVAL '20 YEARS', DATE '1949-05-23' + INTERVAL '20 YEARS'+ INTERVAL '3 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(73, 66, DATE '1990-02-20' + INTERVAL '9 YEARS', DATE '1990-02-20' + INTERVAL '9 YEARS'+ INTERVAL '5 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(74, 56, DATE '1990-11-21' + INTERVAL '15 YEARS', DATE '1990-11-21' + INTERVAL '15 YEARS'+ INTERVAL '19 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(75, 54, DATE '1957-11-24' + INTERVAL '18 YEARS', DATE '1957-11-24' + INTERVAL '18 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(76, 22, DATE '1981-05-30' + INTERVAL '15 YEARS', DATE '1981-05-30' + INTERVAL '15 YEARS'+ INTERVAL '3 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(77, 70, DATE '1954-12-25' + INTERVAL '15 YEARS', DATE '1954-12-25' + INTERVAL '15 YEARS'+ INTERVAL '4 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(78, 34, DATE '1978-03-11' + INTERVAL '9 YEARS', DATE '1978-03-11' + INTERVAL '9 YEARS'+ INTERVAL '4 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(79, 48, DATE '1997-12-24' + INTERVAL '11 YEARS', DATE '1997-12-24' + INTERVAL '11 YEARS'+ INTERVAL '6 MONTHS');
+INSERT INTO pacjenci_lpk VALUES(80, 56, DATE '1949-01-08' + INTERVAL '19 YEARS', DATE '1949-01-08' + INTERVAL '19 YEARS'+ INTERVAL '14 MONTHS');

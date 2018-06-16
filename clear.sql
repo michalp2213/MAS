@@ -30,3 +30,4 @@ DROP FUNCTION IF EXISTS terminarz_insert();
 DROP FUNCTION IF EXISTS specjalizacje_lekarza(INTEGER);
 DROP FUNCTION IF EXISTS wizyta_odbyta_check();
 DROP FUNCTION IF EXISTS wizyta_planowana_check();
+DROP FUNCTION IF EXISTS nulls(ANYARRAY);
