@@ -6,17 +6,19 @@ public class Pracownicy implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO
-		return null;
+		return Database.executeQuery("SELECT * FROM pracownicy;");
 	}
 
 	public boolean deleteItem (int id) {
-		//TODO
-		return false;
+		return Database.executeUpdate("DELETE FROM pracownicy WHERE id_pracownika = " + id + ";") != 0;
 	}
 		
 	public boolean insertItem (String name, String surname, String pesel) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO pracownicy VALUES ("
+				+ "DEFAULT, "
+				+ "'" + name + "', "
+				+ "'" + surname + "', "
+				+ "'" + pesel + "');";
+		return Database.executeUpdate(sql) != 0;
 	}
 }
