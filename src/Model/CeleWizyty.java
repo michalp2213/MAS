@@ -10,11 +10,11 @@ public class CeleWizyty implements Table {
 	}
 	
 	public boolean deleteItem (String name) {
-		return Database.executeUpdate("DELETE FROM cele_wizyty WHERE nazwa = " + name + ";") != 0;
+		return Database.executeUpdate("DELETE FROM cele_wizyty WHERE nazwa = '" + name + "';") != 0;
 	}
 	
 	public boolean insertItem (String name) {
-		return Database.executeUpdate("INSERT INTO cele_wizyty VALUES (DEFAULT, " + name + ");") != 0;
+		return Database.executeUpdate("INSERT INTO cele_wizyty VALUES (DEFAULT, '" + name + "');") != 0;
 	}
 
 }

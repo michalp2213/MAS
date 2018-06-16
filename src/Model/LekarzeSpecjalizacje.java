@@ -14,7 +14,7 @@ public class LekarzeSpecjalizacje implements Table {
 				+ "id_lekarza = " + lekarzId
 				+ " AND (SELECT nazwa FROM specjalizacje WHERE "
 					+ "id_specjalizacji = lekarze_specjalizacje.id_specjalizacji"
-				+ ") = " + specjalizacjaName + ";";
+				+ ") = '" + specjalizacjaName + "';";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -22,7 +22,7 @@ public class LekarzeSpecjalizacje implements Table {
 		String sql = "INSERT INTO lekarze_specjalizacje VALUES ("
 				+ lekarzId + ","
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE "
-					+ "nazwa = " + specjalizacjaName + "));";
+					+ "nazwa = '" + specjalizacjaName + "'));";
 		return false;
 	}
 	

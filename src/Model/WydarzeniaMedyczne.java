@@ -6,18 +6,18 @@ public class WydarzeniaMedyczne implements Table {
 
 	@Override
 	public ResultSet getContents() {
-		// TODO Auto-generated method stub
-		return null;
+		return Database.executeQuery("SELECT * FROM wydarzenia_medyczne;");
 	}
 	
 	public boolean deleteItem (String name) {
-		//TODO
-		return false;
+		return Database.executeUpdate("DELETE FROM wydarzenia_medyczne WHERE nazwa = '" + name + "';") != 0;
 	}
 	
 	public boolean insertItem (String name) {
-		//TODO
-		return false;
+		String sql = "INSERT INTO wydarzenia_medyczne VALUES ("
+				+ "DEFAULT, "
+				+ "'" + name + "');";
+		return Database.executeUpdate(sql) != 0;
 	}
 
 }

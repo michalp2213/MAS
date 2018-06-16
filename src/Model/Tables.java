@@ -5,6 +5,7 @@ public class Tables {
 	public static HistoriaMedyczna historia_medyczna = new HistoriaMedyczna();
 	public static WydarzeniaMedyczne wydarzenia_medyczne = new WydarzeniaMedyczne();
 	public static WizytyPlanowane wizyty_planowane = new WizytyPlanowane();
+	public static WizytyOdbyte wizyty_odbyte = new WizytyOdbyte();
 	public static CeleWizyty cele_wizyty = new CeleWizyty();
 	public static Skierowania skierowania = new Skierowania();
 	public static Pracownicy pracownicy = new Pracownicy();
