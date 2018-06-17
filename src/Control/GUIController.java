@@ -21,6 +21,54 @@ import java.util.Set;
 
 public class GUIController {
     public TableView tableView;
+    public VBox tableButtons;
+    public Button rolePracownikowButton;
+    public Button specjalizacjeLekarzyButton;
+    public Button wizytyPlanowaneButton;
+    public Button wizytyOdbyteButton;
+    public Button skierowaniaButton;
+    public VBox pracownicyChoiceMenu;
+    public Button showPracownicyTableButton;
+    public Button modifyPracownicyTableButton;
+    public VBox pacjenciChoiceMenu;
+    public Button showPacjenciTableButton;
+    public Button modifyPacjenciTableButton;
+    public VBox rolePracownikowChoiceMenu;
+    public Button showRolePracownikowTableButton;
+    public Button modifyRolePracownikowTableButton;
+    public VBox specjalizacjeLekarzyChoiceMenu;
+    public Button showSpecjalizacjeLekarzyTableButton;
+    public Button modifySpecjalizacjeLekarzyTableButton;
+    public VBox LPKChoiceMenu;
+    public Button showLPKTableButton;
+    public Button modifyLPKTableButton;
+    public VBox wizytyPlanowaneChoiceMenu;
+    public Button showWizytyPlanowaneTableButton;
+    public Button modifyWizytyPlanowaneTableButton;
+    public VBox wizytyOdbyteChoiceMenu;
+    public Button showWizytyOdbyteTableButton;
+    public Button modifyWizytyOdbyteTableButton;
+    public VBox skierowaniaChoiceMenu;
+    public Button showSkierowaniaTableButton;
+    public Button modifySkierowaniaTableButton;
+    public VBox historiaMedycznaChoiceMenu;
+    public Button showHistoriaMedycznaTableButton;
+    public Button modifyHistoriaMedycznaTableButton;
+    public VBox ankietyChoiceMenu;
+    public Button showAnkietyTableButton;
+    public Button modifyAnkietyTableButton;
+    public VBox roleChoiceMenu;
+    public Button showRoleTableButton;
+    public Button modifyRoleTableButton;
+    public VBox specjalizacjeChoiceMenu;
+    public Button showSpecjalizacjeTableButton;
+    public Button modifySpecjalizacjeTableButton;
+    public VBox wydarzeniaMedyczneChoiceMenu;
+    public Button showWydarzeniaMedyczneTableButton;
+    public Button modifyWydarzeniaMedyczneTableButton;
+    public VBox celeWizytChoiceMenu;
+    public Button showCeleWizytTableButton;
+    public Button modifyCeleWizytTableButton;
 
     //public ListView<CheckBox> testi;
     private ObservableList<ObservableList> tableData = FXCollections.observableArrayList();
@@ -149,30 +197,143 @@ public class GUIController {
     }
 
     @FXML
-    public void hideTabeleOsoby() {
-        tabeleOsoby.setVisible(false);
+    public void showPracownicyChoiceMenu() {
+        pracownicyChoiceMenu.setVisible(true);
     }
 
     @FXML
-    public void showTabeleRelacje() {
-        tabeleRelacje.setVisible(true);
-        tabeleRelacje.toFront();
+    public void hidePracownicyChoiceMenu() {
+        pracownicyChoiceMenu.setVisible(false);
     }
 
     @FXML
-    public void hideTabeleRelacje() {
-        tabeleRelacje.setVisible(false);
+    public void showPacjenciChoiceMenu() {
+        pacjenciChoiceMenu.setVisible(true);
     }
 
     @FXML
-    public void showTabeleMetadane() {
-        tabeleMetadane.setVisible(true);
-        tabeleMetadane.toFront();
+    public void hidePacjenciChoiceMenu() {
+        pacjenciChoiceMenu.setVisible(false);
     }
 
     @FXML
-    public void hideTabeleMetadane() {
-        tabeleMetadane.setVisible(false);
+    public void showRolePracownikowChoiceMenu() {
+        rolePracownikowChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideRolePracownikowChoiceMenu() {
+        rolePracownikowChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSpecjalizacjeLekarzyChoiceMenu() {
+        specjalizacjeLekarzyChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSpecjalizacjeLekarzyChoiceMenu() {
+        specjalizacjeLekarzyChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showLPKChoiceMenu() {
+        LPKChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideLPKChoiceMenu() {
+        LPKChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWizytyPlanowaneChoiceMenu() {
+        wizytyPlanowaneChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWizytyPlanowaneChoiceMenu() {
+        wizytyPlanowaneChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWizytyOdbyteChoiceMenu() {
+        wizytyOdbyteChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWizytyOdbyteChoiceMenu() {
+        wizytyOdbyteChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSkierowaniaChoiceMenu() {
+        skierowaniaChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSkierowaniaChoiceMenu() {
+        skierowaniaChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showHistoriaMedycznaChoiceMenu() {
+        historiaMedycznaChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideHistoriaMedycznaChoiceMenu() {
+        historiaMedycznaChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showAnkietyChoiceMenu() {
+        ankietyChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideAnkietyChoiceMenu() {
+        ankietyChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showRoleChoiceMenu() {
+        roleChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideRoleChoiceMenu() {
+        roleChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSpecjalizacjeChoiceMenu() {
+        specjalizacjeChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSpecjalizacjeChoiceMenu() {
+        specjalizacjeChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWydarzeniaMedyczneChoiceMenu() {
+        wydarzeniaMedyczneChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWydarzeniaMedyczneChoiceMenu() {
+        wydarzeniaMedyczneChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showCeleWizytChoiceMenu() {
+        celeWizytChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideCeleWizytChoiceMenu() {
+        celeWizytChoiceMenu.setVisible(false);
     }
 
     @FXML
