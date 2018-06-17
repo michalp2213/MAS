@@ -118,7 +118,8 @@
                 minWidth="100"
                 maxHeight="25"
                 minHeight="25"
-                textAlignment="CENTER"/>
+                textAlignment="CENTER"
+                onAction="#showLekarzeSpecjalizacjeMenu"/>
 
         <Button fx:id="LPKButton"
                 text="LPK"
@@ -126,7 +127,8 @@
                 minWidth="100"
                 maxHeight="25"
                 minHeight="25"
-                textAlignment="CENTER"/>
+                textAlignment="CENTER"
+                onAction="#showLPKMenu"/>
     </VBox>
 
     <VBox fx:id="tabeleMetadane"
@@ -378,7 +380,7 @@
               visible="false">
         <ComboBox fx:id="pracownicyRolePracownicyComboBox"
             GridPane.columnIndex="0"
-            GridPane.rowIndex="0"
+            GridPane.rowIndex="1"
             minWidth="300"/>
 
         <Button fx:id="closePracownicyRoleButton"
@@ -392,29 +394,117 @@
 
         <ListView fx:id="pracownicyRoleRoleList"
                   GridPane.columnIndex="0"
-                  GridPane.rowIndex="1"
+                  GridPane.rowIndex="2"
                 maxHeight="100"/>
 
         <Button fx:id="pracownicyRoleDeleteButton"
                 text="Usuń"
                 GridPane.columnIndex="1"
-                GridPane.rowIndex="1"
+                GridPane.rowIndex="2"
                 maxWidth="60"
                 minWidth="60"
                 GridPane.halignment="CENTER"/>
 
         <ComboBox fx:id="pracownicyRoleRoleComboBox"
                   GridPane.columnIndex="0"
-                  GridPane.rowIndex="2"
+                  GridPane.rowIndex="3"
                 minWidth="300"/>
 
         <Button fx:id="pracownicyRoleInsertButton"
                 text="Dodaj"
                 GridPane.columnIndex="1"
+                GridPane.rowIndex="3"
+                maxWidth="60"
+                minWidth="60"
+                GridPane.halignment="CENTER"/>
+
+    </GridPane>
+
+    <GridPane fx:id="lekarzeSpecjalizacjeMenu"
+              AnchorPane.leftAnchor="100"
+              AnchorPane.topAnchor="150"
+              visible="false">
+        <ComboBox fx:id="lekarzeSpecjalizacjeLekarzeComboBox"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="1"
+                  minWidth="300"/>
+
+        <Button fx:id="closeLekarzeSpecjalizacjeButton"
+                text="Zamknij"
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="0"
+                GridPane.halignment="CENTER"
+                maxWidth="60"
+                minWidth="60"
+                onAction="#hideLekarzeSpecjalizacjeMenu"/>
+
+        <ListView fx:id="lekarzeSpecjalizacjeRoleList"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="2"
+                  maxHeight="100"/>
+
+        <Button fx:id="lekarzeSpecjalizacjeDeleteButton"
+                text="Usuń"
+                GridPane.columnIndex="1"
                 GridPane.rowIndex="2"
                 maxWidth="60"
                 minWidth="60"
                 GridPane.halignment="CENTER"/>
+
+        <ComboBox fx:id="lekarzeSpecjalizacjeRoleComboBox"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="3"
+                  minWidth="300"/>
+
+        <Button fx:id="lekarzeSpecjalizacjeInsertButton"
+                text="Dodaj"
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="3"
+                maxWidth="60"
+                minWidth="60"
+                GridPane.halignment="CENTER"/>
+
+    </GridPane>
+
+    <GridPane fx:id="LPKMenu"
+              AnchorPane.topAnchor="150"
+              AnchorPane.leftAnchor="100"
+              visible="false">
+
+        <Button fx:id="closeLPKButton"
+                text="Zamknij"
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="0"
+                GridPane.halignment="CENTER"
+                maxWidth="60"
+                minWidth="60"
+                onAction="#hideLPKMenu"/>
+
+        <ComboBox fx:id="LPKPacjenciComboBox"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="1"
+                  minWidth="450"/>
+
+        <ComboBox fx:id="LPKLekarzeComboBox"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="1"
+                  minWidth="450"/>
+
+        <Button fx:id="LPKUpdateButton"
+                text="Ustaw"
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="1"
+                maxWidth="60"
+                minWidth="60"
+                GridPane.halignment="CENTER"/>
+
+        <ListView fx:id="LPKList"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"
+                  maxWidth="900"
+                  minWidth="900"
+                  maxHeight="70"/>
 
     </GridPane>
 
@@ -676,5 +766,6 @@
 
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="50"
-               visible="false"/>
+                minWidth="1300"
+                visible="false"/>
 </AnchorPane>

@@ -39,3 +39,15 @@
     -fx-border-style:solid;
     -fx-padding: 5px 5px 5px 5px;
 }
+
+#lekarzeSpecjalizacjeMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
+
+#LPKMenu {
+    -fx-background-color:lightgray;
+    -fx-border-style:solid;
+    -fx-padding: 5px 5px 5px 5px;
+}
