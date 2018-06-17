@@ -1,11 +1,12 @@
 package Model;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class LekarzeSpecjalizacje implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * from lekarze_specjalizacje;");
 	}
 	
@@ -26,7 +27,7 @@ public class LekarzeSpecjalizacje implements Table {
 		return false;
 	}
 	
-	public ResultSet getSpecjalizacje (int lekarzId) {
+	public ArrayList<ArrayList<String>> getSpecjalizacje (int lekarzId) {
 		return Database.executeQuery("SELECT * FROM specjalizacje_lekarza(" + lekarzId + ");");
 	}
 

@@ -1,11 +1,12 @@
 package Model;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Skierowania implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * FROM skierowania;");
 	}
 	

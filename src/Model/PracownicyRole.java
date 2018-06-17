@@ -1,11 +1,12 @@
 package Model;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class PracownicyRole implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * FROM pracownicy_role;");
 	}
 
@@ -23,7 +24,7 @@ public class PracownicyRole implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public ResultSet getRole (int pracownikId) {
+	public ArrayList<ArrayList<String>> getRole (int pracownikId) {
 		return Database.executeQuery("SELECT role_pracownika (" + pracownikId + ");");
 	}
 }

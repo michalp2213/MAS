@@ -2,11 +2,12 @@ package Model;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class AnkietyLekarze implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * FROM ankiety_lekarze;");
 	}
 	
@@ -26,15 +27,15 @@ public class AnkietyLekarze implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public ResultSet alphabeticRanking (Date from, Date to, int specjalizacjaId) {
+	public ArrayList<ArrayList<String>> alphabeticRanking (Date from, Date to, int specjalizacjaId) {
 		return Database.executeQuery("SELECT * from ranking_alfabetyczny (" + from + ", " + to + ", " + specjalizacjaId + ");");
 	}
 	
-	public ResultSet bestIn (Date from, Date to, String cecha) {
+	public ArrayList<ArrayList<String>> bestIn (Date from, Date to, String cecha) {
 		return Database.executeQuery("SELECT * from ranking_cecha (" + from + ", " + to + ", " + cecha + ");");
 	}
 	
-	public ResultSet bestAvg (Date from, Date to, int specjalizacjaId) {
+	public ArrayList<ArrayList<String>> bestAvg (Date from, Date to, int specjalizacjaId) {
 		return Database.executeQuery("SELECT * from ranking_specjalizacje (" + from + ", " + to + ", " + specjalizacjaId + ");");
 	}
 
