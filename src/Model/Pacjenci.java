@@ -2,11 +2,12 @@ package Model;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Pacjenci implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * from pacjenci;");
 	}
 	
