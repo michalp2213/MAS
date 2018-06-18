@@ -1,5 +1,5 @@
 INSERT INTO role (nazwa) VALUES ('Lekarz');
-INSERT INTO role (nazwa) VALUES ('Zwolniony');
+INSERT INTO role (nazwa) VALUES ('Rejestrator Medyczny');
 INSERT INTO role (nazwa) VALUES ('Panek');
 INSERT INTO role (nazwa) VALUES ('Pielęgniarka');
 INSERT INTO role (nazwa) VALUES ('Pracownik techniczny');

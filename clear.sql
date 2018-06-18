@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS pacjenci CASCADE;
 DROP VIEW IF EXISTS terminaz;
 DROP FUNCTION IF EXISTS wizyte_odbyte_pacjenta(INTEGER);
 DROP FUNCTION IF EXISTS wizyte_planowane_pacjenta(INTEGER);
-DROP FUNCTION IF EXISTS czy_aktywny_lekarz(INTEGER);
+DROP FUNCTION IF EXISTS czy_aktywny_lekarz(INTEGER, DATE, DATE);
 DROP FUNCTION IF EXISTS lekarze_specjalizacje_check();
 DROP FUNCTION IF EXISTS pacjent_check();
 DROP FUNCTION IF EXISTS pesel_check(CHAR);

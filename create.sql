@@ -23,7 +23,9 @@ CREATE TABLE pracownicy
   imie          VARCHAR  NOT NULL,
   nazwisko      VARCHAR  NOT NULL,
   pesel         CHAR(11) NOT NULL
-    UNIQUE
+    UNIQUE,
+  zatrudniony_od DATE NOT NULL,
+  zatrudniony_do DATE
 );
 
 CREATE TABLE specjalizacje
