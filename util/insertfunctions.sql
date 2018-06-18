@@ -65,15 +65,18 @@ END;
 $$
 language plpgsql;
 
-CREATE OR REPLACE FUNCTION czy_aktywny_lekarz(id INTEGER)
+CREATE OR REPLACE FUNCTION czy_aktywny_lekarz(id INTEGER, d1 DATE, d2 DATE)
   RETURNS BOOLEAN AS
 $$
+DECLARE
+  zod DATE;
+  zdo DATE;
 BEGIN
-  RETURN (SELECT count(*)
+  zod = (SELECT zatrudniony_od FROM pracownicy WHERE id_pracownika = id);
+  zdo = (SELECT zatrudniony_do FROM pracownicy WHERE id_pracownika = id);
+  RETURN (d1 IS NULL OR zod <= d1) AND (zdo IS NULL OR zdo >= d2) AND (SELECT count(*)
           FROM pracownicy_role
-          WHERE id_pracownika = id AND id_roli = 1) = 1 AND (SELECT count(*)
-                                                             FROM pracownicy_role
-                                                             WHERE id_pracownika = id AND id_roli = 2) = 0;
+          WHERE id_pracownika = id AND id_roli = 1) > 0;
 END;
 $$
 language plpgsql;
@@ -132,7 +135,7 @@ CREATE TRIGGER pracownik_check
 CREATE OR REPLACE FUNCTION pacjent_lpk_check()
   RETURNS TRIGGER AS $pacjent_lpk_check$
 BEGIN
-  IF czy_aktywny_lekarz(NEW.id_lekarza)
+  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.od, NEW."do")
   THEN RETURN NEW;
   ELSE RAISE EXCEPTION 'Nie aktywny lekarz';
   END IF;
@@ -149,7 +152,7 @@ CREATE OR REPLACE FUNCTION wizyta_odbyta_check()
   RETURNS TRIGGER AS $wizyta_odbyta_check$
 DECLARE r RECORD;
 BEGIN
-  IF czy_aktywny_lekarz(NEW.id_lekarza) = FALSE
+  IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.czas_trwania)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
   FOR r in SELECT
@@ -178,7 +181,7 @@ BEGIN
   IF NEW.data < current_time
   THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean.';
   END IF;
-  IF czy_aktywny_lekarz(NEW.id_lekarza) = FALSE
+  IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.szacowany_czas)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
   FOR r in SELECT
@@ -317,7 +320,7 @@ language plpgsql;
 CREATE OR REPLACE FUNCTION lekarze_specjalizacje_check()
   RETURNS TRIGGER AS $lekarze_specjalizacje_check$
 BEGIN
-  IF czy_aktywny_lekarz(NEW.id_lekarza)
+  IF czy_aktywny_lekarz(NEW.id_lekarza, NULL, NULL)
   THEN RETURN NEW;
   ELSE RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
