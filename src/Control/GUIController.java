@@ -71,10 +71,10 @@ public class GUIController {
     public Button modifyCeleWizytTableButton;
 
     //public ListView<CheckBox> testi;
-    private ObservableList<ObservableList> tableData = FXCollections.observableArrayList();
+    private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 
     public HBox mainMenuButtons;
-    
+
     public Button historiaMedycznaButton;
     public Button wizytyButton;
     public Button ankietyButton;
@@ -182,23 +182,23 @@ public class GUIController {
     public Button wydarzeniaMedyczneDeleteButton;
 
 
-
     @FXML
     public void showTabeleOsoby() {
         tabeleOsoby.setVisible(true);
         tabeleOsoby.toFront();
-        /*HashSet<String> rows = new HashSet<>();
+        HashSet<String> rows = new HashSet<>();
         rows.add("id");
         rows.add("imie");
         rows.add("nazwisko");
         rows.add("pesel");
-        showTable(Tables.pacjenci.getContents(), rows);*/
+        showTable(Tables.pacjenci.getContents(), rows);
         //comboBoxTest();
     }
 
     @FXML
     public void showPracownicyChoiceMenu() {
         pracownicyChoiceMenu.setVisible(true);
+        pracownicyChoiceMenu.toFront();
     }
 
     @FXML
@@ -209,6 +209,7 @@ public class GUIController {
     @FXML
     public void showPacjenciChoiceMenu() {
         pacjenciChoiceMenu.setVisible(true);
+        pacjenciChoiceMenu.toFront();
     }
 
     @FXML
@@ -219,6 +220,7 @@ public class GUIController {
     @FXML
     public void showRolePracownikowChoiceMenu() {
         rolePracownikowChoiceMenu.setVisible(true);
+        rolePracownikowChoiceMenu.toFront();
     }
 
     @FXML
@@ -229,6 +231,7 @@ public class GUIController {
     @FXML
     public void showSpecjalizacjeLekarzyChoiceMenu() {
         specjalizacjeLekarzyChoiceMenu.setVisible(true);
+        specjalizacjeLekarzyChoiceMenu.toFront();
     }
 
     @FXML
@@ -239,6 +242,7 @@ public class GUIController {
     @FXML
     public void showLPKChoiceMenu() {
         LPKChoiceMenu.setVisible(true);
+        LPKChoiceMenu.toFront();
     }
 
     @FXML
@@ -249,6 +253,7 @@ public class GUIController {
     @FXML
     public void showWizytyPlanowaneChoiceMenu() {
         wizytyPlanowaneChoiceMenu.setVisible(true);
+        wizytyPlanowaneChoiceMenu.toFront();
     }
 
     @FXML
@@ -259,6 +264,7 @@ public class GUIController {
     @FXML
     public void showWizytyOdbyteChoiceMenu() {
         wizytyOdbyteChoiceMenu.setVisible(true);
+        wizytyOdbyteChoiceMenu.toFront();
     }
 
     @FXML
@@ -269,6 +275,7 @@ public class GUIController {
     @FXML
     public void showSkierowaniaChoiceMenu() {
         skierowaniaChoiceMenu.setVisible(true);
+        skierowaniaChoiceMenu.toFront();
     }
 
     @FXML
@@ -279,6 +286,7 @@ public class GUIController {
     @FXML
     public void showHistoriaMedycznaChoiceMenu() {
         historiaMedycznaChoiceMenu.setVisible(true);
+        historiaMedycznaChoiceMenu.toFront();
     }
 
     @FXML
@@ -289,6 +297,7 @@ public class GUIController {
     @FXML
     public void showAnkietyChoiceMenu() {
         ankietyChoiceMenu.setVisible(true);
+        ankietyChoiceMenu.toFront();
     }
 
     @FXML
@@ -299,6 +308,7 @@ public class GUIController {
     @FXML
     public void showRoleChoiceMenu() {
         roleChoiceMenu.setVisible(true);
+        roleChoiceMenu.toFront();
     }
 
     @FXML
@@ -309,6 +319,7 @@ public class GUIController {
     @FXML
     public void showSpecjalizacjeChoiceMenu() {
         specjalizacjeChoiceMenu.setVisible(true);
+        specjalizacjeChoiceMenu.toFront();
     }
 
     @FXML
@@ -319,6 +330,7 @@ public class GUIController {
     @FXML
     public void showWydarzeniaMedyczneChoiceMenu() {
         wydarzeniaMedyczneChoiceMenu.setVisible(true);
+        wydarzeniaMedyczneChoiceMenu.toFront();
     }
 
     @FXML
@@ -329,6 +341,7 @@ public class GUIController {
     @FXML
     public void showCeleWizytChoiceMenu() {
         celeWizytChoiceMenu.setVisible(true);
+        celeWizytChoiceMenu.toFront();
     }
 
     @FXML
@@ -355,7 +368,7 @@ public class GUIController {
     public void hidePacjenciMenu() {
         pacjenciMenu.setVisible(false);
     }
-    
+
     @FXML
     public void showPracownicyRoleMenu() {
         pracownicyRoleMenu.setVisible(true);
@@ -426,7 +439,76 @@ public class GUIController {
         wydarzeniaMedyczneMenu.setVisible(false);
     }
     
-    
+    @FXML
+    public void showTablePracownicy() {
+        showTable(Tables.pracownicy.getContents(), null);
+    }
+
+    @FXML
+    public void showTablePacjenci() {
+        showTable(Tables.pacjenci.getContents(), null);
+    }
+
+    @FXML
+    public void showTablePracownicyRole() {
+        showTable(Tables.pracownicy_role.getContents(), null);
+    }
+
+    @FXML
+    public void showTableLekarzeSpecjalizacje() {
+        showTable(Tables.lekarze_specjalizacje.getContents(), null);
+    }
+
+    @FXML
+    public void showTableLPK() {
+        showTable(Tables.pacjenci_lpk.getContents(), null);
+    }
+
+    @FXML
+    public void showTableWizytyPlanowane() {
+        showTable(Tables.wizyty_planowane.getContents(), null);
+    }
+
+    @FXML
+    public void showTableWizytyOdbyte() {
+        showTable(Tables.wizyty_odbyte.getContents(), null);
+    }
+
+    @FXML
+    public void showTableSkierowania() {
+        showTable(Tables.skierowania.getContents(), null);
+    }
+
+    @FXML
+    public void showTableHistoriaMedyczna() {
+        showTable(Tables.historia_medyczna.getContents(), null);
+    }
+
+    @FXML
+    public void showTableAnkiety() {
+        showTable(Tables.ankiety_lekarze.getContents(), null);
+    }
+
+    @FXML
+    public void showTableRole() {
+        showTable(Tables.role.getContents(), null);
+    }
+
+    @FXML
+    public void showTableSpecjalizacje() {
+        showTable(Tables.specjalizacje.getContents(), null);
+    }
+
+    @FXML
+    public void showTableWydarzeniaMedyczne() {
+        showTable(Tables.wydarzenia_medyczne.getContents(), null);
+    }
+
+    @FXML
+    public void showTableCeleWizyt() {
+        showTable(Tables.cele_wizyty.getContents(), null);
+    }
+
     /*public void comboBoxTest() {
         ArrayList<CheckBox> arr = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -440,39 +522,41 @@ public class GUIController {
         testi.setMaxHeight(100);
     }*/
 
-    public void showTable(ResultSet rows, Set<String> columns) {
-        try {
-            tableView.getItems().clear();
-            tableView.getColumns().clear();
-            tableData.clear();
-            for (int i = 0; i < rows.getMetaData().getColumnCount(); i++) {
-                final int j = i;
-                if (!columns.contains(rows.getMetaData().getColumnName(i + 1))) {
+    public void showTable(ArrayList<ArrayList<String>> rows, Set<String> columns) {
+        tableView.getItems().clear();
+        tableView.getColumns().clear();
+        tableData.clear();
+        int i = 0;
+        for (String colName : rows.get(0)) {
+            if (columns != null && !columns.contains(colName)) {
+                continue;
+            }
+            TableColumn col = new TableColumn(colName);
+            col.prefWidthProperty().bind(tableView.widthProperty().divide(
+                    columns != null ? columns.size() : rows.get(0).size()
+            ).subtract(i == 0 ? 20 : 0));
+            int j = i ;
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(j) == null ? "NULL" : param.getValue().get(j).toString());
+                }
+            });
+
+            tableView.getColumns().addAll(col);
+            i++;
+        }
+        for (int j = 1; j < rows.size(); j++) {
+            ObservableList<String> row = FXCollections.observableArrayList();
+            for (int k = 0; k < rows.get(j).size(); k++) {
+                if (columns != null && !columns.contains(rows.get(0).get(k))) {
                     continue;
                 }
-                System.out.println(i);
-                TableColumn col = new TableColumn(rows.getMetaData().getColumnName(i + 1));
-                col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                        return new SimpleStringProperty(param.getValue().get(j).toString());
-                    }
-                });
-
-                tableView.getColumns().addAll(col);
+                row.add(rows.get(j).get(k));
             }
-            while (rows.next()) {
-                ObservableList<String> row = FXCollections.observableArrayList();
-                for (int i = 1; i <= rows.getMetaData().getColumnCount(); i++) {
-                    row.add(rows.getString(i));
-                }
-                tableData.add(row);
-
-            }
-            tableView.setItems(tableData);
-            tableView.refresh();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            tableData.add(row);
         }
+        tableView.setItems(tableData);
+        tableView.refresh();
     }
 
 }

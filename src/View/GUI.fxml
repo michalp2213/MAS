@@ -163,8 +163,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showPracownicyChoiceMenu"
-            onMouseExited="#hidePracownicyChoiceMenu">
+          onMouseEntered="#showPracownicyChoiceMenu"
+          onMouseExited="#hidePracownicyChoiceMenu">
 
         <Button fx:id="showPracownicyTableButton"
                 text="Pokaż"
@@ -172,7 +172,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTablePracownicy"/>
 
         <Button fx:id="modifyPracownicyTableButton"
                 text="Zmień"
@@ -193,8 +194,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showPacjenciChoiceMenu"
-            onMouseExited="#hidePacjenciChoiceMenu">
+          onMouseEntered="#showPacjenciChoiceMenu"
+          onMouseExited="#hidePacjenciChoiceMenu">
 
         <Button fx:id="showPacjenciTableButton"
                 text="Pokaż"
@@ -202,7 +203,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTablePacjenci"/>
 
         <Button fx:id="modifyPacjenciTableButton"
                 text="Zmień"
@@ -223,8 +225,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showRolePracownikowChoiceMenu"
-            onMouseExited="#hideRolePracownikowChoiceMenu">
+          onMouseEntered="#showRolePracownikowChoiceMenu"
+          onMouseExited="#hideRolePracownikowChoiceMenu">
 
         <Button fx:id="showRolePracownikowTableButton"
                 text="Pokaż"
@@ -232,7 +234,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTablePracownicyRole"/>
 
         <Button fx:id="modifyRolePracownikowTableButton"
                 text="Zmień"
@@ -253,8 +256,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showSpecjalizacjeLekarzyChoiceMenu"
-            onMouseExited="#hideSpecjalizacjeLekarzyChoiceMenu">
+          onMouseEntered="#showSpecjalizacjeLekarzyChoiceMenu"
+          onMouseExited="#hideSpecjalizacjeLekarzyChoiceMenu">
 
         <Button fx:id="showSpecjalizacjeLekarzyTableButton"
                 text="Pokaż"
@@ -262,7 +265,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableLekarzeSpecjalizacje"/>
 
         <Button fx:id="modifySpecjalizacjeLekarzyTableButton"
                 text="Zmień"
@@ -283,8 +287,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showLPKChoiceMenu"
-            onMouseExited="#hideLPKChoiceMenu">
+          onMouseEntered="#showLPKChoiceMenu"
+          onMouseExited="#hideLPKChoiceMenu">
 
         <Button fx:id="showLPKTableButton"
                 text="Pokaż"
@@ -292,7 +296,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableLPK"/>
 
         <Button fx:id="modifyLPKTableButton"
                 text="Zmień"
@@ -313,8 +318,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showWizytyPlanowaneChoiceMenu"
-            onMouseExited="#hideWizytyPlanowaneChoiceMenu">
+          onMouseEntered="#showWizytyPlanowaneChoiceMenu"
+          onMouseExited="#hideWizytyPlanowaneChoiceMenu">
 
         <Button fx:id="showWizytyPlanowaneTableButton"
                 text="Pokaż"
@@ -322,7 +327,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableWizytyPlanowane"/>
 
         <Button fx:id="modifyWizytyPlanowaneTableButton"
                 text="Zmień"
@@ -343,8 +349,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showWizytyOdbyteChoiceMenu"
-            onMouseExited="#hideWizytyOdbyteChoiceMenu">
+          onMouseEntered="#showWizytyOdbyteChoiceMenu"
+          onMouseExited="#hideWizytyOdbyteChoiceMenu">
 
         <Button fx:id="showWizytyOdbyteTableButton"
                 text="Pokaż"
@@ -352,7 +358,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableWizytyOdbyte"/>
 
         <Button fx:id="modifyWizytyOdbyteTableButton"
                 text="Zmień"
@@ -373,8 +380,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showSkierowaniaChoiceMenu"
-            onMouseExited="#hideSkierowaniaChoiceMenu">
+          onMouseEntered="#showSkierowaniaChoiceMenu"
+          onMouseExited="#hideSkierowaniaChoiceMenu">
 
         <Button fx:id="showSkierowaniaTableButton"
                 text="Pokaż"
@@ -382,7 +389,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableSkierowania"/>
 
         <Button fx:id="modifySkierowaniaTableButton"
                 text="Zmień"
@@ -403,8 +411,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showHistoriaMedycznaChoiceMenu"
-            onMouseExited="#hideHistoriaMedycznaChoiceMenu">
+          onMouseEntered="#showHistoriaMedycznaChoiceMenu"
+          onMouseExited="#hideHistoriaMedycznaChoiceMenu">
 
         <Button fx:id="showHistoriaMedycznaTableButton"
                 text="Pokaż"
@@ -412,7 +420,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableHistoriaMedyczna"/>
 
         <Button fx:id="modifyHistoriaMedycznaTableButton"
                 text="Zmień"
@@ -433,8 +442,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showAnkietyChoiceMenu"
-            onMouseExited="#hideAnkietyChoiceMenu">
+          onMouseEntered="#showAnkietyChoiceMenu"
+          onMouseExited="#hideAnkietyChoiceMenu">
 
         <Button fx:id="showAnkietyTableButton"
                 text="Pokaż"
@@ -442,7 +451,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableAnkiety"/>
 
         <Button fx:id="modifyAnkietyTableButton"
                 text="Zmień"
@@ -463,8 +473,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showRoleChoiceMenu"
-            onMouseExited="#hideRoleChoiceMenu">
+          onMouseEntered="#showRoleChoiceMenu"
+          onMouseExited="#hideRoleChoiceMenu">
 
         <Button fx:id="showRoleTableButton"
                 text="Pokaż"
@@ -472,7 +482,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableRole"/>
 
         <Button fx:id="modifyRoleTableButton"
                 text="Zmień"
@@ -493,8 +504,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showSpecjalizacjeChoiceMenu"
-            onMouseExited="#hideSpecjalizacjeChoiceMenu">
+          onMouseEntered="#showSpecjalizacjeChoiceMenu"
+          onMouseExited="#hideSpecjalizacjeChoiceMenu">
 
         <Button fx:id="showSpecjalizacjeTableButton"
                 text="Pokaż"
@@ -502,7 +513,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableSpecjalizacje"/>
 
         <Button fx:id="modifySpecjalizacjeTableButton"
                 text="Zmień"
@@ -523,8 +535,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showWydarzeniaMedyczneChoiceMenu"
-            onMouseExited="#hideWydarzeniaMedyczneChoiceMenu">
+          onMouseEntered="#showWydarzeniaMedyczneChoiceMenu"
+          onMouseExited="#hideWydarzeniaMedyczneChoiceMenu">
 
         <Button fx:id="showWydarzeniaMedyczneTableButton"
                 text="Pokaż"
@@ -532,7 +544,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableWydarzeniaMedyczne"/>
 
         <Button fx:id="modifyWydarzeniaMedyczneTableButton"
                 text="Zmień"
@@ -553,8 +566,8 @@
           minHeight="50"
           maxHeight="50"
           visible="false"
-            onMouseEntered="#showCeleWizytChoiceMenu"
-            onMouseExited="#hideCeleWizytChoiceMenu">
+          onMouseEntered="#showCeleWizytChoiceMenu"
+          onMouseExited="#hideCeleWizytChoiceMenu">
 
         <Button fx:id="showCeleWizytTableButton"
                 text="Pokaż"
@@ -562,7 +575,8 @@
                 minWidth="70"
                 maxWidth="70"
                 minHeight="25"
-                maxHeight="25"/>
+                maxHeight="25"
+                onAction="#showTableCeleWizyt"/>
 
         <Button fx:id="modifyCeleWizytTableButton"
                 text="Zmień"
@@ -779,9 +793,9 @@
               AnchorPane.topAnchor="200"
               visible="false">
         <ComboBox fx:id="pracownicyRolePracownicyComboBox"
-            GridPane.columnIndex="0"
-            GridPane.rowIndex="1"
-            minWidth="300"/>
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="1"
+                  minWidth="300"/>
 
         <Button fx:id="closePracownicyRoleButton"
                 text="Zamknij"
@@ -795,7 +809,7 @@
         <ListView fx:id="pracownicyRoleRoleList"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
-                maxHeight="100"/>
+                  maxHeight="100"/>
 
         <Button fx:id="pracownicyRoleDeleteButton"
                 text="Usuń"
@@ -808,7 +822,7 @@
         <ComboBox fx:id="pracownicyRoleRoleComboBox"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="3"
-                minWidth="300"/>
+                  minWidth="300"/>
 
         <Button fx:id="pracownicyRoleInsertButton"
                 text="Dodaj"
@@ -1165,8 +1179,8 @@
     </GridPane>
 
     <TableView fx:id="tableView"
-               AnchorPane.topAnchor="0"
-               AnchorPane.leftAnchor="140"
-                minWidth="1160"
-                visible="false"/>
+               AnchorPane.topAnchor="5"
+               AnchorPane.leftAnchor="145"
+               minWidth="1150"
+                maxWidth="1150"/>
 </AnchorPane>
