@@ -72,11 +72,15 @@ DECLARE
   zod DATE;
   zdo DATE;
 BEGIN
-  zod = (SELECT zatrudniony_od FROM pracownicy WHERE id_pracownika = id);
-  zdo = (SELECT zatrudniony_do FROM pracownicy WHERE id_pracownika = id);
+  zod = (SELECT zatrudniony_od
+         FROM pracownicy
+         WHERE id_pracownika = id);
+  zdo = (SELECT zatrudniony_do
+         FROM pracownicy
+         WHERE id_pracownika = id);
   RETURN (d1 IS NULL OR zod <= d1) AND (zdo IS NULL OR zdo >= d2) AND (SELECT count(*)
-          FROM pracownicy_role
-          WHERE id_pracownika = id AND id_roli = 1) > 0;
+                                                                       FROM pracownicy_role
+                                                                       WHERE id_pracownika = id AND id_roli = 1) > 0;
 END;
 $$
 language plpgsql;
@@ -118,11 +122,59 @@ CREATE TRIGGER pacjent_check
 
 CREATE OR REPLACE FUNCTION pracownik_check()
   RETURNS TRIGGER AS $pracownik_check$
+DECLARE r RECORD;
+  id INTEGER;
+  d TIMESTAMP;
 BEGIN
-  IF pesel_check(NEW.pesel)
-  THEN RETURN NEW;
-  ELSE RAISE EXCEPTION 'Niepoprawny PESEL';
+  IF pesel_check(NEW.pesel) = FALSE
+  THEN RAISE EXCEPTION 'Niepoprawny PESEL';
   END IF;
+  IF NEW.zatrudniony_do IS NULL OR czy_aktywny_lekarz(NEW.id_pracownika, null, null) = FALSE
+  THEN RETURN NEW;
+  END IF;
+  IF (SELECT count(*)
+      FROM wizyty_planowane
+      WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas >= NEW.zatrudniony_do) = 0
+  THEN RETURN NEW;
+  END IF;
+  IF (SELECT count(*)
+      FROM specjalizacje_lekarza(NEW.id_pracownika) s
+      WHERE (SELECT count(*)
+             FROM lekarze_specjalizacje ls
+             WHERE ls.id_specjalizacji = s.id_specjalizazji AND ls.id_lekarza <> NEW.id_pracownika) = 0 AND
+            (SELECT count(*)
+             FROM wizyty_planowane
+             WHERE specjalizacja = s.id_specjalizazji AND data + szacowany_czas >= NEW.zatrudniony_do) > 0) > 0
+  THEN RAISE EXCEPTION 'Ma wizyte';
+  END IF;
+  FOR r IN (SELECT
+              id_wizyty      AS idw,
+              specjalizacja  AS spec,
+              data,
+              szacowany_czas AS sc
+            FROM wizyty_planowane
+            WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas >= NEW.zatrudniony_do) LOOP
+    id = -1;
+    WHILE id = -1 LOOP
+    id = coalesce((SELECT ls.id_lekarza
+                 FROM lekarze_specjalizacje ls
+                 WHERE ls.id_specjalizacji = r.spec
+                       AND (SELECT count(*)
+                            FROM wizyty_planowane w
+                            WHERE ls.id_lekarza = w.id_lekarza AND
+                                  (w.data, w.data + w.szacowany_czas)
+                                  OVERLAPS
+                                  (r.data, r.data+r.sc)) = 0
+                 ORDER BY id_lekarza
+                 LIMIT 1), -1);
+      IF id = -1 THEN
+        r.data = r.data + INTERVAL '1 DAY';
+      END IF;
+    END LOOP ;
+    UPDATE wizyty_planowane SET id_lekarza = id, data = r.data WHERE id_wizyty = r.idw;
+  END LOOP;
+  RETURN NEW;
+
 END;
 $pracownik_check$
 language plpgsql;
@@ -178,7 +230,7 @@ CREATE OR REPLACE FUNCTION wizyta_planowana_check()
   RETURNS TRIGGER AS $wizyta_planowana_check$
 DECLARE r RECORD;
 BEGIN
-  IF NEW.data < current_time
+  IF NEW.data < current_timestamp
   THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean.';
   END IF;
   IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.szacowany_czas)) = FALSE
@@ -214,18 +266,18 @@ DECLARE r   RECORD;
         i   INTERVAL;
         id  INTEGER;
 BEGIN
-  IF NEW.data < current_time
+  IF NEW.data < current_timestamp
   THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean';
   END IF;
   s = 0;
   val = 0;
   a = 40;
-  age = (SELECT extract(YEARS FROM (current_time - data_urodzenia))
+  age = (SELECT extract(YEARS FROM (current_timestamp - data_urodzenia :: TIMESTAMP))
          FROM pacjenci
          WHERE NEW.id_pacjenta = pacjenci.id_pacjenta);
   FOR r IN SELECT
              extract(MINUTES FROM w.czas_trwania)         AS t,
-             (SELECT extract(years from (current_time - data_urodzenia))
+             (SELECT extract(years from (current_timestamp - data_urodzenia :: TIMESTAMP))
               FROM pacjenci
               WHERE w.id_pacjenta = pacjenci.id_pacjenta) AS age
            FROM wizyty_odbyte w
@@ -253,8 +305,8 @@ BEGIN
   IF id = -1
   THEN RAISE EXCEPTION 'Nie mamy specjalisty';
   END IF;
-  INSERT INTO wizyty_planowane (id_pacjenta, id_lekarza, cel, data, szacowany_czas)
-  VALUES (NEW.id_pacjenta, id, NEW.cel, NEW.data, i);
+  INSERT INTO wizyty_planowane (id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas)
+  VALUES (NEW.id_pacjenta, id, NEW.cel, NEW.specjalizacja, NEW.data, i);
   RETURN NEW;
 END;
 $terminarz_insert$
@@ -270,26 +322,26 @@ CREATE OR REPLACE FUNCTION ranking(d1 DATE, d2 DATE)
 AS
 $$
 BEGIN
-  d1 = coalesce(d1, min((SELECT data
-                         FROM ankiety_lekarze)));
-  d2 = coalesce(d2, max((SELECT data
-                         FROM ankiety_lekarze)));
+  d1 = coalesce(d1, (SELECT min(data)
+                     FROM ankiety_lekarze));
+  d2 = coalesce(d2, (SELECT max(data)
+                     FROM ankiety_lekarze));
   RETURN QUERY
   WITH temp AS (
       SELECT
-        al.id_lekarza                                                               AS id,
-        sum(coalesce(al.dokladnosc_badan, 0)) / CASE WHEN count(al.dokladnosc_badan) = 0
+        al.id_lekarza                                                                                      AS id,
+        round((sum(coalesce(al.dokladnosc_badan, 0)) :: DECIMAL / CASE WHEN count(al.dokladnosc_badan) = 0
           THEN 1
-                                                ELSE count(al.dokladnosc_badan) END AS v1,
-        sum(coalesce(al.informacyjnosc, 0)) / CASE WHEN count(al.informacyjnosc) = 0
+                                                                  ELSE count(al.dokladnosc_badan) END), 2) AS v1,
+        sum(coalesce(al.informacyjnosc, 0)) :: DECIMAL / CASE WHEN count(al.informacyjnosc) = 0
           THEN 1
-                                              ELSE count(al.informacyjnosc) END     AS v2,
-        sum(coalesce(al.opanowanie, 0)) / CASE WHEN count(al.opanowanie) = 0
+                                                         ELSE count(al.informacyjnosc) END                 AS v2,
+        sum(coalesce(al.opanowanie, 0)) :: DECIMAL / CASE WHEN count(al.opanowanie) = 0
           THEN 1
-                                          ELSE count(al.opanowanie) END             AS v3,
-        sum(coalesce(al.uprzejmosc, 0)) / CASE WHEN count(al.uprzejmosc) = 0
+                                                     ELSE count(al.opanowanie) END                         AS v3,
+        sum(coalesce(al.uprzejmosc, 0)) :: DECIMAL / CASE WHEN count(al.uprzejmosc) = 0
           THEN 1
-                                          ELSE count(al.uprzejmosc) END             AS v4
+                                                     ELSE count(al.uprzejmosc) END                         AS v4
       FROM ankiety_lekarze al
       WHERE data >= d1 AND data <= d2
       GROUP BY al.id_lekarza
@@ -298,12 +350,14 @@ BEGIN
     id,
     p.imie,
     p.nazwisko,
-    ((v1 + v2 + v3 + v4) /
-     (nulls(nullif(v1, 0)) + nulls(nullif(v2, 0)) + nulls(nullif(v3, 0)) + nulls(nullif(v4, 0)))) :: NUMERIC(3, 2)
+    round(((v1 + v2 + v3 + v4) :: DECIMAL /
+           (nulls(nullif(v1 <> 0, true)) + nulls(nullif(v2 <> 0, true)) + nulls(nullif(v3 <> 0, true)) +
+            nulls(nullif(v4 <> 0, true)))), 2) :: NUMERIC(3, 2)
   FROM temp
     JOIN pracownicy p ON id = p.id_pracownika
   ORDER BY (v1 + v2 + v3 + v4) /
-           (nulls(nullif(v1, 0)) + nulls(nullif(v2, 0)) + nulls(nullif(v3, 0)) + nulls(nullif(v4, 0))) DESC, id;
+           (nulls(nullif(v1 <> 0, true)) + nulls(nullif(v2 <> 0, true)) + nulls(nullif(v3 <> 0, true)) +
+            nulls(nullif(v4 <> 0, true))) DESC, id;
 END;
 $$
 language plpgsql;
@@ -329,10 +383,10 @@ CREATE OR REPLACE FUNCTION ranking_cecha(d1 DATE, d2 DATE, cecha VARCHAR)
 AS
 $$
 BEGIN
-  d1 = coalesce(d1, min((SELECT data
-                         FROM ankiety_lekarze)));
-  d2 = coalesce(d2, max((SELECT data
-                         FROM ankiety_lekarze)));
+  d1 = coalesce(d1, (SELECT min(data)
+                     FROM ankiety_lekarze));
+  d2 = coalesce(d2, (SELECT max(data)
+                     FROM ankiety_lekarze));
   IF cecha <> 'dokladnosc_badan' AND cecha <> 'informacyjnosc' AND cecha <> 'opanowanie' AND cecha <> 'uprzejmosc'
   THEN RAISE EXCEPTION 'Nie mamy takiej cechy';
   END IF;
@@ -341,8 +395,8 @@ BEGIN
     RETURN QUERY
     WITH temp AS (
         SELECT
-          al.id_lekarza                                                                         AS id,
-          (sum(coalesce(al.dokladnosc_badan, 0)) / count(al.dokladnosc_badan)) :: NUMERIC(3, 2) AS v
+          al.id_lekarza                                                                             AS id,
+          round((sum(coalesce(al.dokladnosc_badan, 0)) :: DECIMAL / count(al.dokladnosc_badan)), 2) AS v
         FROM ankiety_lekarze al
         WHERE data >= d1 AND data <= d2
         GROUP BY al.id_lekarza
@@ -352,7 +406,7 @@ BEGIN
       p.id_pracownika,
       p.imie,
       p.nazwisko,
-      v
+      v :: NUMERIC(3, 2)
     FROM temp
       JOIN pracownicy p ON id = p.id_pracownika
     ORDER BY v DESC, id;
@@ -361,8 +415,8 @@ BEGIN
       RETURN QUERY
       WITH temp AS (
           SELECT
-            al.id_lekarza                                                                     AS id,
-            (sum(coalesce(al.informacyjnosc, 0)) / count(al.informacyjnosc)) :: NUMERIC(3, 2) AS v
+            al.id_lekarza                                                                         AS id,
+            round((sum(coalesce(al.informacyjnosc, 0)) :: DECIMAL / count(al.informacyjnosc)), 2) AS v
           FROM ankiety_lekarze al
           WHERE data >= d1 AND data <= d2
           GROUP BY al.id_lekarza
@@ -372,7 +426,7 @@ BEGIN
         p.id_pracownika,
         p.imie,
         p.nazwisko,
-        v
+        v :: NUMERIC(3, 2)
       FROM temp
         JOIN pracownicy p ON id = p.id_pracownika
       ORDER BY v DESC, id;
@@ -381,8 +435,8 @@ BEGIN
       RETURN QUERY
       WITH temp AS (
           SELECT
-            al.id_lekarza                                                             AS id,
-            (sum(coalesce(al.opanowanie, 0)) / count(al.opanowanie)) :: NUMERIC(3, 2) AS v
+            al.id_lekarza                                                                 AS id,
+            round((sum(coalesce(al.opanowanie, 0)) :: DECIMAL / count(al.opanowanie)), 2) AS v
           FROM ankiety_lekarze al
           WHERE data >= d1 AND data <= d2
           GROUP BY al.id_lekarza
@@ -392,7 +446,7 @@ BEGIN
         p.id_pracownika,
         p.imie,
         p.nazwisko,
-        v
+        v :: NUMERIC(3, 2)
       FROM temp
         JOIN pracownicy p ON id = p.id_pracownika
       ORDER BY v DESC, id;
@@ -400,8 +454,8 @@ BEGIN
     RETURN QUERY
     WITH temp AS (
         SELECT
-          al.id_lekarza                                                             AS id,
-          (sum(coalesce(al.uprzejmosc, 0)) / count(al.uprzejmosc)) :: NUMERIC(3, 2) AS v
+          al.id_lekarza                                                                 AS id,
+          round((sum(coalesce(al.uprzejmosc, 0)) :: DECIMAL / count(al.uprzejmosc)), 2) AS v
         FROM ankiety_lekarze al
         WHERE data >= d1 AND data <= d2
         GROUP BY al.id_lekarza
@@ -411,7 +465,7 @@ BEGIN
       p.id_pracownika,
       p.imie,
       p.nazwisko,
-      v
+      v :: NUMERIC(3, 2)
     FROM temp
       JOIN pracownicy p ON id = p.id_pracownika
     ORDER BY v DESC, id;
@@ -425,10 +479,10 @@ CREATE OR REPLACE FUNCTION ranking_specjalizacje(d1 DATE, d2 DATE, id INTEGER)
 AS
 $$
 BEGIN
-  d1 = coalesce(d1, min((SELECT data
-                         FROM ankiety_lekarze)));
-  d2 = coalesce(d2, max((SELECT data
-                         FROM ankiety_lekarze)));
+  d1 = coalesce(d1, (SELECT min(data)
+                     FROM ankiety_lekarze));
+  d2 = coalesce(d2, (SELECT max(data)
+                     FROM ankiety_lekarze));
   RETURN QUERY SELECT r.*
                FROM ranking(d1, d2) r
                  JOIN lekarze_specjalizacje ls ON ls.id_lekarza = r.id_lekarza AND ls.id_specjalizacji = id;
@@ -441,10 +495,10 @@ CREATE OR REPLACE FUNCTION ranking_alfabetyczny(d1 DATE, d2 DATE)
 AS
 $$
 BEGIN
-  d1 = coalesce(d1, min((SELECT data
-                         FROM ankiety_lekarze)));
-  d2 = coalesce(d2, max((SELECT data
-                         FROM ankiety_lekarze)));
+  d1 = coalesce(d1, (SELECT min(data)
+                     FROM ankiety_lekarze));
+  d2 = coalesce(d2, (SELECT max(data)
+                     FROM ankiety_lekarze));
   RETURN QUERY SELECT r.*
                FROM ranking(d1, d2) r
                ORDER BY r.nazwisko, r.imie, r.wynik DESC;

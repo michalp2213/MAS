@@ -86,7 +86,7 @@ CREATE TABLE cele_wizyty
 
 CREATE TABLE wizyty_odbyte
 (
-  id_wizyty     INTEGER   NOT NULL
+  id_wizyty     SERIAL   NOT NULL
     PRIMARY KEY,
   id_pacjenta   INTEGER   NOT NULL
     REFERENCES pacjenci (id_pacjenta),
@@ -142,7 +142,7 @@ CREATE TABLE historia_medyczna
 
 CREATE TABLE skierowania
 (
-  nr_skierowania  INTEGER NOT NULL
+  nr_skierowania  SERIAL NOT NULL
     PRIMARY KEY,
   wizyta          INTEGER NOT NULL
     REFERENCES wizyty_odbyte (id_wizyty),
@@ -150,7 +150,7 @@ CREATE TABLE skierowania
     REFERENCES specjalizacje (id_specjalizacji),
   cel_skierowania INTEGER NOT NULL
     REFERENCES cele_wizyty (id_celu),
-  opis            VARCHAR NOT NULL,
+  opis            VARCHAR ,
   UNIQUE (wizyta, specjalizacja, cel_skierowania)
 );
 
@@ -177,7 +177,6 @@ CREATE OR REPLACE VIEW terminarz AS
   WHERE FALSE;
 
 
-
 \i util/insertfunctions.sql
 \i util/insertrole.sql
 \i util/insertpacj.sql
@@ -188,3 +187,8 @@ CREATE OR REPLACE VIEW terminarz AS
 \i util/insertcele.sql
 \i util/insertwydarzenia.sql
 \i util/insertlpk.sql
+\i util/insertwizyty_odbyte.sql
+\i util/insertskierowania.sql
+\i util/inserthistoria.sql
+\i util/insertwizyty_planowane.sql
+\i util/insertankiety.sql
