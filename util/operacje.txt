@@ -1,0 +1,75 @@
+abdominoplastyka
+adenotomia
+adenomektomia
+adrenalektomia
+amputacja
+angioplastyka
+antromastoidektomia
+appendektomia
+artroskopia
+astragalektomia
+bronchotomia
+cholecystektomia
+cystogastrostomia
+dekortykacja płuca
+diwertikulotomia
+fundoplastyka
+gastrektomia
+hemikorporektomia
+heminefrektomia
+hemisferektomia
+hepatektomia
+hipofizektomia
+histerektomia
+irydektomia
+kalozotomia
+kolektomia
+kraniektomia
+kraniotomia
+laminektomia
+laryngektomia
+laryngofisura
+ligacja jajowodu
+litotrypsja
+lobektomia
+lobotomia
+mastektomia
+metastazektomia
+mukosektomia
+nacięcie krocza
+nefrektomia
+nefrotomia
+obrzezanie
+ooforektomia
+operacja Bassiniego
+operacja Billrotha
+operacja Brickera
+operacja Drapanasa
+operacja Girarda
+operacja Halstedta
+operacja Hartmanna
+operacja Jurasza
+operacja Lichtensteina
+operacja Milesa
+operacja Mogga
+operacja Nussa
+operacja Puestowa
+operacja Rutkowa
+operacja Rydygiera
+operacja Shouldice'a
+operacja Strassmana
+operacja Traverso-Longmire'a
+operacja Warrena
+operacja Whipple’a
+operacja zmiany płci
+orbitotomia
+orchidektomia
+owarektomia
+owariektomia
+papilotomia
+paracenteza
+pankreatoduodenektomia
+penektomia
+perikardiektomia
+plastyka Heinekego-Mikulicza
+prostatektomia

@@ -158,3 +158,83 @@ INSERT INTO pacjenci (imie, nazwisko, pesel, data_urodzenia, plec)
 VALUES ('Aleksandra', 'Tomaszewska', '97122423246', '24.12.1997', 'F');
 INSERT INTO pacjenci (imie, nazwisko, pesel, data_urodzenia, plec)
 VALUES ('Alicja', 'Kucharska', '49010814683', '08.01.1949', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Frankie', 'Hussain', 'GBR202608663', '1994-11-21', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Gabriel', 'Hill', 'GBR198036391', '1967-11-2', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Ellis', 'Jordan', 'GBR199430032', '1987-2-5', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Max', 'Read', 'GBR201392487', '1977-12-24', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Henry', 'Barker', 'GBR198614401', '1977-4-5', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Tyree', 'Kennedy', 'GBR201081775', '1998-8-4', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Aiden', 'Ochoa', 'GBR197702635', '1957-1-19', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Keegan', 'Cote', 'GBR197697136', '1950-10-16', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Cael', 'Ware', 'GBR200928379', '1980-12-17', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Noel', 'Charles', 'GBR199208756', '1984-6-2', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Frederick', 'Lewis', 'GBR198022040', '1955-8-17', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Charlie', 'Spencer', 'GBR202271160', '2001-4-17', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Michael', 'Gray', 'GBR201662152', '1991-11-14', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Liam', 'James', 'GBR198883388', '1962-4-22', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Ollie', 'Price', 'GBR202683963', '1999-1-26', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Jerome', 'Weeks', 'GBR202947923', '1996-11-22', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Deshawn', 'Dawson', 'GBR199443870', '1987-1-6', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Abel', 'Richmond', 'GBR199589213', '1961-10-24', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Kase', 'Wright', 'GBR199701264', '1978-9-10', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Trystan', 'Allison', 'GBR198816339', '1984-1-3', 'M');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Amelie', 'Allison', 'GBR199069429', '1963-8-19', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Maisy', 'Allison', 'GBR200119706', '1979-9-13', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Poppy', 'Allison', 'GBR199271753', '1962-12-18', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Maisie', 'Allison', 'GBR198427876', '1952-9-23', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Imogen', 'Allison', 'GBR195710899', '1951-1-5', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Lilah', 'Allison', 'GBR196712540', '1952-1-14', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Janiyah', 'Allison', 'GBR200016960', '1974-8-18', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Chelsea', 'Allison', 'GBR200481442', '1983-7-14', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Karissa', 'Allison', 'GBR200704412', '1992-10-5', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Jessica', 'Allison', 'GBR202547293', '1993-5-27', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Amelie', 'Allison', 'GBR198455450', '1965-6-13', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Maisy', 'Allison', 'GBR196260651', '1953-4-5', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Poppy', 'Allison', 'GBR198944012', '1974-7-8', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Maisie', 'Allison', 'GBR198908216', '1972-3-14', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Imogen', 'Allison', 'GBR200407333', '1982-7-15', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Lilah', 'Allison', 'GBR200504346', '1993-4-8', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Janiyah', 'Allison', 'GBR197980171', '1953-12-14', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Chelsea', 'Allison', 'GBR198103192', '1965-8-8', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Karissa', 'Allison', 'GBR200561485', '1976-2-27', 'F');
+INSERT INTO pacjenci (imie, nazwisko, nr_paszportu, data_urodzenia, plec)
+VALUES ('Jessica', 'Allison', 'GBR197053491', '1965-4-1', 'F');
