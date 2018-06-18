@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class PracownicyRole implements Table {
@@ -14,6 +13,14 @@ public class PracownicyRole implements Table {
 		String sql = "DELETE FROM pracownicy_role WHERE "
 				+ "id_pracownika = " + pracownikId
 				+ " AND (SELECT nazwa FROM role WHERE id_roli = pracownicy_role.id_roli) = '" + roleName + "';";
+		return Database.executeUpdate(sql) != 0;
+	}
+	
+	public boolean updateItem (int oldRolaId, int oldPracownikId, int newRolaId, int newPracownikId) {
+		String sql = "UPDATE pracownicy_role SET (id_roli, id_pracownika) = ("
+				+ newRolaId + ", "
+				+ newPracownikId + ") WHERE "
+				+ "id_roli = " + oldRolaId + " AND id_pracownika = " + oldPracownikId + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
