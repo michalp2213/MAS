@@ -1,7 +1,6 @@
 package Model;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class AnkietyLekarze implements Table {
@@ -13,6 +12,18 @@ public class AnkietyLekarze implements Table {
 	
 	public boolean deleteItem (int id) {
 		return Database.executeUpdate("DELETE FROM ankiety_lekarze WHERE id_ankiety = " + id + ";") != 0;
+	}
+	
+	public boolean updateItem (int id, int newLekarzId, Date newDate, int newUprzejmosc, int newInformacyjnosc, int newDokladnosc_badan) {
+		String sql = "UPDATE ankiety_lekarze SET "
+				+ "(id_lekarza, data, uprzejmosc, informacyjnosc, dokladnosc_badan) = ("
+				+ newLekarzId + ", "
+				+ newDate + ", "
+				+ newUprzejmosc + ", "
+				+ newInformacyjnosc + ", "
+				+ newDokladnosc_badan + ") "
+				+ "WHERE id_ankiety = " + id + ";";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean insertItem (int lekarzId, Date date, int uprzejmosc, int opanowanie, int informacyjnosc, int dokladnosc_badan) {

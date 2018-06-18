@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class LekarzeSpecjalizacje implements Table {
@@ -19,12 +18,19 @@ public class LekarzeSpecjalizacje implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
+	public boolean updateItem (int oldSpecId, int oldLekarzId, int newSpecId, int newLekarzId) {
+		String sql = "UPDATE lekarze_specjalizacje SET id_specjalizacji = " + newSpecId
+				+ ", id_lekarza = " + newLekarzId + " WHERE id_specjalizacji = " + oldSpecId
+				+ " AND id_lekarza = " + oldLekarzId + ";";
+		return Database.executeUpdate(sql) != 0;
+	}
+	
 	public boolean insertItem (String specjalizacjaName, int lekarzId) {
 		String sql = "INSERT INTO lekarze_specjalizacje VALUES ("
 				+ lekarzId + ","
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE "
 					+ "nazwa = '" + specjalizacjaName + "'));";
-		return false;
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public ArrayList<ArrayList<String>> getSpecjalizacje (int lekarzId) {

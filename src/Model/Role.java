@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Role implements Table {
@@ -12,6 +11,10 @@ public class Role implements Table {
 	
 	public boolean deleteItem (String name) {
 		return Database.executeUpdate("DELETE FROM role WHERE nazwa = '" + name + "';") != 0;
+	}
+	
+	public boolean updateItem (String oldName, String newName) {
+		return Database.executeUpdate("UPDATE role SET nazwa = " + newName + " WHERE nazwa = " + oldName + ";") != 0;
 	}
 		
 	public boolean insertItem (String name) {
