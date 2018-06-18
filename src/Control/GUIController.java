@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.Pair;
 
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
@@ -199,6 +200,7 @@ public class GUIController {
     public void showPracownicyChoiceMenu() {
         pracownicyChoiceMenu.setVisible(true);
         pracownicyChoiceMenu.toFront();
+        updateListView(pracownicyList, Tables.pracownicy.getContents());
     }
 
     @FXML
@@ -352,6 +354,7 @@ public class GUIController {
     @FXML
     public void showPracownicyMenu() {
         pracownicyMenu.setVisible(true);
+        pracownicyMenu.toFront();
     }
 
     @FXML
@@ -362,6 +365,7 @@ public class GUIController {
     @FXML
     public void showPacjenciMenu() {
         pacjenciMenu.setVisible(true);
+        pacjenciMenu.toFront();
     }
 
     @FXML
@@ -372,6 +376,7 @@ public class GUIController {
     @FXML
     public void showPracownicyRoleMenu() {
         pracownicyRoleMenu.setVisible(true);
+        pracownicyRoleMenu.toFront();
     }
 
     @FXML
@@ -382,6 +387,7 @@ public class GUIController {
     @FXML
     public void showLekarzeSpecjalizacjeMenu() {
         lekarzeSpecjalizacjeMenu.setVisible(true);
+        lekarzeSpecjalizacjeMenu.toFront();
     }
 
     @FXML
@@ -392,6 +398,7 @@ public class GUIController {
     @FXML
     public void showLPKMenu() {
         LPKMenu.setVisible(true);
+        LPKMenu.toFront();
     }
 
     @FXML
@@ -402,6 +409,7 @@ public class GUIController {
     @FXML
     public void showRoleMenu() {
         roleMenu.setVisible(true);
+        roleMenu.toFront();
     }
 
     @FXML
@@ -412,6 +420,7 @@ public class GUIController {
     @FXML
     public void showSpecjalizacjeMenu() {
         specjalizacjeMenu.setVisible(true);
+        specjalizacjeMenu.toFront();
     }
 
     @FXML
@@ -422,6 +431,7 @@ public class GUIController {
     @FXML
     public void showCeleWizytMenu() {
         celeWizytMenu.setVisible(true);
+        celeWizytMenu.toFront();
     }
 
     @FXML
@@ -432,6 +442,7 @@ public class GUIController {
     @FXML
     public void showWydarzeniaMedyczneMenu() {
         wydarzeniaMedyczneMenu.setVisible(true);
+        wydarzeniaMedyczneMenu.toFront();
     }
 
     @FXML
@@ -559,4 +570,14 @@ public class GUIController {
         tableView.refresh();
     }
 
+    public void updateListView(ListView view, ArrayList<ArrayList<String>> tab) {
+        view.getItems().clear();
+        for (int i = 1; i < tab.size(); i++) {
+            //view.getItems().add(new Pair<>(tab.get(i), new CheckBox()));
+            CheckBox b = new CheckBox();
+            b.setText(tab.get(i).toString());
+            view.getItems().add(b);
+        }
+        view.refresh();
+    }
 }

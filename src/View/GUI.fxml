@@ -663,7 +663,7 @@
                   GridPane.columnSpan="3"
                   maxWidth="450"
                   minWidth="450"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="pracownicyDeleteButton"
                 text="Usuń"
@@ -777,7 +777,7 @@
                   GridPane.columnSpan="6"
                   maxWidth="900"
                   minWidth="900"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="pacjenciDeleteButton"
                 text="Usuń"
@@ -809,7 +809,7 @@
         <ListView fx:id="pracownicyRoleRoleList"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
-                  maxHeight="100"/>
+                  maxHeight="200"/>
 
         <Button fx:id="pracownicyRoleDeleteButton"
                 text="Usuń"
@@ -855,7 +855,7 @@
         <ListView fx:id="lekarzeSpecjalizacjeRoleList"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
-                  maxHeight="100"/>
+                  maxHeight="200"/>
 
         <Button fx:id="lekarzeSpecjalizacjeDeleteButton"
                 text="Usuń"
@@ -918,7 +918,7 @@
                   GridPane.columnSpan="2"
                   maxWidth="900"
                   minWidth="900"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
     </GridPane>
 
@@ -975,7 +975,7 @@
                   GridPane.columnSpan="2"
                   maxWidth="150"
                   minWidth="150"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="roleDeleteButton"
                 text="Usuń"
@@ -1039,7 +1039,7 @@
                   GridPane.columnSpan="2"
                   maxWidth="150"
                   minWidth="150"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="specjalizacjeDeleteButton"
                 text="Usuń"
@@ -1103,7 +1103,7 @@
                   GridPane.columnSpan="2"
                   maxWidth="150"
                   minWidth="150"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="celeWizytDeleteButton"
                 text="Usuń"
@@ -1167,7 +1167,7 @@
                   GridPane.columnSpan="2"
                   maxWidth="150"
                   minWidth="150"
-                  maxHeight="70"/>
+                  maxHeight="200"/>
 
         <Button fx:id="wydarzeniaMedyczneDeleteButton"
                 text="Usuń"
