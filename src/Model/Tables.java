@@ -14,4 +14,5 @@ public class Tables {
 	public static LekarzeSpecjalizacje lekarze_specjalizacje = new LekarzeSpecjalizacje();
 	public static Specjalizacje specjalizacje = new Specjalizacje();
 	public static AnkietyLekarze ankiety_lekarze = new AnkietyLekarze();
+	public static PacjenciLPK pacjenci_lpk = new PacjenciLPK();
 }

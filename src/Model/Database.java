@@ -54,7 +54,6 @@ public class Database {
 			for (int i = 1; i <= numCols; ++ i) {
 				arr.get(0).add (meta.getColumnName(i));
 			}
-			
 			int row = 1;
 			
 			while (res.next()) {
@@ -64,6 +63,8 @@ public class Database {
 				}
 				++ row;
 			}
+
+			return arr;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
