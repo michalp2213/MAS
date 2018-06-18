@@ -1,7 +1,7 @@
 package Model;
 
-import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public interface Table {
-	public ResultSet getContents ();
+	public ArrayList <ArrayList <String>> getContents ();
 }

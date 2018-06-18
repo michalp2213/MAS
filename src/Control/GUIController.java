@@ -1,5 +1,6 @@
 package Control;
 
+import Model.Tables;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,53 +16,59 @@ import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class GUIController {
     public TableView tableView;
-    public Button pracownicyUpdateButton;
-    public ComboBox pracownicyBox;
-    public Button pacjenciUpdateButton;
-    public ComboBox pacjenciBox;
-    public GridPane roleMenu;
-    public Button closeRoleMenuButton;
-    public TextField roleNazwaField;
-    public Button roleInsertButton;
-    public ComboBox roleBox;
-    public Button roleUpdateButton;
-    public ListView roleList;
-    public Button roleDeleteButton;
-    public Button specjalizacjeDeleteButton;
-    public ListView specjalizacjeList;
-    public Button specjalizacjeUpdateButton;
-    public ComboBox specjalizacjeBox;
-    public Button specjalizacjeInsertButton;
-    public TextField specjalizacjeNazwaField;
-    public Button closeSpecjalizacjeMenuButton;
-    public GridPane specjalizacjeMenu;
-    public GridPane celeWizytMenu;
-    public Button closeCeleWizytMenuButton;
-    public TextField celeWizytNazwaField;
-    public Button celeWizytInsertButton;
-    public ComboBox celeWizytBox;
-    public Button celeWizytUpdateButton;
-    public ListView celeWizytList;
-    public Button celeWizytDeleteButton;
-    public GridPane wydarzeniaMedyczneMenu;
-    public Button closeWydarzeniaMedyczneMenuButton;
-    public TextField wydarzeniaMedyczneNazwaField;
-    public ComboBox wydarzeniaMedyczneBox;
-    public Button wydarzeniaMedyczneInsertButton;
-    public Button wydarzeniaMedyczneUpdateButton;
-    public ListView wydarzeniaMedyczneList;
-    public Button wydarzeniaMedyczneDeleteButton;
-    public GridPane pracownicyRoleMenu;
-    public ComboBox pracownicyRolePracownicyComboBox;
-    public Button closePracownicyRoleButton;
-    public ListView pracownicyRoleRoleList;
-    public Button pracownicyRoleDeleteButton;
-    public ComboBox pracownicyRoleRoleComboBox;
-    public Button pracownicyRoleInsertButton;
+    public VBox tableButtons;
+    public Button rolePracownikowButton;
+    public Button specjalizacjeLekarzyButton;
+    public Button wizytyPlanowaneButton;
+    public Button wizytyOdbyteButton;
+    public Button skierowaniaButton;
+    public VBox pracownicyChoiceMenu;
+    public Button showPracownicyTableButton;
+    public Button modifyPracownicyTableButton;
+    public VBox pacjenciChoiceMenu;
+    public Button showPacjenciTableButton;
+    public Button modifyPacjenciTableButton;
+    public VBox rolePracownikowChoiceMenu;
+    public Button showRolePracownikowTableButton;
+    public Button modifyRolePracownikowTableButton;
+    public VBox specjalizacjeLekarzyChoiceMenu;
+    public Button showSpecjalizacjeLekarzyTableButton;
+    public Button modifySpecjalizacjeLekarzyTableButton;
+    public VBox LPKChoiceMenu;
+    public Button showLPKTableButton;
+    public Button modifyLPKTableButton;
+    public VBox wizytyPlanowaneChoiceMenu;
+    public Button showWizytyPlanowaneTableButton;
+    public Button modifyWizytyPlanowaneTableButton;
+    public VBox wizytyOdbyteChoiceMenu;
+    public Button showWizytyOdbyteTableButton;
+    public Button modifyWizytyOdbyteTableButton;
+    public VBox skierowaniaChoiceMenu;
+    public Button showSkierowaniaTableButton;
+    public Button modifySkierowaniaTableButton;
+    public VBox historiaMedycznaChoiceMenu;
+    public Button showHistoriaMedycznaTableButton;
+    public Button modifyHistoriaMedycznaTableButton;
+    public VBox ankietyChoiceMenu;
+    public Button showAnkietyTableButton;
+    public Button modifyAnkietyTableButton;
+    public VBox roleChoiceMenu;
+    public Button showRoleTableButton;
+    public Button modifyRoleTableButton;
+    public VBox specjalizacjeChoiceMenu;
+    public Button showSpecjalizacjeTableButton;
+    public Button modifySpecjalizacjeTableButton;
+    public VBox wydarzeniaMedyczneChoiceMenu;
+    public Button showWydarzeniaMedyczneTableButton;
+    public Button modifyWydarzeniaMedyczneTableButton;
+    public VBox celeWizytChoiceMenu;
+    public Button showCeleWizytTableButton;
+    public Button modifyCeleWizytTableButton;
 
     //public ListView<CheckBox> testi;
     private ObservableList<ObservableList> tableData = FXCollections.observableArrayList();
@@ -73,8 +80,8 @@ public class GUIController {
     public Button ankietyButton;
 
     public Button modyfikujOsobyButton;
-
     public VBox tabeleOsoby;
+
     public Button pracownicyButton;
     public GridPane pracownicyMenu;
     public ListView pracownicyList;
@@ -84,6 +91,8 @@ public class GUIController {
     public Button pracownicyInsertButton;
     public Button pracownicyDeleteButton;
     public Button closePracownicyMenuButton;
+    public Button pracownicyUpdateButton;
+    public ComboBox pracownicyBox;
 
     public Button pacjenciButton;
     public GridPane pacjenciMenu;
@@ -97,53 +106,234 @@ public class GUIController {
     public Button pacjenciInsertButton;
     public ListView pacjenciList;
     public Button pacjenciDeleteButton;
+    public Button pacjenciUpdateButton;
+    public ComboBox pacjenciBox;
 
     public Button modyfikujRelacjeButton;
     public VBox tabeleRelacje;
+
     public Button pracownicyRoleButton;
+    public GridPane pracownicyRoleMenu;
+    public ComboBox pracownicyRolePracownicyComboBox;
+    public Button closePracownicyRoleButton;
+    public ListView pracownicyRoleRoleList;
+    public Button pracownicyRoleDeleteButton;
+    public ComboBox pracownicyRoleRoleComboBox;
+    public Button pracownicyRoleInsertButton;
+
     public Button lekarzeSpecjalizacjeButton;
+    public GridPane lekarzeSpecjalizacjeMenu;
+    public ComboBox lekarzeSpecjalizacjeLekarzeComboBox;
+    public Button closeLekarzeSpecjalizacjeButton;
+    public ListView lekarzeSpecjalizacjeRoleList;
+    public Button lekarzeSpecjalizacjeDeleteButton;
+    public ComboBox lekarzeSpecjalizacjeRoleComboBox;
+    public Button lekarzeSpecjalizacjeInsertButton;
+
     public Button LPKButton;
+    public GridPane LPKMenu;
+    public Button closeLPKButton;
+    public ComboBox LPKPacjenciComboBox;
+    public ComboBox LPKLekarzeComboBox;
+    public Button LPKUpdateButton;
+    public ListView LPKList;
 
     public Button modyfikujMetadaneButton;
     public VBox tabeleMetadane;
+
     public Button roleButton;
+    public GridPane roleMenu;
+    public Button closeRoleMenuButton;
+    public TextField roleNazwaField;
+    public Button roleInsertButton;
+    public ComboBox roleBox;
+    public Button roleUpdateButton;
+    public ListView roleList;
+    public Button roleDeleteButton;
+
     public Button specjalizacjeButton;
+    public Button specjalizacjeDeleteButton;
+    public ListView specjalizacjeList;
+    public Button specjalizacjeUpdateButton;
+    public ComboBox specjalizacjeBox;
+    public Button specjalizacjeInsertButton;
+    public TextField specjalizacjeNazwaField;
+    public Button closeSpecjalizacjeMenuButton;
+    public GridPane specjalizacjeMenu;
+
     public Button celeWizytButton;
+    public GridPane celeWizytMenu;
+    public Button closeCeleWizytMenuButton;
+    public TextField celeWizytNazwaField;
+    public Button celeWizytInsertButton;
+    public ComboBox celeWizytBox;
+    public Button celeWizytUpdateButton;
+    public ListView celeWizytList;
+    public Button celeWizytDeleteButton;
+
     public Button wydarzeniaMedyczneButton;
+    public GridPane wydarzeniaMedyczneMenu;
+    public Button closeWydarzeniaMedyczneMenuButton;
+    public TextField wydarzeniaMedyczneNazwaField;
+    public ComboBox wydarzeniaMedyczneBox;
+    public Button wydarzeniaMedyczneInsertButton;
+    public Button wydarzeniaMedyczneUpdateButton;
+    public ListView wydarzeniaMedyczneList;
+    public Button wydarzeniaMedyczneDeleteButton;
+
 
 
     @FXML
     public void showTabeleOsoby() {
         tabeleOsoby.setVisible(true);
         tabeleOsoby.toFront();
+        /*HashSet<String> rows = new HashSet<>();
+        rows.add("id");
+        rows.add("imie");
+        rows.add("nazwisko");
+        rows.add("pesel");
+        showTable(Tables.pacjenci.getContents(), rows);*/
         //comboBoxTest();
     }
 
     @FXML
-    public void hideTabeleOsoby() {
-        tabeleOsoby.setVisible(false);
+    public void showPracownicyChoiceMenu() {
+        pracownicyChoiceMenu.setVisible(true);
     }
 
     @FXML
-    public void showTabeleRelacje() {
-        tabeleRelacje.setVisible(true);
-        tabeleRelacje.toFront();
+    public void hidePracownicyChoiceMenu() {
+        pracownicyChoiceMenu.setVisible(false);
     }
 
     @FXML
-    public void hideTabeleRelacje() {
-        tabeleRelacje.setVisible(false);
+    public void showPacjenciChoiceMenu() {
+        pacjenciChoiceMenu.setVisible(true);
     }
 
     @FXML
-    public void showTabeleMetadane() {
-        tabeleMetadane.setVisible(true);
-        tabeleMetadane.toFront();
+    public void hidePacjenciChoiceMenu() {
+        pacjenciChoiceMenu.setVisible(false);
     }
 
     @FXML
-    public void hideTabeleMetadane() {
-        tabeleMetadane.setVisible(false);
+    public void showRolePracownikowChoiceMenu() {
+        rolePracownikowChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideRolePracownikowChoiceMenu() {
+        rolePracownikowChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSpecjalizacjeLekarzyChoiceMenu() {
+        specjalizacjeLekarzyChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSpecjalizacjeLekarzyChoiceMenu() {
+        specjalizacjeLekarzyChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showLPKChoiceMenu() {
+        LPKChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideLPKChoiceMenu() {
+        LPKChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWizytyPlanowaneChoiceMenu() {
+        wizytyPlanowaneChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWizytyPlanowaneChoiceMenu() {
+        wizytyPlanowaneChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWizytyOdbyteChoiceMenu() {
+        wizytyOdbyteChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWizytyOdbyteChoiceMenu() {
+        wizytyOdbyteChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSkierowaniaChoiceMenu() {
+        skierowaniaChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSkierowaniaChoiceMenu() {
+        skierowaniaChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showHistoriaMedycznaChoiceMenu() {
+        historiaMedycznaChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideHistoriaMedycznaChoiceMenu() {
+        historiaMedycznaChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showAnkietyChoiceMenu() {
+        ankietyChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideAnkietyChoiceMenu() {
+        ankietyChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showRoleChoiceMenu() {
+        roleChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideRoleChoiceMenu() {
+        roleChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showSpecjalizacjeChoiceMenu() {
+        specjalizacjeChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideSpecjalizacjeChoiceMenu() {
+        specjalizacjeChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showWydarzeniaMedyczneChoiceMenu() {
+        wydarzeniaMedyczneChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideWydarzeniaMedyczneChoiceMenu() {
+        wydarzeniaMedyczneChoiceMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showCeleWizytChoiceMenu() {
+        celeWizytChoiceMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideCeleWizytChoiceMenu() {
+        celeWizytChoiceMenu.setVisible(false);
     }
 
     @FXML
@@ -174,6 +364,26 @@ public class GUIController {
     @FXML
     public void hidePracownicyRoleMenu() {
         pracownicyRoleMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showLekarzeSpecjalizacjeMenu() {
+        lekarzeSpecjalizacjeMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideLekarzeSpecjalizacjeMenu() {
+        lekarzeSpecjalizacjeMenu.setVisible(false);
+    }
+
+    @FXML
+    public void showLPKMenu() {
+        LPKMenu.setVisible(true);
+    }
+
+    @FXML
+    public void hideLPKMenu() {
+        LPKMenu.setVisible(false);
     }
 
     @FXML
@@ -216,6 +426,7 @@ public class GUIController {
         wydarzeniaMedyczneMenu.setVisible(false);
     }
     
+    
     /*public void comboBoxTest() {
         ArrayList<CheckBox> arr = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -239,6 +450,7 @@ public class GUIController {
                 if (!columns.contains(rows.getMetaData().getColumnName(i + 1))) {
                     continue;
                 }
+                System.out.println(i);
                 TableColumn col = new TableColumn(rows.getMetaData().getColumnName(i + 1));
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
@@ -257,7 +469,10 @@ public class GUIController {
 
             }
             tableView.setItems(tableData);
-        } catch (SQLException e) {}
+            tableView.refresh();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

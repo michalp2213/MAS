@@ -2,13 +2,14 @@ package Model;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import org.postgresql.util.PGInterval;
 
 public class WizytyPlanowane implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * FROM wizyty_planowane;");
 	}
 	

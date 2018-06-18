@@ -1,5 +1,7 @@
 \i clear.sql
 
+SET DATESTYLE to dmy;
+
 CREATE TABLE pacjenci
 (
   id_pacjenta    SERIAL  NOT NULL

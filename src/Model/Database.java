@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Database {
 	private static Connection dbConn = null;
@@ -37,11 +39,31 @@ public class Database {
 		}
 	}
 
-	public static ResultSet executeQuery(String sql) {
+	public static ArrayList <ArrayList <String>> executeQuery(String sql) {
 		Statement stmt = null;
 		try {
 			stmt = dbConn.createStatement();
-			return stmt.executeQuery (sql);
+			ResultSet res = stmt.executeQuery (sql);
+			ResultSetMetaData meta = res.getMetaData();
+			
+			ArrayList<ArrayList <String>> arr = new ArrayList<>();
+			
+			int numCols = meta.getColumnCount();
+			
+			arr.add (new ArrayList <String> ());
+			for (int i = 1; i <= numCols; ++ i) {
+				arr.get(0).add (meta.getColumnName(i));
+			}
+			
+			int row = 1;
+			
+			while (res.next()) {
+				arr.add (new ArrayList<>());
+				for (int i = 1; i <= numCols; ++ i) {
+					arr.get(row).add (res.getString(i));
+				}
+				++ row;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());

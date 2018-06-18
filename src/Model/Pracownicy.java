@@ -1,11 +1,12 @@
 package Model;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Pracownicy implements Table {
 
 	@Override
-	public ResultSet getContents() {
+	public ArrayList<ArrayList<String>> getContents() {
 		return Database.executeQuery("SELECT * FROM pracownicy;");
 	}
 
