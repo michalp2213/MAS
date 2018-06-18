@@ -203,15 +203,6 @@ CREATE TRIGGER wizyta_planowana_check
   ON wizyty_planowane
   FOR EACH ROW EXECUTE PROCEDURE wizyta_planowana_check();
 
-CREATE OR REPLACE VIEW terminaz AS
-  SELECT
-    id_pacjenta,
-    cel,
-    specjalizacja,
-    data
-  FROM wizyty_planowane
-  WHERE FALSE;
-
 CREATE OR REPLACE FUNCTION terminarz_insert()
   RETURNS TRIGGER AS $terminarz_insert$
 DECLARE r   RECORD;
@@ -271,7 +262,7 @@ language plpgsql;
 
 CREATE TRIGGER terminarz_insert
   INSTEAD OF INSERT
-  ON terminaz
+  ON terminarz
   FOR EACH ROW EXECUTE PROCEDURE terminarz_insert();
 
 CREATE OR REPLACE FUNCTION ranking(d1 DATE, d2 DATE)

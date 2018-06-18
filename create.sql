@@ -167,6 +167,16 @@ CREATE TABLE ankiety_lekarze
          informacyjnosc IS NOT NULL OR dokladnosc_badan IS NOT NULL)
 );
 
+CREATE OR REPLACE VIEW terminarz AS
+  SELECT
+    id_pacjenta,
+    cel,
+    specjalizacja,
+    data
+  FROM wizyty_planowane
+  WHERE FALSE;
+
+
 
 \i util/insertfunctions.sql
 \i util/insertrole.sql
@@ -175,8 +185,6 @@ CREATE TABLE ankiety_lekarze
 \i util/insertprac_role.sql
 \i util/insertspecjalizacje.sql
 \i util/insertlekarze_sp.sql
-INSERT INTO cele_wizyty (nazwa) VALUES ('Profilaktyka');
-INSERT INTO cele_wizyty (nazwa) VALUES ('Badanie');
-INSERT INTO cele_wizyty (nazwa) VALUES ('');
+\i util/insertcele.sql
 \i util/insertwydarzenia.sql
 \i util/insertlpk.sql
