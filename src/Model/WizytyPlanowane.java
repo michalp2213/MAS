@@ -1,7 +1,6 @@
 package Model;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.postgresql.util.PGInterval;
@@ -17,6 +16,16 @@ public class WizytyPlanowane implements Table {
 		return Database.executeUpdate("DELETE FROM wizyty_planowane WHERE id_wizyty = " + id + ";") != 0;
 	}
 	
+	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, Date newDate, PGInterval newInt) {
+		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, data, szacowany_czas) = ("
+				+ newPacjentId + ", "
+				+ newLekarzId + ", "
+				+ newCel + ", "
+				+ newDate + ", "
+				+ newInt + ") WHERE id_wizyty = " + id + ";";
+		return Database.executeUpdate(sql) != 0;
+	}
+
 	public boolean insertItem (int pacjentId,  String cel, String specjalizacja, Date date) {
 		String sql = "INSERT INTO terminaz VALUES ("
 				+ pacjentId + ", "

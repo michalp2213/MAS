@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Skierowania implements Table {
@@ -12,6 +11,15 @@ public class Skierowania implements Table {
 	
 	public boolean deleteItem (int id) {
 		return Database.executeUpdate("DELETE FROM skierowania WHERE nr_skierowania = " + id + ";") != 0;
+	}
+	
+	public boolean updateItem (int id, int newWizytaId, int newSpecId, int newCelId, String newDesc) {
+		String sql = "UPDATE skierowania SET (id_wizyty, id_specjalizacji, id_celu, opis) = ("
+				+ newWizytaId + ", "
+				+ newSpecId + ", "
+				+ newCelId + ", "
+				+ "'" + newDesc + "') WHERE nr_skierowania = " + id + ";";
+		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean insertItem (int wizytaId, int specjalizacjaId, int celId, String desc) {
