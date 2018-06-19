@@ -144,6 +144,8 @@ public class GUIController {
     public ComboBox rankingiTypBox;
     public ComboBox rankingiOpcjeBox;
     public Button showRankingButton;
+    public TextField pracownicyZatrudnionyOdField;
+    public TextField pracownicyZatrudnionyDoField;
 
     private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 

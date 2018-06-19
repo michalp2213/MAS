@@ -620,6 +620,18 @@
                maxWidth="100"
                minWidth="100"/>
 
+        <Label text="Zatr. od"
+               GridPane.columnIndex="3"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Zatr. do"
+               GridPane.columnIndex="4"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
         <Button fx:id="closePracownicyMenuButton"
                 text="X"
                 GridPane.columnIndex="3"
@@ -645,11 +657,23 @@
                    GridPane.columnIndex="2"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                    minWidth="150"/>
+
+        <TextField fx:id="pracownicyZatrudnionyOdField"
+                   GridPane.columnIndex="3"
+                   GridPane.rowIndex="1"
+                   maxWidth="100"
+                   minWidth="100"/>
+
+        <TextField fx:id="pracownicyZatrudnionyDoField"
+                   GridPane.columnIndex="4"
+                   GridPane.rowIndex="1"
+                   maxWidth="100"
+                   minWidth="100"/>
 
         <Button fx:id="pracownicyInsertButton"
                 text="Dodaj"
-                GridPane.columnIndex="3"
+                GridPane.columnIndex="5"
                 GridPane.rowIndex="1"
                 GridPane.halignment="CENTER"
                 maxWidth="60"
@@ -660,12 +684,12 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
                   GridPane.columnSpan="3"
-                  maxWidth="450"
-                  minWidth="450"/>
+                  maxWidth="650"
+                  minWidth="650"/>
 
         <Button fx:id="pracownicyUpdateButton"
                 text="Zmień"
-                GridPane.columnIndex="3"
+                GridPane.columnIndex="5"
                 GridPane.rowIndex="2"
                 GridPane.halignment="CENTER"
                 maxWidth="60"
@@ -676,14 +700,14 @@
                   GridPane.rowIndex="3"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="3"
-                  maxWidth="450"
-                  minWidth="450"
+                  maxWidth="650"
+                  minWidth="650"
                   maxHeight="200"/>
 
         <Button fx:id="pracownicyDeleteButton"
                 text="Usuń"
                 GridPane.rowIndex="3"
-                GridPane.columnIndex="3"
+                GridPane.columnIndex="5"
                 GridPane.halignment="CENTER"
                 maxWidth="60"
                 minWidth="60"
