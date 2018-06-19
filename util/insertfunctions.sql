@@ -122,9 +122,10 @@ CREATE TRIGGER pacjent_check
 
 CREATE OR REPLACE FUNCTION pracownik_check()
   RETURNS TRIGGER AS $pracownik_check$
-DECLARE r RECORD;
-  id INTEGER;
-  d TIMESTAMP;
+DECLARE r  RECORD;
+        id INTEGER;
+        d  TIMESTAMP;
+        m  DATE;
 BEGIN
   IF pesel_check(NEW.pesel) = FALSE
   THEN RAISE EXCEPTION 'Niepoprawny PESEL';
@@ -134,7 +135,7 @@ BEGIN
   END IF;
   IF (SELECT count(*)
       FROM wizyty_planowane
-      WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas >= NEW.zatrudniony_do) = 0
+      WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas > NEW.zatrudniony_do) = 0
   THEN RETURN NEW;
   END IF;
   IF (SELECT count(*)
@@ -144,8 +145,18 @@ BEGIN
              WHERE ls.id_specjalizacji = s.id_specjalizazji AND ls.id_lekarza <> NEW.id_pracownika) = 0 AND
             (SELECT count(*)
              FROM wizyty_planowane
-             WHERE specjalizacja = s.id_specjalizazji AND data + szacowany_czas >= NEW.zatrudniony_do) > 0) > 0
+             WHERE specjalizacja = s.id_specjalizazji AND data + szacowany_czas > NEW.zatrudniony_do) > 0) > 0
   THEN RAISE EXCEPTION 'Ma wizyte';
+  END IF;
+  m = (SELECT "do"
+       FROM pacjenci_lpk
+       WHERE id_lekarza = NEW.id_pracownika AND "do" > NEW.zatrudniony_do
+       ORDER BY "do" DESC NULLS FIRST
+       LIMIT 1);
+  IF (SELECT count(*)
+      FROM pracownicy
+      WHERE czy_aktywny_lekarz(id_pracownika, DATE(current_timestamp + INTERVAL '1 DAY'), m)) = 0
+  THEN RAISE EXCEPTION 'Jest lpk';
   END IF;
   FOR r IN (SELECT
               id_wizyty      AS idw,
@@ -153,25 +164,47 @@ BEGIN
               data,
               szacowany_czas AS sc
             FROM wizyty_planowane
-            WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas >= NEW.zatrudniony_do) LOOP
+            WHERE id_lekarza = NEW.id_pracownika AND data + szacowany_czas > NEW.zatrudniony_do) LOOP
     id = -1;
     WHILE id = -1 LOOP
-    id = coalesce((SELECT ls.id_lekarza
-                 FROM lekarze_specjalizacje ls
-                 WHERE ls.id_specjalizacji = r.spec
-                       AND (SELECT count(*)
-                            FROM wizyty_planowane w
-                            WHERE ls.id_lekarza = w.id_lekarza AND
-                                  (w.data, w.data + w.szacowany_czas)
-                                  OVERLAPS
-                                  (r.data, r.data+r.sc)) = 0
-                 ORDER BY id_lekarza
-                 LIMIT 1), -1);
-      IF id = -1 THEN
+      id = coalesce((SELECT ls.id_lekarza
+                     FROM lekarze_specjalizacje ls
+                     WHERE ls.id_specjalizacji = r.spec AND
+                           czy_aktywny_lekarz(ls.id_lekarza, DATE(r.data), DATE(r.data + r.sc))
+                           AND (SELECT count(*)
+                                FROM wizyty_planowane w
+                                WHERE ls.id_lekarza = w.id_lekarza AND
+                                      (w.data, w.data + w.szacowany_czas)
+                                      OVERLAPS
+                                      (r.data, r.data + r.sc)) = 0
+                     ORDER BY id_lekarza
+                     LIMIT 1), -1);
+      IF id = -1
+      THEN
         r.data = r.data + INTERVAL '1 DAY';
       END IF;
-    END LOOP ;
-    UPDATE wizyty_planowane SET id_lekarza = id, data = r.data WHERE id_wizyty = r.idw;
+    END LOOP;
+    UPDATE wizyty_planowane
+    SET id_lekarza = id, data = r.data
+    WHERE id_wizyty = r.idw;
+  END LOOP;
+
+  FOR r IN (SELECT
+              p.id_pacjenta AS idp,
+              p.od,
+              p."do"
+            FROM pacjenci_lpk p
+            WHERE p.id_lekarza = NEW.id_pracownika AND (p."do" IS NULL OR p."do" > NEW.zatrudniony_do)) LOOP
+    id = (SELECT p.id_pracownika
+          FROM pracownicy p
+          WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(NEW.zatrudniony_do + INTERVAL '1 DAY'), r."do") AND
+                p.id_pracownika <> NEW.id_pracownika
+          LIMIT 1);
+    m = r."do";
+    UPDATE pacjenci_lpk
+    SET "do" = DATE(NEW.zatrudniony_do)
+    WHERE id_pacjenta = r.idp AND id_lekarza = NEW.id_pracownika AND od = r.od;
+    INSERT INTO pacjenci_lpk VALUES (r.idp, id, DATE(NEW.zatrudniony_do + INTERVAL '1 DAYS'), m);
   END LOOP;
   RETURN NEW;
 
@@ -186,10 +219,21 @@ CREATE TRIGGER pracownik_check
 
 CREATE OR REPLACE FUNCTION pacjent_lpk_check()
   RETURNS TRIGGER AS $pacjent_lpk_check$
+DECLARE
+  d1 DATE;
+  d2 DATE;
 BEGIN
-  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.od, NEW."do")
-  THEN RETURN NEW;
-  ELSE RAISE EXCEPTION 'Nie aktywny lekarz';
+  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.od, NEW."do") = FALSE
+  THEN RAISE EXCEPTION 'Nie aktywny lekarz';
+  END IF;
+  d1 = NEW.od;
+  d2 = coalesce(New."do", DATE(current_timestamp + INTERVAL '100 YEARS'));
+  IF (SELECT count(*)
+      FROM pacjenci_lpk p
+      WHERE p.id_pacjenta = NEW.id_pacjenta
+            AND NEW.od <> p.od AND (d1, d2) OVERLAPS (p.od, coalesce(p."do", DATE(CURRENT_TIMESTAMP+INTERVAL '100 YEARS')))) >0
+  THEN RAISE EXCEPTION 'Pacjent posiada lpk w zadanym terminie';
+  ELSE RETURN NEW;
   END IF;
 END;
 $pacjent_lpk_check$
@@ -505,3 +549,8 @@ BEGIN
 END;
 $$
 language plpgsql;
+
+CREATE OR REPLACE RULE pracownicy_delete AS ON DELETE TO pracownicy
+DO INSTEAD UPDATE pracownicy
+SET zatrudniony_do = least(DATE(current_timestamp), coalesce(zatrudniony_do, DATE(current_timestamp)))
+WHERE id_pracownika = OLD.id_pracownika;

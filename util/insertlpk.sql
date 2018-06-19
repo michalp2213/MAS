@@ -78,3 +78,11 @@ INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (77, 2, '201
 INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (78, 12, '2002-12-28', '2003-11-28');
 INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (79, 2, '2010-05-21', '2011-05-21');
 INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (80, 24, '2008-02-18', '2009-01-18');
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (81, 2, '2018-06-19', '2018-06-19');
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (81, 26, '2018-06-20', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (82, 24, '2018-06-19', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (1, 2, '2018-06-19', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (100, 56, '2018-06-19', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (99, 34, '2018-06-19', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (98, 12, '2018-06-10', null);
+INSERT INTO pacjenci_lpk (id_pacjenta, id_lekarza, od, "do") VALUES (97, 28, '2017-06-20', null);

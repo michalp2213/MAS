@@ -26,7 +26,9 @@ public class Pracownicy implements Table {
 				+ "DEFAULT, "
 				+ "'" + name + "', "
 				+ "'" + surname + "', "
-				+ "'" + pesel + "');";
+				+ "'" + pesel + "', "
+				+ "now(), "
+				+ "NULL);";
 		return Database.executeUpdate(sql) != 0;
 	}
 }
