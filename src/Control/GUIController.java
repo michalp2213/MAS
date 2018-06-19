@@ -903,8 +903,7 @@ public class GUIController {
         }
         String type = rankingiTypBox.getSelectionModel().getSelectedItem().toString();
         if (type.equals("Alfabetyczny")) {
-            updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
-            rankingiOpcjeBox.setVisible(true);
+            rankingiOpcjeBox.setVisible(false);
         } else if (type.equals("Według średniej")) {
             updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
             rankingiOpcjeBox.setVisible(true);
@@ -924,20 +923,20 @@ public class GUIController {
 
     @FXML
     private void showRankingPressed() {
-        if (rankingiTypBox.getSelectionModel().getSelectedItem() == null ||
-                rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+        if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
             return;
         }
         switch(rankingiTypBox.getSelectionModel().getSelectedItem().toString()) {
             case "Alfabetyczny":
                 showTable(Tables.ankiety_lekarze.alphabeticRanking(
                         rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
-                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
-                        specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                                rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
+                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText())
                 ));
                 break;
             case "Według średniej":
+                if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+                    return;
+                }
                 showTable(Tables.ankiety_lekarze.bestAvg(
                         rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
                         rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
@@ -946,6 +945,9 @@ public class GUIController {
                 ));
                 break;
             case "Według cechy":
+                if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+                    return;
+                }
                 showTable(Tables.ankiety_lekarze.bestIn(
                         rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
                         rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
@@ -953,6 +955,7 @@ public class GUIController {
                 ));
                 break;
         }
+        hideRankingiMenu();
     }
 
     @FXML
