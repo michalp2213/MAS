@@ -38,16 +38,22 @@ public class AnkietyLekarze implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public ArrayList<ArrayList<String>> alphabeticRanking (Date from, Date to, int specjalizacjaId) {
-		return Database.executeQuery("SELECT * from ranking_alfabetyczny ('" + from + "'::date, '" + to + "'::date, " + specjalizacjaId + ");");
+	public ArrayList<ArrayList<String>> alphabeticRanking (Date from, Date to) {
+		String fromStr = from == null ? "NULL" : "'" + from + "'";
+		String toStr = to == null ? "NULL" : "'" + to + "'";
+		return Database.executeQuery("SELECT * from ranking_alfabetyczny (" + fromStr + ", " + toStr + ");");
 	}
 	
 	public ArrayList<ArrayList<String>> bestIn (Date from, Date to, String cecha) {
-		return Database.executeQuery("SELECT * from ranking_cecha ('" + from + "', '" + to + "', " + cecha + ");");
+		String fromStr = from == null ? "NULL" : "'" + from + "'";
+		String toStr = to == null ? "NULL" : "'" + to + "'";
+		return Database.executeQuery("SELECT * from ranking_cecha (" + fromStr + ", " + toStr + ", " + cecha + ");");
 	}
 	
 	public ArrayList<ArrayList<String>> bestAvg (Date from, Date to, int specjalizacjaId) {
-		return Database.executeQuery("SELECT * from ranking_specjalizacje ('" + from + "', '" + to + "', " + specjalizacjaId + ");");
+		String fromStr = from == null ? "NULL" : "'" + from + "'";
+		String toStr = to == null ? "NULL" : "'" + to + "'";
+		return Database.executeQuery("SELECT * from ranking_specjalizacje (" + fromStr + ", " + toStr + ", " + specjalizacjaId + ");");
 	}
 
 }
