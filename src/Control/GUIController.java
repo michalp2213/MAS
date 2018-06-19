@@ -932,9 +932,7 @@ public class GUIController {
             case "Alfabetyczny":
                 showTable(Tables.ankiety_lekarze.alphabeticRanking(
                         rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
-                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
-                        specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                                rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
+                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText())
                 ));
                 break;
             case "Według średniej":
