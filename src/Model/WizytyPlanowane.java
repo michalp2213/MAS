@@ -16,11 +16,12 @@ public class WizytyPlanowane implements Table {
 		return Database.executeUpdate("DELETE FROM wizyty_planowane WHERE id_wizyty = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, Date newDate, PGInterval newInt) {
-		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, data, szacowany_czas) = ("
+	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, int newSpecjalizacja, Date newDate, PGInterval newInt) {
+		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) = ("
 				+ newPacjentId + ", "
 				+ newLekarzId + ", "
 				+ newCel + ", "
+				+ newSpecjalizacja + ", "
 				+ newDate + ", "
 				+ newInt + ") WHERE id_wizyty = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
