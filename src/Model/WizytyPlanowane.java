@@ -22,7 +22,7 @@ public class WizytyPlanowane implements Table {
 				+ newLekarzId + ", "
 				+ newCel + ", "
 				+ newSpecjalizacja + ", "
-				+ newDate + ", "
+				+ "'" + newDate + "', "
 				+ newInt + ") WHERE id_wizyty = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
@@ -32,7 +32,7 @@ public class WizytyPlanowane implements Table {
 				+ pacjentId + ", "
 				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = '" + cel + "'), "
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE nazwa = '" + specjalizacja + "'), "
-				+ date + ");";
+				+ "'" + date + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 	

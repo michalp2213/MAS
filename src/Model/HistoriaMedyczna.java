@@ -14,7 +14,7 @@ public class HistoriaMedyczna implements Table {
 		String sql = "DELETE FROM historia_medyczna WHERE "
 				+ "id_pacjenta = " + pacjentId + ","
 				+ "id_wydarzenia = " + wydarzenieId + ","
-				+ "od = " + from + ";";
+				+ "od = '" + from + "';";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -28,12 +28,12 @@ public class HistoriaMedyczna implements Table {
 				+ "wizyta) = ("
 				+ newPacjentId + ", "
 				+ newWydarzenieId + ", "
-				+ newFrom + ", "
-				+ newTo + ", "
+				+ "'" + newFrom + "', "
+				+ "'" + newTo + "', "
 				+ newWizytaId + ") WHERE "
 				+ "id_pacjenta = " + pacjentId + " AND "
 				+ "id_wydarzenia = " + wydarzenieId + " AND "
-				+ "od = " + from + ";";
+				+ "od = '" + from + "';";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -42,8 +42,8 @@ public class HistoriaMedyczna implements Table {
 				+ pacjentId + ","
 				+ wydarzenieId + ","
 				+ wizytaId + ","
-				+ from + ","
-				+ to + ");";
+				+ "'" + from + "',"
+				+ "'" + to + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 
