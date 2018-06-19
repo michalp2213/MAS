@@ -136,6 +136,14 @@ public class GUIController {
     public ListView ankietyList;
     public Button ankietyDeleteButton;
     public Button LPKDeleteButton;
+    public Button rankingiButton;
+    public GridPane rankingiMenu;
+    public Button closeRankingiMenuButton;
+    public TextField rankingiOdField;
+    public TextField rankingiDoField;
+    public ComboBox rankingiTypBox;
+    public ComboBox rankingiOpcjeBox;
+    public Button showRankingButton;
 
     private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 
@@ -572,6 +580,20 @@ public class GUIController {
         wydarzeniaMedyczneMenu.setVisible(false);
     }
 
+    @FXML
+    public void showRankingiMenu() {
+        hideAllMenus();
+        updateRankingiMenu();
+        rankingiMenu.setVisible(true);
+        rankingiMenu.toFront();
+    }
+
+    @FXML
+    public void hideRankingiMenu() {
+        rankingiMenu.setVisible(false);
+        rankingiOpcjeBox.setVisible(false);
+    }
+
     public void hideAllMenus() {
         hidePracownicyMenu();
         hidePracownicyChoiceMenu();
@@ -601,6 +623,7 @@ public class GUIController {
         hideWydarzeniaMedyczneChoiceMenu();
         hideCeleWizytMenu();
         hideCeleWizytChoiceMenu();
+        hideRankingiMenu();
     }
 
     @FXML
@@ -870,6 +893,66 @@ public class GUIController {
 
     private void updateCeleWizytMenu() {
         updateCeleWizytMenuVolatile();
+    }
+
+    @FXML
+    private void updateRankingiMenuOpcjeBox() {
+        if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
+            rankingiOpcjeBox.setVisible(false);
+            return;
+        }
+        String type = rankingiTypBox.getSelectionModel().getSelectedItem().toString();
+        if (type.equals("Alfabetyczny")) {
+            updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+            rankingiOpcjeBox.setVisible(true);
+        } else if (type.equals("Według średniej")) {
+            updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+            rankingiOpcjeBox.setVisible(true);
+        } else {
+            ObservableList<String> opcjeItems = FXCollections.observableArrayList();
+            opcjeItems.addAll("uprzejmość", "opanowanie", "informacyjność", "dokładność badań");
+            rankingiOpcjeBox.setItems(opcjeItems);
+            rankingiOpcjeBox.setVisible(true);
+        }
+    }
+
+    private void updateRankingiMenu() {
+        ObservableList<String> typItems = FXCollections.observableArrayList();
+        typItems.addAll("Alfabetyczny", "Według średniej", "Według cechy");
+        rankingiTypBox.setItems(typItems);
+    }
+
+    @FXML
+    private void showRankingPressed() {
+        if (rankingiTypBox.getSelectionModel().getSelectedItem() == null ||
+                rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        switch(rankingiTypBox.getSelectionModel().getSelectedItem().toString()) {
+            case "Alfabetyczny":
+                showTable(Tables.ankiety_lekarze.alphabeticRanking(
+                        rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
+                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
+                        specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                                rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
+                ));
+                break;
+            case "Według średniej":
+                showTable(Tables.ankiety_lekarze.bestAvg(
+                        rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
+                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
+                        specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                                rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
+                ));
+                break;
+            case "Według cechy":
+                showTable(Tables.ankiety_lekarze.bestIn(
+                        rankingiOdField.getText().equals("") ? null : Date.valueOf(rankingiOdField.getText()),
+                        rankingiDoField.getText().equals("") ? null : Date.valueOf(rankingiDoField.getText()),
+                        rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString()
+                ));
+                break;
+        }
     }
 
     @FXML
@@ -1530,8 +1613,8 @@ public class GUIController {
         return Integer.valueOf(Database.executeQuery(
                 "select s.id_specjalizacji " +
                         "from specjalizacje s " +
-                        "where s.nazwa = " +
-                        spec +
+                        "where s.nazwa = '" +
+                        spec + "'" +
                         ";"
         ).get(1).get(0));
     }

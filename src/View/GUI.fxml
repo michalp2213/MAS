@@ -152,6 +152,15 @@
                 onMouseEntered="#showCeleWizytChoiceMenu"
                 onMouseExited="#hideCeleWizytChoiceMenu"/>
 
+        <Button fx:id="rankingiButton"
+                text="Rankingi"
+                textAlignment="CENTER"
+                minWidth="140"
+                maxWidth="140"
+                minHeight="25"
+                maxHeight="25"
+                onAction="#showRankingiMenu"/>
+
     </VBox>
 
     <VBox fx:id="pracownicyChoiceMenu"
@@ -1827,6 +1836,75 @@
                 maxWidth="60"
                 minWidth="60"
                 onAction="#wydarzeniaMedyczneMenuDeletePressed"/>
+    </GridPane>
+
+    <GridPane fx:id="rankingiMenu"
+              AnchorPane.topAnchor="150"
+              AnchorPane.leftAnchor="200"
+              visible="false">
+
+        <Label text="Od"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Do"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Label text="Typ"
+               GridPane.columnIndex="2"
+               GridPane.rowIndex="0"
+               maxWidth="100"
+               minWidth="100"/>
+
+        <Button fx:id="closeRankingiMenuButton"
+                text="X"
+                GridPane.columnIndex="4"
+                GridPane.rowIndex="0"
+                GridPane.halignment="CENTER"
+                maxWidth="60"
+                minWidth="60"
+                onAction="#hideRankingiMenu"/>
+
+        <TextField fx:id="rankingiOdField"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"
+                   maxWidth="100"
+                   minWidth="100"/>
+
+        <TextField fx:id="rankingiDoField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"
+                   maxWidth="100"
+                   minWidth="100"/>
+
+        <ComboBox fx:id="rankingiTypBox"
+                  GridPane.columnIndex="2"
+                  GridPane.rowIndex="1"
+                  maxWidth="150"
+                  minWidth="150"
+        onAction="#updateRankingiMenuOpcjeBox"/>
+
+        <ComboBox fx:id="rankingiOpcjeBox"
+                  GridPane.columnIndex="3"
+                  GridPane.rowIndex="1"
+                  maxWidth="150"
+                  minWidth="150"
+                    visible="false"/>
+
+        <Button fx:id="showRankingButton"
+                text="Pokaż"
+                GridPane.columnIndex="4"
+                GridPane.rowIndex="1"
+                maxWidth="60"
+                minWidth="60"
+                GridPane.halignment="CENTER"
+                onAction="#showRankingPressed"/>
+
     </GridPane>
 
     <TableView fx:id="tableView"
