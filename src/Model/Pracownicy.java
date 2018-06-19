@@ -1,5 +1,6 @@
 package Model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Pracownicy implements Table {
@@ -13,11 +14,14 @@ public class Pracownicy implements Table {
 		return Database.executeUpdate("DELETE FROM pracownicy WHERE id_pracownika = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, String newName, String newSurname, String newPesel) {
+	public boolean updateItem (int id, String newName, String newSurname, String newPesel, Date newZatrudniony_od, Date newZatrudniony_do) {
+		String zatrudniony_doStr = newZatrudniony_do == null ? "NULL" : "'" + newZatrudniony_do + "'";
 		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel) = ("
 				+ "'" + newName + "', "
 				+ "'" + newSurname + "', "
-				+ "'" + newPesel + "') WHERE id_pracownika = " + id + ";";
+				+ "'" + newPesel + "', " 
+				+ "'" + newZatrudniony_od + "', " 
+				+ zatrudniony_doStr + ") WHERE id_pracownika = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 		
