@@ -26,7 +26,7 @@ CREATE TABLE pracownicy
   nazwisko      VARCHAR  NOT NULL,
   pesel         CHAR(11) NOT NULL
     UNIQUE,
-  zatrudniony_od DATE NOT NULL,
+  zatrudniony_od DATE NOT NULL DEFAULT(DATE(current_timestamp)),
   zatrudniony_do DATE
 );
 
