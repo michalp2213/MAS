@@ -18,7 +18,7 @@ public class AnkietyLekarze implements Table {
 		String sql = "UPDATE ankiety_lekarze SET "
 				+ "(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) = ("
 				+ newLekarzId + ", "
-				+ newDate + ", "
+				+ "'" + newDate + "', "
 				+ newUprzejmosc + ", "
 				+ newOpanowanie + ", "
 				+ newInformacyjnosc + ", "
@@ -28,9 +28,10 @@ public class AnkietyLekarze implements Table {
 	}
 	
 	public boolean insertItem (int lekarzId, Date date, Integer uprzejmosc, Integer opanowanie, Integer informacyjnosc, Integer dokladnosc_badan) {
-		String sql = "INSERT INTO ankiety_lekarze(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ("
+		String sql = "INSERT INTO ankiety_lekarze VALUES ("
+				+ "DEFAULT,"
 				+ lekarzId + ","
-				+ "'" + date + "'" + ","
+				+ "'" + date + "',"
 				+ uprzejmosc + ","
 				+ opanowanie + ","
 				+ informacyjnosc + ","

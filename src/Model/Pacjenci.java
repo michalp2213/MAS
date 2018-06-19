@@ -20,7 +20,7 @@ public class Pacjenci implements Table {
 				+ "'" + newSurname + "', "
 				+ "'" + newPesel + "', "
 				+ "'" + newPassportNo + "', "
-				+ newBirthDate + ", "
+				+ "'" + newBirthDate + "', "
 				+ "'" + newSex + "') WHERE id_pacjenta = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
@@ -32,7 +32,7 @@ public class Pacjenci implements Table {
 				+ "'" + surname + "', "
 				+ "'" + pesel + "', "
 				+ "'" + passportNo + "', "
-				+ birthDate + ", "
+				+ "'" + birthDate + "', "
 				+ sex + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
