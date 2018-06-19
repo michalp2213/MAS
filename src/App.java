@@ -14,9 +14,9 @@ public class App extends Application {
     private final int resolutionY = 600;
 
     public static void main( String[] args ) {
-    	Database.setServerAddr("jdbc:postgresql://localhost:5432/psimaj"); // set this up for your db config
+    	Database.setServerAddr("jdbc:postgresql://localhost:5432/aftyr"); // set this up for your db config
     	try {
-			Database.connect("psimaj", "testpass");
+			Database.connect("aftyr", "");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1); // cannot work without DB connection
