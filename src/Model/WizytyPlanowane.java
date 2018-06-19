@@ -37,9 +37,11 @@ public class WizytyPlanowane implements Table {
 	}
 	
 	public boolean moveToWizytyOdbyte (int id) {
-		Database.executeUpdate("INSERT INTO wizyty_odbyte (id_pacjenta, id_lekarza, cel, specjalizacja, data, czas_trwania) "
+		if (Database.executeUpdate("INSERT INTO wizyty_odbyte (id_pacjenta, id_lekarza, cel, specjalizacja, data, czas_trwania) "
 				+ "SELECT id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas as czas_trwania "
-				+ "FROM wizyty_planowane WHERE id_wizyty = " + id + ";");
+				+ "FROM wizyty_planowane WHERE id_wizyty = " + id + ";") == 0) {
+			return false;
+		}
 		return this.deleteItem(id);
 	}
 	

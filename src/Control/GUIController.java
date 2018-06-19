@@ -811,8 +811,8 @@ public class GUIController {
     }
 
     private void updateWizytyOdbyteMenuVolatile() {
-        updateListView(wizytyOdbyteList, Tables.wizyty_odbyte.getContents());
-        updateComboBox(wizytyOdbyteBox, Tables.wizyty_odbyte.getContents());
+        updateListView(wizytyOdbyteList, Tables.wizyty_planowane.getContents());
+        updateComboBox(wizytyOdbyteBox, Tables.wizyty_planowane.getContents());
     }
 
     private void updateWizytyOdbyteMenu() {
@@ -1219,6 +1219,18 @@ public class GUIController {
             );
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        updateWizytyOdbyteMenuVolatile();
+    }
+
+    @FXML
+    public void wizytyOdbyteMenuDeletePressed() {
+        for (Object o : wizytyOdbyteList.getItems()) {
+            CheckBox c = (CheckBox) o;
+            if (c.isSelected()) {
+                Integer id_wizyty = Integer.valueOf(toStringArray(c.getText())[0]);
+                Tables.wizyty_planowane.moveToWizytyOdbyte(id_wizyty);
+            }
         }
         updateWizytyOdbyteMenuVolatile();
     }
