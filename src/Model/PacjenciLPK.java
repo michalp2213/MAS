@@ -12,7 +12,7 @@ public class PacjenciLPK implements Table {
 
     public boolean deleteItem (int id, Date from) {
         return Database.executeUpdate("DELETE FROM pacjenci_lpk WHERE id_pacjenta = " + id +
-                " and od = " + from) != 0;
+                " and od = '" + from + "'") != 0;
     }
     
     public boolean updateItem (int oldPacjentId, Date oldFrom,
@@ -28,7 +28,7 @@ public class PacjenciLPK implements Table {
     }
 
     public boolean insertItem (int id_pacjenta, int id_lekarza) {
-        String sql = "INSERT INTO pacjenci VALUES ("
+        String sql = "INSERT INTO pacjenci_lpk VALUES ("
                 + "'" + id_pacjenta + "', "
                 + "'" + id_lekarza + "', "
                 + "now(), NULL);";

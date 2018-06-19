@@ -1014,14 +1014,14 @@ public class GUIController {
         Integer id_pac = Integer.valueOf(
                 toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
         Integer id_lek = Integer.valueOf(
-                toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+                toStringArray(LPKLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
         Tables.pacjenci_lpk.insertItem(id_pac, id_lek);
         updateLPKMenuVolatile();
     }
 
     @FXML
     private void LPKMenuDeletePressed() {
-        for (Object o : lekarzeSpecjalizacjeRoleList.getItems()) {
+        for (Object o : LPKList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
                 Integer id_pac = Integer.valueOf(
@@ -1077,6 +1077,7 @@ public class GUIController {
                     id_pac == null ? Integer.valueOf(fields[1]) : id_pac,
                     id_lek == null ? Integer.valueOf(fields[2]) : id_lek,
                     cel == null ? celNameToId(fields[3]) : celNameToId(cel),
+                    spec == null ? specNameToId(fields[4]) : specNameToId(spec),
                     data == null ? Date.valueOf(fields[5]) : data,
                     interval == null ? new PGInterval(fields[6]) : interval
             );
@@ -1122,6 +1123,7 @@ public class GUIController {
                     id_pac == null ? Integer.valueOf(fields[1]) : id_pac,
                     id_lek == null ? Integer.valueOf(fields[2]) : id_lek,
                     cel == null ? celNameToId(fields[3]) : celNameToId(cel),
+                    spec == null ? specNameToId(fields[4]) : specNameToId(spec),
                     data == null ? Date.valueOf(fields[5]) : data,
                     interval == null ? new PGInterval(fields[6]) : interval
             );

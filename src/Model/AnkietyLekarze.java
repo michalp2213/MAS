@@ -28,10 +28,9 @@ public class AnkietyLekarze implements Table {
 	}
 	
 	public boolean insertItem (int lekarzId, Date date, Integer uprzejmosc, Integer opanowanie, Integer informacyjnosc, Integer dokladnosc_badan) {
-		String sql = "INSERT INTO ankiety_lekarze VALUES ("
-				+ "DEFAULT,"
+		String sql = "INSERT INTO ankiety_lekarze(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ("
 				+ lekarzId + ","
-				+ date + ","
+				+ "'" + date + "'" + ","
 				+ uprzejmosc + ","
 				+ opanowanie + ","
 				+ informacyjnosc + ","

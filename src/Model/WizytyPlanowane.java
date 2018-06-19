@@ -28,7 +28,7 @@ public class WizytyPlanowane implements Table {
 	}
 
 	public boolean insertItem (int pacjentId,  String cel, String specjalizacja, Date date) {
-		String sql = "INSERT INTO terminaz VALUES ("
+		String sql = "INSERT INTO terminarz VALUES ("
 				+ pacjentId + ", "
 				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = '" + cel + "'), "
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE nazwa = '" + specjalizacja + "'), "

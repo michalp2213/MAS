@@ -14,7 +14,7 @@ public class App extends Application {
     private final int resolutionY = 600;
 
     public static void main( String[] args ) {
-    	Database.setServerAddr("jdbc:postgresql://localhost:5432/mas"); // set this up for your db config
+    	Database.setServerAddr("jdbc:postgresql://localhost:5432/psimaj"); // set this up for your db config
     	try {
 			Database.connect("psimaj", "testpass");
 		} catch (IOException e) {
