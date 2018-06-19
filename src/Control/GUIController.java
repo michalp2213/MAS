@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import org.postgresql.util.PGInterval;
 
 import java.awt.event.ActionEvent;
 import java.sql.Date;
@@ -127,7 +128,7 @@ public class GUIController {
     public TextField ankietyDataDataField;
     public ComboBox ankietyUprzejmoscComboBox;
     public ComboBox ankietyOpanowanieComboBox;
-    public ComboBox ankietyInformacyjnosComboBox;
+    public ComboBox ankietyInformacyjnoscComboBox;
     public ComboBox ankietyDokladnoscBadanComboBox;
     public Button ankietyInsertButton;
     public ComboBox ankietyBox;
@@ -686,17 +687,29 @@ public class GUIController {
         showTable(Tables.cele_wizyty.getContents());
     }
 
-    private void updatePracownicyMenu() {
+    private void updatePracownicyMenuVolatile() {
         updateListView(pracownicyList, Tables.pracownicy.getContents());
         updateComboBox(pracownicyBox, Tables.pracownicy.getContents());
     }
 
-    private void updatePacjenciMenu() {
+    private void updatePracownicyMenu() {
+        updatePracownicyMenuVolatile();
+    }
+
+    private void updatePacjenciMenuVolatile() {
         updateListView(pacjenciList, Tables.pacjenci.getContents());
         updateComboBox(pacjenciBox, Tables.pacjenci.getContents());
+    }
+
+    private void updatePacjenciMenu() {
+        updatePacjenciMenuVolatile();
         ObservableList<String> l = FXCollections.observableArrayList();
         l.addAll("M", "F");
         pacjenciPlecField.setItems(l);
+    }
+
+    private void updatePracownicyRoleMenuVolatile() {
+        updatePracownicyRoleMenuListView();
     }
 
     @FXML
@@ -722,6 +735,10 @@ public class GUIController {
         updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(), "nazwa"));
     }
 
+    private void updateLekarzeSpecjalizacjeMenuVolatile() {
+        updateLekarzeSpecjalizacjeMenuListView();
+    }
+
     @FXML
     private void updateLekarzeSpecjalizacjeMenuListView() {
         if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() != null) {
@@ -745,74 +762,114 @@ public class GUIController {
         updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
     }
 
-    private void updateLPKMenu() {
+    private void updateLPKMenuVolatile() {
         updateListView(LPKList, Tables.pacjenci_lpk.getContents());
+    }
+
+    private void updateLPKMenu() {
+        updateLPKMenuVolatile();
         updateComboBox(LPKLekarzeComboBox, getSmallLekarze());
         updateComboBox(LPKPacjenciComboBox, getSmallPacjenci());
     }
 
-    private void updateWizytyPlanowaneMenu() {
+    private void updateWizytyPlanowaneMenuVolatile() {
         updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents());
         updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents());
+    }
+
+    private void updateWizytyPlanowaneMenu() {
+        updateWizytyPlanowaneMenuVolatile();
         updateComboBox(wizytyPlanowaneCelComboBox, filterTable(Tables.cele_wizyty.getContents(), "nazwa"));
         updateComboBox(wizytyPlanowaneLekarzeComboBox, getSmallLekarze());
         updateComboBox(wizytyPlanowanePacjenciComboBox, getSmallPacjenci());
         updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
     }
 
-    private void updateWizytyOdbyteMenu() {
+    private void updateWizytyOdbyteMenuVolatile() {
         updateListView(wizytyOdbyteList, Tables.wizyty_odbyte.getContents());
         updateComboBox(wizytyOdbyteBox, Tables.wizyty_odbyte.getContents());
+    }
+
+    private void updateWizytyOdbyteMenu() {
+        updateWizytyOdbyteMenuVolatile();
         updateComboBox(wizytyOdbyteCelComboBox, filterTable(Tables.cele_wizyty.getContents(), "nazwa"));
         updateComboBox(wizytyOdbyteLekarzeComboBox, getSmallLekarze());
         updateComboBox(wizytyOdbytePacjenciComboBox, getSmallPacjenci());
         updateComboBox(wizytyOdbyteSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
     }
 
-    private void updateSkierowaniaMenu() {
+    private void updateSkierowaniaMenuVolatile() {
         updateListView(skierowaniaList, Tables.skierowania.getContents());
         updateComboBox(skierowaniaBox, Tables.skierowania.getContents());
+    }
+
+    private void updateSkierowaniaMenu() {
+        updateSkierowaniaMenuVolatile();
         updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(), "nazwa"));
         updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
     }
 
-    private void updateHistoriaMedycznaMenu() {
+    private void updateHistoriaMedycznaMenuVolatile() {
         updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents());
         updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents());
+    }
+
+    private void updateHistoriaMedycznaMenu() {
+        updateHistoriaMedycznaMenuVolatile();
         updateComboBox(historiaMedycznaPacjenciComboBox, getSmallPacjenci());
         updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(), "nazwa"));
     }
 
-    private void updateAnkietyMenu() {
+    private void updateAnkietyMenuVolatile() {
         updateListView(ankietyList, Tables.ankiety_lekarze.getContents());
         updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents());
+    }
+
+    private void updateAnkietyMenu() {
+        updateAnkietyMenuVolatile();
         updateComboBox(ankietyLekarzeComboBox, getSmallLekarze());
         ObservableList<Integer> vals = FXCollections.observableArrayList();
         vals.addAll(1, 2, 3, 4, 5);
         ankietyDokladnoscBadanComboBox.setItems(vals);
-        ankietyInformacyjnosComboBox.setItems(vals);
+        ankietyInformacyjnoscComboBox.setItems(vals);
         ankietyOpanowanieComboBox.setItems(vals);
         ankietyUprzejmoscComboBox.setItems(vals);
     }
 
-    private void updateRoleMenu() {
+    private void updateRoleMenuVolatile() {
         updateListView(roleList, Tables.role.getContents());
         updateComboBox(roleBox, Tables.role.getContents());
     }
 
-    private void updateSpecjalizacjeMenu() {
+    private void updateRoleMenu() {
+        updateRoleMenuVolatile();
+    }
+
+    private void updateSpecjalizacjeMenuVolatile() {
         updateListView(specjalizacjeList, Tables.specjalizacje.getContents());
         updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents());
     }
 
-    private void updateWydarzeniaMedyczneMenu() {
+    private void updateSpecjalizacjeMenu() {
+        updateSpecjalizacjeMenuVolatile();
+    }
+
+    private void updateWydarzeniaMedyczneMenuVolatile() {
         updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents());
         updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents());
     }
 
-    private void updateCeleWizytMenu() {
+    private void updateWydarzeniaMedyczneMenu() {
+        updateWydarzeniaMedyczneMenuVolatile();
+    }
+
+    private void updateCeleWizytMenuVolatile() {
         updateListView(celeWizytList, Tables.cele_wizyty.getContents());
         updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents());
+    }
+
+    private void updateCeleWizytMenu() {
+        updateCeleWizytMenuVolatile();
     }
 
     @FXML
@@ -820,6 +877,7 @@ public class GUIController {
         Tables.pracownicy.insertItem(pracownicyImieField.getText(),
                 pracownicyNazwiskoField.getText(),
                 pracownicyPeselField.getText());
+        updatePracownicyMenuVolatile();
     }
 
     @FXML
@@ -831,6 +889,7 @@ public class GUIController {
                     pracownicyNazwiskoField.getText().equals("") ? fields[2] : pracownicyNazwiskoField.getText(),
                     pracownicyPeselField.getText().equals("") ? fields[3] : pracownicyPeselField.getText()
             );
+            updatePracownicyMenuVolatile();
         }
     }
 
@@ -842,6 +901,7 @@ public class GUIController {
                 Tables.pacjenci.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
             }
         }
+        updatePracownicyMenuVolatile();
     }
 
     @FXML
@@ -851,7 +911,8 @@ public class GUIController {
                 pacjenciPeselField.getText(),
                 pacjenciNrPaszportuField.getText(),
                 Date.valueOf(pacjenciDataUrodzeniaField.getText()),
-                pacjenciPlecField.getSelectionModel().getSelectedItem().toString());
+                pacjenciPlecField.getSelectionModel().getSelectedItem() == null ? null : pacjenciPlecField.getSelectionModel().getSelectedItem().toString());
+        updatePacjenciMenuVolatile();
     }
 
     @FXML
@@ -864,9 +925,10 @@ public class GUIController {
                     pacjenciPeselField.getText().equals("") ? fields[3] : pacjenciPeselField.getText(),
                     pacjenciNrPaszportuField.getText().equals("") ? fields[4] : pacjenciNrPaszportuField.getText(),
                     Date.valueOf(pacjenciDataUrodzeniaField.getText()),
-                    pacjenciPlecField.getSelectionModel().getSelectedItem().toString()
+                    pacjenciPlecField.getSelectionModel().getSelectedItem() == null ? null : pacjenciPlecField.getSelectionModel().getSelectedItem().toString()
 
             );
+            updatePacjenciMenuVolatile();
         }
     }
 
@@ -878,15 +940,21 @@ public class GUIController {
                 Tables.pacjenci.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
             }
         }
+        updatePacjenciMenuVolatile();
     }
 
     @FXML
     private void pracownicyRoleMenuInsertPressed() {
+        if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null ||
+                pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
         String chosenRole = pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
                 pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
         Integer id_prac = Integer.valueOf(
                 toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0]);
         Tables.pracownicy_role.insertItem(chosenRole, id_prac);
+        updatePracownicyRoleMenuVolatile();
     }
 
     @FXML
@@ -903,6 +971,453 @@ public class GUIController {
                 Tables.pracownicy_role.deleteItem(chosenRole, id_prac);
             }
         }
+        updatePracownicyRoleMenuVolatile();
+    }
+
+    @FXML
+    private void lekarzeSpecjalizacjeMenuInsertPressed() {
+        if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
+                lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String chosenRole = lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        Integer id_lek = Integer.valueOf(
+                toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek);
+        updateLekarzeSpecjalizacjeMenuVolatile();
+    }
+
+    @FXML
+    private void lekarzeSpecjalizacjeMenuDeletePressed() {
+        if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Integer id_lek = Integer.valueOf(
+                toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        for (Object o : lekarzeSpecjalizacjeRoleList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                String chosenRole = b.getText().substring(1, b.getText().length() - 1);
+                Tables.lekarze_specjalizacje.deleteItem(chosenRole, id_lek);
+            }
+        }
+        updateLekarzeSpecjalizacjeMenuVolatile();
+    }
+
+    @FXML
+    private void LPKMenuInsertPressed() {
+        if (LPKPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                LPKLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Integer id_pac = Integer.valueOf(
+                toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer id_lek = Integer.valueOf(
+                toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Tables.pacjenci_lpk.insertItem(id_pac, id_lek);
+        updateLPKMenuVolatile();
+    }
+
+    @FXML
+    private void LPKMenuDeletePressed() {
+        for (Object o : lekarzeSpecjalizacjeRoleList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Integer id_pac = Integer.valueOf(
+                        toStringArray(b.getText())[0]);
+                Date data = Date.valueOf(
+                        toStringArray(b.getText())[2]);
+                Tables.pacjenci_lpk.deleteItem(id_pac, data);
+            }
+        }
+        updateLPKMenuVolatile();
+    }
+
+    @FXML
+    private void wizytyPlanowaneMenuInsertPressed() {
+        if (wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ||
+                wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Integer id_pac = Integer.valueOf(
+                toStringArray(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer id_lek = wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        String cel = wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        String spec = wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        Date data = Date.valueOf(wizytyPlanowaneDataField.getText());
+        Tables.wizyty_planowane.insertItem(id_pac, cel, spec, data);
+        updateWizytyPlanowaneMenuVolatile();
+    }
+
+    @FXML
+    private void wizytyPlanowaneMenuUpdatePressed() {
+        if (wizytyPlanowaneBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
+        Integer id_pac = wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer id_lek = wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        String cel = wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        String spec = wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        Date data = wizytyPlanowaneDataField.getText().equals("") ? null : Date.valueOf(wizytyPlanowaneDataField.getText());
+        try {
+            PGInterval interval = wizytyPlanowaneSzacowanyCzasField.getText() == null ? null : new PGInterval(wizytyPlanowaneSzacowanyCzasField.getText());
+            Tables.wizyty_planowane.updateItem(Integer.valueOf(fields[0]),
+                    id_pac == null ? Integer.valueOf(fields[1]) : id_pac,
+                    id_lek == null ? Integer.valueOf(fields[2]) : id_lek,
+                    cel == null ? celNameToId(fields[3]) : celNameToId(cel),
+                    data == null ? Date.valueOf(fields[5]) : data,
+                    interval == null ? new PGInterval(fields[6]) : interval
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateWizytyPlanowaneMenuVolatile();
+    }
+
+    @FXML
+    public void wizytyPlanowaneMenuDeletePressed() {
+        for (Object o : wizytyPlanowaneList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Integer id_wiz = Integer.valueOf(
+                        toStringArray(b.getText())[0]);
+                Tables.wizyty_planowane.deleteItem(id_wiz);
+            }
+        }
+        updateWizytyPlanowaneMenuVolatile();
+    }
+
+    @FXML
+    public void wizytyOdbyteMenuUpdatePressed() {
+        if (wizytyOdbyteBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(wizytyOdbyteBox.getSelectionModel().getSelectedItem().toString());
+        Integer id_pac = wizytyOdbytePacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(wizytyOdbytePacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer id_lek = wizytyOdbyteLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(wizytyOdbyteLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        String cel = wizytyOdbyteCelComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                wizytyOdbyteCelComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        wizytyOdbyteCelComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        String spec = wizytyOdbyteSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                wizytyOdbyteSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        wizytyOdbyteSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+        Date data = wizytyOdbyteDataField.getText().equals("") ? null : Date.valueOf(wizytyOdbyteDataField.getText());
+        try {
+            PGInterval interval = wizytyOdbyteCzasTrwaniaField.getText() == null ? null : new PGInterval(wizytyOdbyteCzasTrwaniaField.getText());
+            Tables.wizyty_odbyte.updateItem(Integer.valueOf(fields[0]),
+                    id_pac == null ? Integer.valueOf(fields[1]) : id_pac,
+                    id_lek == null ? Integer.valueOf(fields[2]) : id_lek,
+                    cel == null ? celNameToId(fields[3]) : celNameToId(cel),
+                    data == null ? Date.valueOf(fields[5]) : data,
+                    interval == null ? new PGInterval(fields[6]) : interval
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateWizytyOdbyteMenuVolatile();
+    }
+
+    @FXML
+    private void skierowaniaMenuInsertPressed() {
+        if (skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ||
+                skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Tables.skierowania.insertItem(Integer.valueOf(skierowaniaWizytyComboBox.getText()),
+                specNameToId(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                celNameToId(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                skierowaniaOpisDataField.getText()
+        );
+        updateSkierowaniaMenuVolatile();
+    }
+
+    @FXML
+    private void skierowaniaMenuUpdatePressed() {
+        if (skierowaniaBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
+        Tables.skierowania.updateItem(Integer.valueOf(fields[0]),
+                skierowaniaWizytyComboBox.getText().equals("") ? Integer.valueOf(fields[1]) : Integer.valueOf(skierowaniaWizytyComboBox.getText()),
+                skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? specNameToId(fields[2]) : specNameToId(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null ? celNameToId(fields[3]) : celNameToId(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                skierowaniaOpisDataField.getText().equals("") ? fields[4] : skierowaniaOpisDataField.getText()
+        );
+        updateSkierowaniaMenuVolatile();
+    }
+
+    @FXML
+    private void skierowaniaMenuDeletePressed() {
+        for (Object o : skierowaniaList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.skierowania.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
+            }
+        }
+        updateSkierowaniaMenuVolatile();
+    }
+
+    @FXML
+    private void historiaMedycznaMenuInsertPressed() {
+        //todo
+        /*if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Integer pacjent_id = Integer.valueOf(toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer wydarzenie_id = wydarzenieNameToId(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().length() - 1));
+        Date from = Date.valueOf(historiaMedycznaOdDataField.getText());
+        Date to = historiaMedycznaDoDataField.getText().equals("") ? null : Date.valueOf(historiaMedycznaDoDataField.getText());
+        Integer id_wizyty = historiaMedycznaWizytyComboBox.getText().equals("") ? null : Integer.valueOf(historiaMedycznaWizytyComboBox.getText());
+        Tables.historia_medyczna.insertItem(pacjent_id,
+                wydarzenie_id,
+                from,
+                to,
+                id_wizyty
+        );
+        updateHistoriaMedycznaMenuVolatile();*/
+    }
+
+    @FXML
+    private void historiaMedycznaMenuUpdatePressed() {
+        //todo
+        /*if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(historiaMedycznaBox.getSelectionModel().getSelectedItem().toString());
+        Integer pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? Integer.valueOf(
+                toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
+        Integer wydarzenie_id = wydarzenieNameToId(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().length() - 1));
+        Date from = Date.valueOf(historiaMedycznaOdDataField.getText());
+        Date to = historiaMedycznaDoDataField.getText().equals("") ? null : Date.valueOf(historiaMedycznaDoDataField.getText());
+        Integer id_wizyty = historiaMedycznaWizytyComboBox.getText().equals("") ? null : Integer.valueOf(historiaMedycznaWizytyComboBox.getText());
+        Tables.skierowania.updateItem(Integer.valueOf(fields[0]),
+                skierowaniaWizytyComboBox.getText().equals("") ? Integer.valueOf(fields[1]) : Integer.valueOf(skierowaniaWizytyComboBox.getText()),
+                skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? specNameToId(fields[2]) : specNameToId(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null ? celNameToId(fields[3]) : celNameToId(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                        skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
+                skierowaniaOpisDataField.getText().equals("") ? fields[4] : skierowaniaOpisDataField.getText()
+        );
+        updateSkierowaniaMenuVolatile();*/
+    }
+
+    @FXML
+    private void historiaMedycznaMenuDeletePressed() {
+        //todo
+        /*for (Object o : skierowaniaList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.skierowania.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
+            }
+        }
+        updateSkierowaniaMenuVolatile();*/
+    }
+
+    @FXML
+    private void ankietyMenuInsertPressed() {
+        if (ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
+                ankietyDataDataField.getText().equals("")) {
+            return;
+        }
+        Integer id_lekarza = Integer.valueOf(
+                toStringArray(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]
+        );
+        Date data = Date.valueOf(ankietyDataDataField.getText());
+        Integer up = ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer op = ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer inf = ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer dok = ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem().toString());
+        Tables.ankiety_lekarze.insertItem(id_lekarza,
+                data,
+                up,
+                op,
+                inf,
+                dok
+        );
+        updateAnkietyMenuVolatile();
+    }
+
+    @FXML
+    private void ankietyMenuUpdatePressed() {
+        if (ankietyBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Integer id_lekarza = ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null : Integer.valueOf(
+                toStringArray(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0]
+        );
+        Date data = ankietyDataDataField.getText().equals("") ? null : Date.valueOf(ankietyDataDataField.getText());
+        Integer up = ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer op = ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer inf = ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem().toString());
+        Integer dok = ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                Integer.valueOf(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem().toString());
+        String[] fields = toStringArray(ankietyBox.getSelectionModel().getSelectedItem().toString());
+        //todo
+        /*Tables.ankiety_lekarze.updateItem(Integer.valueOf(fields[0]),
+                id_lekarza == null ? Integer.valueOf(fields[1]) : id_lekarza,
+                data == null ? Date.valueOf(fields[2]) : data,
+                up == null ? Integer.valueOf(fields[3]) : up,
+                op == null ? Integer.valueOf(fields[4]) : op,
+                inf == null ? Integer.valueOf(fields[5]) : inf,
+                dok == null ? Integer.valueOf(fields[6]) : dok
+        );*/
+        updateAnkietyMenuVolatile();
+    }
+
+    @FXML
+    private void ankietyMenuDeletePressed() {
+        for (Object o : ankietyList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.ankiety_lekarze.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
+            }
+        }
+        updateAnkietyMenuVolatile();
+    }
+
+    @FXML
+    private void roleMenuInsertPressed() {
+        Tables.role.insertItem(roleNazwaField.getText());
+        updateRoleMenuVolatile();
+    }
+
+    @FXML
+    private void roleMenuUpdatePressed() {
+        if (roleBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(roleBox.getSelectionModel().getSelectedItem().toString());
+        Tables.role.updateItem(fields[1],
+                roleNazwaField.getText()
+        );
+        updateRoleMenuVolatile();
+    }
+
+    @FXML
+    private void roleMenuDeletePressed() {
+        for (Object o : roleList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.role.deleteItem(toStringArray(b.getText())[1]);
+            }
+        }
+        updateRoleMenuVolatile();
+    }
+
+    @FXML
+    private void specjalizacjeMenuInsertPressed() {
+        Tables.specjalizacje.insertItem(specjalizacjeNazwaField.getText());
+        updateSpecjalizacjeMenuVolatile();
+    }
+
+    @FXML
+    private void specjalizacjeMenuUpdatePressed() {
+        if (specjalizacjeBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(specjalizacjeBox.getSelectionModel().getSelectedItem().toString());
+        Tables.specjalizacje.updateItem(fields[1],
+                specjalizacjeNazwaField.getText()
+        );
+        updateSpecjalizacjeMenuVolatile();
+    }
+
+    @FXML
+    private void specjalizacjeMenuDeletePressed() {
+        for (Object o : specjalizacjeList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.specjalizacje.deleteItem(toStringArray(b.getText())[1]);
+            }
+        }
+        updateSpecjalizacjeMenuVolatile();
+    }
+
+    @FXML
+    private void wydarzeniaMedyczneMenuInsertPressed() {
+        Tables.wydarzenia_medyczne.insertItem(wydarzeniaMedyczneNazwaField.getText());
+        updateWydarzeniaMedyczneMenuVolatile();
+    }
+
+    @FXML
+    private void wydarzeniaMedyczneMenuUpdatePressed() {
+        if (wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem().toString());
+        Tables.wydarzenia_medyczne.updateItem(fields[1],
+                wydarzeniaMedyczneNazwaField.getText()
+        );
+        updateWydarzeniaMedyczneMenuVolatile();
+    }
+
+    @FXML
+    private void wydarzeniaMedyczneMenuDeletePressed() {
+        for (Object o : wydarzeniaMedyczneList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.wydarzenia_medyczne.deleteItem(toStringArray(b.getText())[1]);
+            }
+        }
+        updateWydarzeniaMedyczneMenuVolatile();
+    }
+
+    @FXML
+    private void celeWizytMenuInsertPressed() {
+        Tables.cele_wizyty.insertItem(celeWizytNazwaField.getText());
+        updateCeleWizytMenuVolatile();
+    }
+
+    @FXML
+    private void celeWizytMenuUpdatePressed() {
+        if (celeWizytBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        String[] fields = toStringArray(celeWizytBox.getSelectionModel().getSelectedItem().toString());
+        System.out.println(celeWizytNazwaField.getText() + " " + fields[1]);
+        Tables.cele_wizyty.updateItem(fields[1],
+                celeWizytNazwaField.getText()
+        );
+        updateCeleWizytMenuVolatile();
+    }
+
+    @FXML
+    private void celeWizytMenuDeletePressed() {
+        for (Object o : celeWizytList.getItems()) {
+            CheckBox b = (CheckBox) o;
+            if (b.isSelected()) {
+                Tables.cele_wizyty.deleteItem(toStringArray(b.getText())[1]);
+            }
+        }
+        updateCeleWizytMenuVolatile();
     }
 
     private ArrayList<ArrayList<String>> filterTable(ArrayList<ArrayList<String>> rows, String... cols) {
@@ -937,7 +1452,7 @@ public class GUIController {
             TableColumn col = new TableColumn(colName);
             col.prefWidthProperty().bind(tableView.widthProperty().divide(
                     rows.get(0).size()).subtract(i == 0 ? 20 : 0));
-            int j = i ;
+            int j = i;
             col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                     return new SimpleStringProperty(param.getValue().get(j) == null ? "NULL" : param.getValue().get(j).toString());
@@ -980,7 +1495,7 @@ public class GUIController {
         }
     }
 
-    public String[] toStringArray(String s){
+    public String[] toStringArray(String s) {
         return s.substring(1, s.length() - 1).split(", ");
     }
 
@@ -997,5 +1512,35 @@ public class GUIController {
 
     public ArrayList<ArrayList<String>> getSmallPacjenci() {
         return filterTable(Tables.pacjenci.getContents(), "id_pacjenta", "imie", "nazwisko");
+    }
+
+    public Integer celNameToId(String cel) {
+        return Integer.valueOf(Database.executeQuery(
+                "select c.id_celu " +
+                        "from cele c " +
+                        "where c.nazwa = " +
+                        cel +
+                        ";"
+        ).get(1).get(0));
+    }
+
+    public Integer specNameToId(String spec) {
+        return Integer.valueOf(Database.executeQuery(
+                "select s.id_specjalizacji " +
+                        "from specjalizacje s " +
+                        "where s.nazwa = " +
+                        spec +
+                        ";"
+        ).get(1).get(0));
+    }
+
+    public Integer wydarzenieNameToId(String wydarzenie) {
+        return Integer.valueOf(Database.executeQuery(
+                "select w.id_wydarzenia " +
+                        "from wydarzenia_medyczne w " +
+                        "where w.nazwa = " +
+                        wydarzenie +
+                        ";"
+        ).get(1).get(0));
     }
 }
