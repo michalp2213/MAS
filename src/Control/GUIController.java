@@ -975,8 +975,10 @@ public class GUIController {
             Tables.pracownicy.updateItem(Integer.valueOf(fields[0]),
                     pracownicyImieField.getText().equals("") ? fields[1] : pracownicyImieField.getText(),
                     pracownicyNazwiskoField.getText().equals("") ? fields[2] : pracownicyNazwiskoField.getText(),
-                    pracownicyPeselField.getText().equals("") ? fields[3] : pracownicyPeselField.getText()
-            );
+                    pracownicyPeselField.getText().equals("") ? fields[3] : pracownicyPeselField.getText(),
+                    pracownicyZatrudnionyOdField.getText().equals("") ? Date.valueOf(fields[4]) : Date.valueOf(pracownicyZatrudnionyOdField.getText()),
+                    pracownicyZatrudnionyDoField.getText().equals("") ? Date.valueOf(fields[5]) : Date.valueOf(pracownicyZatrudnionyDoField.getText())
+                    );
             updatePracownicyMenuVolatile();
         }
     }
