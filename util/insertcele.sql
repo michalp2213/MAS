@@ -1,5 +1,4 @@
 INSERT INTO cele_wizyty (nazwa) VALUES ('Profilaktyka');
-INSERT INTO cele_wizyty (nazwa) VALUES ('Operacja');
 INSERT INTO cele_wizyty (nazwa) VALUES ('Bronchoskopia');
 INSERT INTO cele_wizyty (nazwa) VALUES ('Laryngoskopia');
 INSERT INTO cele_wizyty (nazwa) VALUES ('Stroboskopia');
