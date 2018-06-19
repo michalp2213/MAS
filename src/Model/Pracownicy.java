@@ -16,7 +16,7 @@ public class Pracownicy implements Table {
 	
 	public boolean updateItem (int id, String newName, String newSurname, String newPesel, Date newZatrudniony_od, Date newZatrudniony_do) {
 		String zatrudniony_doStr = newZatrudniony_do == null ? "NULL" : "'" + newZatrudniony_do + "'";
-		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel) = ("
+		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel, zatrudniony_od, zatrudniony_do) = ("
 				+ "'" + newName + "', "
 				+ "'" + newSurname + "', "
 				+ "'" + newPesel + "', " 
