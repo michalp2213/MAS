@@ -14,7 +14,7 @@ public class CeleWizyty implements Table {
 	}
 	
 	public boolean updateItem (String oldName, String newName) {
-		return Database.executeUpdate("UPDATE cele_wizyty SET nazwa = " + newName + " WHERE nazwa = " + oldName + ";") != 0;
+		return Database.executeUpdate("UPDATE cele_wizyty SET nazwa = '" + newName + "' WHERE nazwa = '" + oldName + "';") != 0;
 	}
 	
 	public boolean insertItem (String name) {

@@ -16,27 +16,30 @@ public class WizytyPlanowane implements Table {
 		return Database.executeUpdate("DELETE FROM wizyty_planowane WHERE id_wizyty = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, Date newDate, PGInterval newInt) {
-		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, data, szacowany_czas) = ("
+	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, int newSpecjalizacja, Date newDate, PGInterval newInt) {
+		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) = ("
 				+ newPacjentId + ", "
 				+ newLekarzId + ", "
 				+ newCel + ", "
-				+ newDate + ", "
+				+ newSpecjalizacja + ", "
+				+ "'" + newDate + "', "
 				+ newInt + ") WHERE id_wizyty = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 
 	public boolean insertItem (int pacjentId,  String cel, String specjalizacja, Date date) {
-		String sql = "INSERT INTO terminaz VALUES ("
+		String sql = "INSERT INTO terminarz VALUES ("
 				+ pacjentId + ", "
 				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = '" + cel + "'), "
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE nazwa = '" + specjalizacja + "'), "
-				+ date + ");";
+				+ "'" + date + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean moveToWizytyOdbyte (int id) {
-		Database.executeUpdate("INSERT INTO wizyty_odbyte (SELECT * FROM wizyty_planowane WHERE id_wizyty = " + id + ");");
+		Database.executeUpdate("INSERT INTO wizyty_odbyte (id_pacjenta, id_lekarza, cel, specjalizacja, data, czas_trwania) "
+				+ "SELECT id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas as czas_trwania "
+				+ "FROM wizyty_planowane WHERE id_wizyty = " + id + ";");
 		return this.deleteItem(id);
 	}
 	

@@ -14,12 +14,12 @@ public class HistoriaMedyczna implements Table {
 		String sql = "DELETE FROM historia_medyczna WHERE "
 				+ "id_pacjenta = " + pacjentId + ","
 				+ "id_wydarzenia = " + wydarzenieId + ","
-				+ "od = " + from + ";";
+				+ "od = '" + from + "';";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean updateItem (int pacjentId, int wydarzenieId, Date from,
-			int newPacjentId, int newWydarzenieId, Date newFrom, Date newTo, int newWizytaId) {
+			int newPacjentId, int newWydarzenieId, Integer newWizytaId, Date newFrom, Date newTo) {
 		String sql = "UPDATE historia_medyczna SET ("
 				+ "id_pacjenta, "
 				+ "id_wydarzenia, "
@@ -28,22 +28,22 @@ public class HistoriaMedyczna implements Table {
 				+ "wizyta) = ("
 				+ newPacjentId + ", "
 				+ newWydarzenieId + ", "
-				+ newFrom + ", "
-				+ newTo + ", "
+				+ "'" + newFrom + "', "
+				+ "'" + newTo + "', "
 				+ newWizytaId + ") WHERE "
 				+ "id_pacjenta = " + pacjentId + " AND "
 				+ "id_wydarzenia = " + wydarzenieId + " AND "
-				+ "od = " + from + ";";
+				+ "od = '" + from + "';";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (int pacjentId, int wydarzenieId, Date from, Date to, int wizytaId) {
+	public boolean insertItem (int pacjentId, int wydarzenieId, Integer wizytaId, Date from, Date to) {
 		String sql = "INSERT INTO historia_medyczna VALUES ("
 				+ pacjentId + ","
 				+ wydarzenieId + ","
-				+ from + ","
 				+ wizytaId + ","
-				+ to + ");";
+				+ "'" + from + "',"
+				+ "'" + to + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 

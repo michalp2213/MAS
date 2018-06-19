@@ -14,23 +14,24 @@ public class AnkietyLekarze implements Table {
 		return Database.executeUpdate("DELETE FROM ankiety_lekarze WHERE id_ankiety = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, int newLekarzId, Date newDate, int newUprzejmosc, int newInformacyjnosc, int newDokladnosc_badan) {
+	public boolean updateItem (int id, int newLekarzId, Date newDate, Integer newUprzejmosc, Integer newOpanowanie, Integer newInformacyjnosc, Integer newDokladnosc_badan) {
 		String sql = "UPDATE ankiety_lekarze SET "
-				+ "(id_lekarza, data, uprzejmosc, informacyjnosc, dokladnosc_badan) = ("
+				+ "(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) = ("
 				+ newLekarzId + ", "
-				+ newDate + ", "
+				+ "'" + newDate + "', "
 				+ newUprzejmosc + ", "
+				+ newOpanowanie + ", "
 				+ newInformacyjnosc + ", "
 				+ newDokladnosc_badan + ") "
 				+ "WHERE id_ankiety = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (int lekarzId, Date date, int uprzejmosc, int opanowanie, int informacyjnosc, int dokladnosc_badan) {
+	public boolean insertItem (int lekarzId, Date date, Integer uprzejmosc, Integer opanowanie, Integer informacyjnosc, Integer dokladnosc_badan) {
 		String sql = "INSERT INTO ankiety_lekarze VALUES ("
 				+ "DEFAULT,"
 				+ lekarzId + ","
-				+ date + ","
+				+ "'" + date + "',"
 				+ uprzejmosc + ","
 				+ opanowanie + ","
 				+ informacyjnosc + ","
