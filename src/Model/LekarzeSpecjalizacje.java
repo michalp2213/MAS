@@ -5,8 +5,21 @@ import java.util.ArrayList;
 public class LekarzeSpecjalizacje implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents() {
-		return Database.executeQuery("SELECT * from lekarze_specjalizacje;");
+	public ArrayList<ArrayList<String>> getContents(int... args) {	
+
+		String sql = "SELECT * FROM lekarze_specjalizacje";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
 	}
 	
 	public boolean deleteItem (String specjalizacjaName, String lekarzId) {

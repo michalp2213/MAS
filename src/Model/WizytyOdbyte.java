@@ -1,15 +1,25 @@
 package Model;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-
-import org.postgresql.util.PGInterval;
 
 public class WizytyOdbyte implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents() {
-		return Database.executeQuery("SELECT * FROM wizyty_odbyte;");
+	public ArrayList<ArrayList<String>> getContents(int...args) {	
+		
+		String sql = "SELECT * FROM wizyty_odbyte";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
 	}
 	
 	public boolean updateItem (String id, String newPacjentId, String newLekarzId, String newCel, String newSpecjalizacja, String newDate, String newInt) {

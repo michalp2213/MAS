@@ -5,8 +5,22 @@ import java.util.ArrayList;
 public class PacjenciLPK implements Table {
 
     @Override
-    public ArrayList<ArrayList<String>> getContents() {
-        return Database.executeQuery("SELECT * from pacjenci_lpk;");
+    public ArrayList<ArrayList<String>> getContents(int... args) {	
+
+		String sql = "SELECT * FROM pacjenci_lpk ORDER BY ";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
     }
 
     public boolean deleteItem (String id, String from) {

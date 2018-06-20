@@ -1,13 +1,24 @@
 package Model;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 public class AnkietyLekarze implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents() {
-		return Database.executeQuery("SELECT * FROM ankiety_lekarze;");
+	public ArrayList<ArrayList<String>> getContents(int... args) {
+		String sql = "SELECT * FROM ankiety_lekarze";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+		
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+		
+		return Database.executeQuery(sql);
 	}
 	
 	public boolean deleteItem (String id) {
