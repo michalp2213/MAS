@@ -10,11 +10,11 @@ public class Pacjenci implements Table {
 		return Database.executeQuery("SELECT * from pacjenci;");
 	}
 	
-	public boolean deleteItem (int id) {
+	public boolean deleteItem (String id) {
 		return Database.executeUpdate("DELETE FROM pacjenci WHERE id_pacjenta = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, String newName, String newSurname, String newPesel, String newPassportNo, Date newBirthDate, String newSex) {
+	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newPassportNo, String newBirthDate, String newSex) {
 		String sql = "UPDATE pacjenci SET (imie, nazwisko, pesel, nr_paszportu, data_urodzenia, plec) = ("
 				+ "'" + newName + "', "
 				+ "'" + newSurname + "', "
@@ -25,7 +25,7 @@ public class Pacjenci implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (String name, String surname, String pesel, String passportNo, Date birthDate, String sex) {
+	public boolean insertItem (String name, String surname, String pesel, String passportNo, String birthDate, String sex) {
 		String sql = "INSERT INTO pacjenci VALUES ("
 				+ "DEFAULT, "
 				+ "'" + name + "', "
@@ -37,7 +37,7 @@ public class Pacjenci implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean setLPK (int pacjentId, int lekarzId) {
+	public boolean setLPK (String pacjentId, String lekarzId) {
 		String sql = "INSERT INTO pacjenci_lpk VALUES ("
 				+ pacjentId + ","
 				+ "now(),"
