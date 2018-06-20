@@ -1,6 +1,6 @@
 package Model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.postgresql.util.PGInterval;
@@ -16,7 +16,7 @@ public class WizytyPlanowane implements Table {
 		return Database.executeUpdate("DELETE FROM wizyty_planowane WHERE id_wizyty = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, int newSpecjalizacja, Date newDate, PGInterval newInt) {
+	public boolean updateItem (int id, int newPacjentId, int newLekarzId, int newCel, int newSpecjalizacja, Timestamp newDate, PGInterval newInt) {
 		String sql = "UPDATE wizyty_planowane SET (id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) = ("
 				+ newPacjentId + ", "
 				+ newLekarzId + ", "
@@ -27,7 +27,7 @@ public class WizytyPlanowane implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 
-	public boolean insertItem (int pacjentId,  String cel, String specjalizacja, Date date) {
+	public boolean insertItem (int pacjentId,  String cel, String specjalizacja, Timestamp date) {
 		String sql = "INSERT INTO terminarz VALUES ("
 				+ pacjentId + ", "
 				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = '" + cel + "'), "
