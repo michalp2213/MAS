@@ -597,7 +597,7 @@ public class GUIController {
         rankingiOpcjeBox.setVisible(false);
     }
 
-    public void hideAllMenus() {
+    private void hideAllMenus() {
         hidePracownicyMenu();
         hidePracownicyChoiceMenu();
         hidePacjenciMenu();
@@ -632,90 +632,90 @@ public class GUIController {
     @FXML
     public void showTablePracownicy() {
         hideAllMenus();
-        showTable(Tables.pracownicy.getContents());
+        showTable(Tables.pracownicy.getContents(1));
     }
 
     @FXML
     public void showTablePacjenci() {
         hideAllMenus();
-        showTable(Tables.pacjenci.getContents());
+        showTable(Tables.pacjenci.getContents(1));
     }
 
     @FXML
     public void showTablePracownicyRole() {
         hideAllMenus();
-        showTable(Tables.pracownicy_role.getContents());
+        showTable(Tables.pracownicy_role.getContents(1));
     }
 
     @FXML
     public void showTableLekarzeSpecjalizacje() {
         hideAllMenus();
-        showTable(Tables.lekarze_specjalizacje.getContents());
+        showTable(Tables.lekarze_specjalizacje.getContents(1));
     }
 
     @FXML
     public void showTableLPK() {
         hideAllMenus();
-        showTable(Tables.pacjenci_lpk.getContents());
+        showTable(Tables.pacjenci_lpk.getContents(1));
     }
 
     @FXML
     public void showTableWizytyPlanowane() {
         hideAllMenus();
-        showTable(Tables.wizyty_planowane.getContents());
+        showTable(Tables.wizyty_planowane.getContents(5));
     }
 
     @FXML
     public void showTableWizytyOdbyte() {
         hideAllMenus();
-        showTable(Tables.wizyty_odbyte.getContents());
+        showTable(Tables.wizyty_odbyte.getContents(5));
     }
 
     @FXML
     public void showTableSkierowania() {
         hideAllMenus();
-        showTable(Tables.skierowania.getContents());
+        showTable(Tables.skierowania.getContents(1));
     }
 
     @FXML
     public void showTableHistoriaMedyczna() {
         hideAllMenus();
-        showTable(Tables.historia_medyczna.getContents());
+        showTable(Tables.historia_medyczna.getContents(1));
     }
 
     @FXML
     public void showTableAnkiety() {
         hideAllMenus();
-        showTable(Tables.ankiety_lekarze.getContents());
+        showTable(Tables.ankiety_lekarze.getContents(1));
     }
 
     @FXML
     public void showTableRole() {
         hideAllMenus();
-        showTable(Tables.role.getContents());
+        showTable(Tables.role.getContents(1));
     }
 
     @FXML
     public void showTableSpecjalizacje() {
         hideAllMenus();
-        showTable(Tables.specjalizacje.getContents());
+        showTable(Tables.specjalizacje.getContents(1));
     }
 
     @FXML
     public void showTableWydarzeniaMedyczne() {
         hideAllMenus();
-        showTable(Tables.wydarzenia_medyczne.getContents());
+        showTable(Tables.wydarzenia_medyczne.getContents(1));
     }
 
     @FXML
     public void showTableCeleWizyt() {
         hideAllMenus();
-        showTable(Tables.cele_wizyty.getContents());
+        showTable(Tables.cele_wizyty.getContents(1));
     }
 
     private void updatePracownicyMenuVolatile() {
-        updateListView(pracownicyList, Tables.pracownicy.getContents());
-        updateComboBox(pracownicyBox, Tables.pracownicy.getContents());
+        updateListView(pracownicyList, Tables.pracownicy.getContents(1));
+        updateComboBox(pracownicyBox, Tables.pracownicy.getContents(1));
     }
 
     private void updatePracownicyMenu() {
@@ -723,8 +723,8 @@ public class GUIController {
     }
 
     private void updatePacjenciMenuVolatile() {
-        updateListView(pacjenciList, Tables.pacjenci.getContents());
-        updateComboBox(pacjenciBox, Tables.pacjenci.getContents());
+        updateListView(pacjenciList, Tables.pacjenci.getContents(1));
+        updateComboBox(pacjenciBox, Tables.pacjenci.getContents(1));
     }
 
     private void updatePacjenciMenu() {
@@ -757,8 +757,8 @@ public class GUIController {
 
     private void updatePracownicyRoleMenu() {
         pracownicyRoleRoleList.getItems().clear();
-        updateComboBox(pracownicyRolePracownicyComboBox, filterTable(Tables.pracownicy.getContents(), "id_pracownika", "imie", "nazwisko"));
-        updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(), "nazwa"));
+        updateComboBox(pracownicyRolePracownicyComboBox, filterTable(Tables.pracownicy.getContents(1), "id_pracownika", "imie", "nazwisko"));
+        updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(2), "nazwa"));
     }
 
     private void updateLekarzeSpecjalizacjeMenuVolatile() {
@@ -785,11 +785,11 @@ public class GUIController {
     private void updateLekarzeSpecjalizacjeMenu() {
         lekarzeSpecjalizacjeRoleList.getItems().clear();
         updateComboBox(lekarzeSpecjalizacjeLekarzeComboBox, getSmallLekarze());
-        updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+        updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
     }
 
     private void updateLPKMenuVolatile() {
-        updateListView(LPKList, Tables.pacjenci_lpk.getContents());
+        updateListView(LPKList, Tables.pacjenci_lpk.getContents(1));
     }
 
     private void updateLPKMenu() {
@@ -799,21 +799,21 @@ public class GUIController {
     }
 
     private void updateWizytyPlanowaneMenuVolatile() {
-        updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents());
-        updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents());
+        updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(5));
+        updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(5));
     }
 
     private void updateWizytyPlanowaneMenu() {
         updateWizytyPlanowaneMenuVolatile();
-        updateComboBox(wizytyPlanowaneCelComboBox, filterTable(Tables.cele_wizyty.getContents(), "nazwa"));
+        updateComboBox(wizytyPlanowaneCelComboBox, filterTable(Tables.cele_wizyty.getContents(2), "nazwa"));
         updateComboBox(wizytyPlanowaneLekarzeComboBox, getSmallLekarze());
         updateComboBox(wizytyPlanowanePacjenciComboBox, getSmallPacjenci());
-        updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+        updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
     }
 
     private void updateWizytyOdbyteMenuVolatile() {
-        updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents());
-        updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents());
+        updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(5));
+        updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(5));
     }
 
     private void updateWizytyOdbyteMenu() {
@@ -841,30 +841,30 @@ public class GUIController {
     }
 
     private void updateSkierowaniaMenuVolatile() {
-        updateListView(skierowaniaList, Tables.skierowania.getContents());
-        updateComboBox(skierowaniaBox, Tables.skierowania.getContents());
+        updateListView(skierowaniaList, Tables.skierowania.getContents(1));
+        updateComboBox(skierowaniaBox, Tables.skierowania.getContents(1));
     }
 
     private void updateSkierowaniaMenu() {
         updateSkierowaniaMenuVolatile();
-        updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(), "nazwa"));
-        updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+        updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(1), "nazwa"));
+        updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(1), "nazwa"));
     }
 
     private void updateHistoriaMedycznaMenuVolatile() {
-        updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents());
-        updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents());
+        updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents(1));
+        updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents(1));
     }
 
     private void updateHistoriaMedycznaMenu() {
         updateHistoriaMedycznaMenuVolatile();
         updateComboBox(historiaMedycznaPacjenciComboBox, getSmallPacjenci());
-        updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(), "nazwa"));
+        updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(2), "nazwa"));
     }
 
     private void updateAnkietyMenuVolatile() {
-        updateListView(ankietyList, Tables.ankiety_lekarze.getContents());
-        updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents());
+        updateListView(ankietyList, Tables.ankiety_lekarze.getContents(1));
+        updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents(1));
     }
 
     private void updateAnkietyMenu() {
@@ -879,8 +879,8 @@ public class GUIController {
     }
 
     private void updateRoleMenuVolatile() {
-        updateListView(roleList, Tables.role.getContents());
-        updateComboBox(roleBox, Tables.role.getContents());
+        updateListView(roleList, Tables.role.getContents(1));
+        updateComboBox(roleBox, Tables.role.getContents(1));
     }
 
     private void updateRoleMenu() {
@@ -888,8 +888,8 @@ public class GUIController {
     }
 
     private void updateSpecjalizacjeMenuVolatile() {
-        updateListView(specjalizacjeList, Tables.specjalizacje.getContents());
-        updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents());
+        updateListView(specjalizacjeList, Tables.specjalizacje.getContents(1));
+        updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents(1));
     }
 
     private void updateSpecjalizacjeMenu() {
@@ -897,8 +897,8 @@ public class GUIController {
     }
 
     private void updateWydarzeniaMedyczneMenuVolatile() {
-        updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents());
-        updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents());
+        updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents(1));
+        updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents(1));
     }
 
     private void updateWydarzeniaMedyczneMenu() {
@@ -906,8 +906,8 @@ public class GUIController {
     }
 
     private void updateCeleWizytMenuVolatile() {
-        updateListView(celeWizytList, Tables.cele_wizyty.getContents());
-        updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents());
+        updateListView(celeWizytList, Tables.cele_wizyty.getContents(1));
+        updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents(1));
     }
 
     private void updateCeleWizytMenu() {
@@ -924,7 +924,7 @@ public class GUIController {
         if (type.equals("Alfabetyczny")) {
             rankingiOpcjeBox.setVisible(false);
         } else if (type.equals("Według średniej")) {
-            updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(), "nazwa"));
+            updateComboBox(rankingiOpcjeBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
             rankingiOpcjeBox.setVisible(true);
         } else {
             ObservableList<String> opcjeItems = FXCollections.observableArrayList();
@@ -1195,7 +1195,7 @@ public class GUIController {
             showError();
             return;
         }
-        String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
+        String id_pac = toStringArray(toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem()))[0];
         String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
         String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
         String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
@@ -1256,8 +1256,8 @@ public class GUIController {
             showError();
             return;
         }
-        String czas = toNullString(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem());
-        String[] fields = toStringArray(wizytyOdbyteBox.getSelectionModel().getSelectedItem().toString());
+        String czas = toEmptyString(wizytyOdbyteOdbyteCzasField.getText());
+        String[] fields = toStringArray(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem().toString());
         if (!Tables.wizyty_odbyte.updateItem(fields[0],
                     fields[1],
                     fields[2],
@@ -1313,7 +1313,8 @@ public class GUIController {
             return;
         }
         String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
-        String spec_id = specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
+        String spec_id = skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
         String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
         String opis = toEmptyString(skierowaniaOpisDataField.getText());
         String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
@@ -1343,61 +1344,67 @@ public class GUIController {
 
     @FXML
     private void historiaMedycznaMenuInsertPressed() {
-        //todo
-        /*if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+        if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                 historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
-        Integer pacjent_id = Integer.valueOf(toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
-        Integer wydarzenie_id = wydarzenieNameToId(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().length() - 1));
-        Date from = Date.valueOf(historiaMedycznaOdDataField.getText());
-        Date to = historiaMedycznaDoDataField.getText().equals("") ? null : Date.valueOf(historiaMedycznaDoDataField.getText());
-        Integer id_wizyty = historiaMedycznaWizytyComboBox.getText().equals("") ? null : Integer.valueOf(historiaMedycznaWizytyComboBox.getText());
-        Tables.historia_medyczna.insertItem(pacjent_id,
+        String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        String wydarzenie_id = toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        String from = toEmptyString(historiaMedycznaOdDataField.getText());
+        String to = toEmptyString(historiaMedycznaDoDataField.getText());
+        String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
+        if (!Tables.historia_medyczna.insertItem(pacjent_id,
                 wydarzenie_id,
+                id_wizyty,
                 from,
-                to,
-                id_wizyty
-        );
-        updateHistoriaMedycznaMenuVolatile();*/
+                to
+        )) {
+            showError();
+        }
+        updateHistoriaMedycznaMenuVolatile();
     }
 
     @FXML
     private void historiaMedycznaMenuUpdatePressed() {
-        //todo
-        /*if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
+        if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String[] fields = toStringArray(historiaMedycznaBox.getSelectionModel().getSelectedItem().toString());
-        Integer pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? Integer.valueOf(
-                toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0]);
-        Integer wydarzenie_id = wydarzenieNameToId(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString().length() - 1));
-        Date from = Date.valueOf(historiaMedycznaOdDataField.getText());
-        Date to = historiaMedycznaDoDataField.getText().equals("") ? null : Date.valueOf(historiaMedycznaDoDataField.getText());
-        Integer id_wizyty = historiaMedycznaWizytyComboBox.getText().equals("") ? null : Integer.valueOf(historiaMedycznaWizytyComboBox.getText());
-        Tables.skierowania.updateItem(Integer.valueOf(fields[0]),
-                skierowaniaWizytyComboBox.getText().equals("") ? Integer.valueOf(fields[1]) : Integer.valueOf(skierowaniaWizytyComboBox.getText()),
-                skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? specNameToId(fields[2]) : specNameToId(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                        skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
-                skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null ? celNameToId(fields[3]) : celNameToId(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                        skierowaniaCeleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1)),
-                skierowaniaOpisDataField.getText().equals("") ? fields[4] : skierowaniaOpisDataField.getText()
-        );
-        updateSkierowaniaMenuVolatile();*/
+        String pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        String wydarzenie_id = historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        String from = toEmptyString(historiaMedycznaOdDataField.getText());
+        String to = toEmptyString(historiaMedycznaDoDataField.getText());
+        String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
+        if (!Tables.historia_medyczna.updateItem(fields[0],
+                fields[1],
+                fields[3],
+                pacjent_id == null ? fields[0] : pacjent_id,
+                wydarzenie_id == null ? fields[1] : wydarzenie_id,
+                id_wizyty == null ? fields[2] : id_wizyty,
+                from == null ? fields[3] : from,
+                to == null ? fields[4] : to
+        )) {
+            showError();
+        }
+        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void historiaMedycznaMenuDeletePressed() {
-        //todo
-        /*for (Object o : skierowaniaList.getItems()) {
+        for (Object o : historiaMedycznaList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.skierowania.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
+                String[] fields = toStringArray(b.getText());
+                if (!Tables.historia_medyczna.deleteItem(fields[0], fields[1], fields[3])) {
+                    showError();
+                }
             }
         }
-        updateSkierowaniaMenuVolatile();*/
+        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
@@ -1693,7 +1700,7 @@ public class GUIController {
     }
 
     private ArrayList<ArrayList<String>> getSmallPacjenci() {
-        return filterTable(Tables.pacjenci.getContents(), "id_pacjenta", "imie", "nazwisko");
+        return filterTable(Tables.pacjenci.getContents(1), "id_pacjenta", "imie", "nazwisko");
     }
 
     private String celNameToId(String cel) {
