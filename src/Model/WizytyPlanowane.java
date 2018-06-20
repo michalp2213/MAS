@@ -56,7 +56,7 @@ public class WizytyPlanowane implements Table {
 	}
 	
 	public boolean moveToWizytyOdbyte (String id, String interval) {
-		Database.executeUpdate("UPDATE wizyty_planowane SET szacowany_czas = " + interval + "WHERE id_wizyty = " + id + ";");
+		Database.executeUpdate("UPDATE wizyty_planowane SET szacowany_czas = '" + interval + "' WHERE id_wizyty = " + id + ";");
 		return this.moveToWizytyOdbyte(id);
 	}
 

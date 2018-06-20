@@ -45,7 +45,7 @@ public class Pacjenci implements Table {
 				+ "'" + pesel + "', "
 				+ "'" + passportNo + "', "
 				+ "'" + birthDate + "', "
-				+ sex + ");";
+				+ "'" + sex + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
