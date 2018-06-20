@@ -19,8 +19,6 @@ public class Pracownicy implements Table {
 		}
 		sql += ";";
 	
-		
-		System.out.println(sql);
 		return Database.executeQuery(sql);
 	}
 
