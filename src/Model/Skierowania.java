@@ -9,11 +9,11 @@ public class Skierowania implements Table {
 		return Database.executeQuery("SELECT * FROM skierowania;");
 	}
 	
-	public boolean deleteItem (int id) {
+	public boolean deleteItem (String id) {
 		return Database.executeUpdate("DELETE FROM skierowania WHERE nr_skierowania = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (int id, int newWizytaId, int newSpecId, int newCelId, String newDesc) {
+	public boolean updateItem (String id, String newWizytaId, String newSpecId, String newCelId, String newDesc) {
 		String sql = "UPDATE skierowania SET (id_wizyty, id_specjalizacji, id_celu, opis) = ("
 				+ newWizytaId + ", "
 				+ newSpecId + ", "
@@ -22,7 +22,7 @@ public class Skierowania implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (int wizytaId, int specjalizacjaId, int celId, String desc) {
+	public boolean insertItem (String wizytaId, String specjalizacjaId, String celId, String desc) {
 		String sql = "INSERT INTO skierowania VALUES ("
 				+ "DEFAULT, "
 				+ wizytaId + ", "

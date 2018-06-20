@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 public class PacjenciLPK implements Table {
@@ -10,13 +9,13 @@ public class PacjenciLPK implements Table {
         return Database.executeQuery("SELECT * from pacjenci_lpk;");
     }
 
-    public boolean deleteItem (int id, Date from) {
+    public boolean deleteItem (String id, String from) {
         return Database.executeUpdate("DELETE FROM pacjenci_lpk WHERE id_pacjenta = " + id +
                 " and od = '" + from + "';") != 0;
     }
     
-    public boolean updateItem (int oldPacjentId, Date oldFrom,
-    		int newPacjentId, int newLekarzId, Date newFrom, Date newTo) {
+    public boolean updateItem (String oldPacjentId, String oldFrom,
+    		String newPacjentId, String newLekarzId, String newFrom, String newTo) {
     	String sql = "UPDATE pacjenci_lpk SET (id_pacjenta, id_lekarza, od, do) = ("
     			+ newPacjentId + ", "
     			+ newLekarzId + ", "
@@ -27,8 +26,8 @@ public class PacjenciLPK implements Table {
     	return Database.executeUpdate(sql) != 0;
     }
 
-    public boolean insertItem (int id_pacjenta, int id_lekarza) {
-        String sql = "INSERT INTO pacjenci_lpk VALUES ("
+    public boolean insertItem (String id_pacjenta, String id_lekarza) {
+        String sql = "INSERT INTO pacjenci VALUES ("
                 + "'" + id_pacjenta + "', "
                 + "'" + id_lekarza + "', "
                 + "now(), NULL);";

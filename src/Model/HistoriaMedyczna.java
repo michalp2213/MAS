@@ -10,7 +10,7 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeQuery("SELECT * FROM historia_medyczna;");
 	}
 	
-	public boolean deleteItem (int pacjentId, int wydarzenieId, Date from) {
+	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) {
 		String sql = "DELETE FROM historia_medyczna WHERE "
 				+ "id_pacjenta = " + pacjentId + ","
 				+ "id_wydarzenia = " + wydarzenieId + ","
@@ -18,8 +18,8 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean updateItem (int pacjentId, int wydarzenieId, Date from,
-			int newPacjentId, int newWydarzenieId, Integer newWizytaId, Date newFrom, Date newTo) {
+	public boolean updateItem (String pacjentId, String wydarzenieId, String from,
+			String newPacjentId, String newWydarzenieId, String newWizytaId, String newFrom, String newTo) {
 		String sql = "UPDATE historia_medyczna SET ("
 				+ "id_pacjenta, "
 				+ "id_wydarzenia, "
@@ -37,7 +37,7 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (int pacjentId, int wydarzenieId, Integer wizytaId, Date from, Date to) {
+	public boolean insertItem (String pacjentId, String wydarzenieId, String wizytaId, String from, String to) {
 		String sql = "INSERT INTO historia_medyczna VALUES ("
 				+ pacjentId + ","
 				+ wydarzenieId + ","
