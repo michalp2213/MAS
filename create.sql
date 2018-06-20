@@ -27,7 +27,7 @@ CREATE TABLE pracownicy
   pesel         CHAR(11) NOT NULL
     UNIQUE,
   zatrudniony_od DATE NOT NULL DEFAULT(DATE(current_timestamp)),
-  zatrudniony_do DATE
+  zatrudniony_do DATE CHECK (zatrudniony_od <= zatrudniony_do)
 );
 
 CREATE TABLE specjalizacje
