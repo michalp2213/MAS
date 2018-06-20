@@ -47,7 +47,7 @@ public class AnkietyLekarze implements Table {
 	public ArrayList<ArrayList<String>> bestIn (Date from, Date to, String cecha) {
 		String fromStr = from == null ? "NULL" : "'" + from + "'";
 		String toStr = to == null ? "NULL" : "'" + to + "'";
-		return Database.executeQuery("SELECT * from ranking_cecha (" + fromStr + ", " + toStr + ", " + cecha + ");");
+		return Database.executeQuery("SELECT * from ranking_cecha (" + fromStr + ", " + toStr + ", '" + cecha + "');");
 	}
 	
 	public ArrayList<ArrayList<String>> bestAvg (Date from, Date to, int specjalizacjaId) {

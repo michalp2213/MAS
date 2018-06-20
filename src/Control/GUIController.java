@@ -988,7 +988,7 @@ public class GUIController {
         for (Object o : pracownicyList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.pacjenci.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
+                Tables.pracownicy.deleteItem(Integer.valueOf(toStringArray(b.getText())[0]));
             }
         }
         updatePracownicyMenuVolatile();

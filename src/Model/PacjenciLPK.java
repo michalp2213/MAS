@@ -28,7 +28,7 @@ public class PacjenciLPK implements Table {
     }
 
     public boolean insertItem (int id_pacjenta, int id_lekarza) {
-        String sql = "INSERT INTO pacjenci VALUES ("
+        String sql = "INSERT INTO pacjenci_lpk VALUES ("
                 + "'" + id_pacjenta + "', "
                 + "'" + id_lekarza + "', "
                 + "now(), NULL);";
