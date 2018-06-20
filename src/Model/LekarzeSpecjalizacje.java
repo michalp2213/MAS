@@ -5,11 +5,24 @@ import java.util.ArrayList;
 public class LekarzeSpecjalizacje implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents() {
-		return Database.executeQuery("SELECT * from lekarze_specjalizacje;");
+	public ArrayList<ArrayList<String>> getContents(int... args) {	
+
+		String sql = "SELECT * FROM lekarze_specjalizacje";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
 	}
 	
-	public boolean deleteItem (String specjalizacjaName, int lekarzId) {
+	public boolean deleteItem (String specjalizacjaName, String lekarzId) {
 		String sql = "DELETE FROM lekarze_specjalizacje WHERE "
 				+ "id_lekarza = " + lekarzId
 				+ " AND (SELECT nazwa FROM specjalizacje WHERE "
@@ -18,14 +31,14 @@ public class LekarzeSpecjalizacje implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean updateItem (int oldSpecId, int oldLekarzId, int newSpecId, int newLekarzId) {
+	public boolean updateItem (String oldSpecId, String oldLekarzId, String newSpecId, String newLekarzId) {
 		String sql = "UPDATE lekarze_specjalizacje SET id_specjalizacji = " + newSpecId
 				+ ", id_lekarza = " + newLekarzId + " WHERE id_specjalizacji = " + oldSpecId
 				+ " AND id_lekarza = " + oldLekarzId + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (String specjalizacjaName, int lekarzId) {
+	public boolean insertItem (String specjalizacjaName, String lekarzId) {
 		String sql = "INSERT INTO lekarze_specjalizacje VALUES ("
 				+ lekarzId + ","
 				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE "
@@ -33,7 +46,7 @@ public class LekarzeSpecjalizacje implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public ArrayList<ArrayList<String>> getSpecjalizacje (int lekarzId) {
+	public ArrayList<ArrayList<String>> getSpecjalizacje (String lekarzId) {
 		return Database.executeQuery("SELECT * FROM specjalizacje_lekarza(" + lekarzId + ");");
 	}
 

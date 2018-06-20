@@ -251,6 +251,8 @@ BEGIN
   IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.czas_trwania)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
+  IF NEW.DATA>current_timestamp THEN RAISE EXCEPTION 'DeLorean';
+  END IF;
   FOR r in SELECT
              data                AS d1,
              data + czas_trwania AS d2

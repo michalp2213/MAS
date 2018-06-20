@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Control.GUIController"
@@ -645,19 +646,19 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-                minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pracownicyNazwiskoField"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-            minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pracownicyPeselField"
                    GridPane.columnIndex="2"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-                    minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pracownicyZatrudnionyOdField"
                    GridPane.columnIndex="3"
@@ -769,37 +770,37 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pacjenciNazwiskoField"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pacjenciPeselField"
                    GridPane.columnIndex="2"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pacjenciNrPaszportuField"
                    GridPane.columnIndex="3"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                   minWidth="150"/>
 
         <TextField fx:id="pacjenciDataUrodzeniaField"
                    GridPane.columnIndex="4"
                    GridPane.rowIndex="1"
                    maxWidth="150"
-        minWidth="150"/>
+                   minWidth="150"/>
 
         <ComboBox fx:id="pacjenciPlecField"
-                   GridPane.columnIndex="5"
-                   GridPane.rowIndex="1"
-                   maxWidth="150"
-        minWidth="150"/>
+                  GridPane.columnIndex="5"
+                  GridPane.rowIndex="1"
+                  maxWidth="150"
+                  minWidth="150"/>
 
         <Button fx:id="pacjenciInsertButton"
                 text="Dodaj"
@@ -858,7 +859,7 @@
                   GridPane.rowIndex="1"
                   minWidth="300"
                   maxWidth="300"
-        onAction="#updatePracownicyRoleMenuListView"/>
+                  onAction="#updatePracownicyRoleMenuListView"/>
 
         <Button fx:id="closePracownicyRoleButton"
                 text="X"
@@ -889,7 +890,7 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="3"
                   minWidth="300"
-        maxWidth="300"/>
+                  maxWidth="300"/>
 
         <Button fx:id="pracownicyRoleInsertButton"
                 text="Dodaj"
@@ -916,7 +917,7 @@
                   GridPane.rowIndex="1"
                   minWidth="300"
                   maxWidth="300"
-            onAction="#updateLekarzeSpecjalizacjeMenuListView"/>
+                  onAction="#updateLekarzeSpecjalizacjeMenuListView"/>
 
         <Button fx:id="closeLekarzeSpecjalizacjeButton"
                 text="X"
@@ -947,7 +948,7 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="3"
                   minWidth="300"
-        maxWidth="300"/>
+                  maxWidth="300"/>
 
         <Button fx:id="lekarzeSpecjalizacjeInsertButton"
                 text="Dodaj"
@@ -986,13 +987,13 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   minWidth="450"
-        maxWidth="450"/>
+                  maxWidth="450"/>
 
         <ComboBox fx:id="LPKLekarzeComboBox"
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   minWidth="450"
-        maxWidth="450"/>
+                  maxWidth="450"/>
 
         <Button fx:id="LPKUpdateButton"
                 text="Ustaw"
@@ -1064,37 +1065,37 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="wizytyPlanowaneLekarzeComboBox"
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="wizytyPlanowaneCelComboBox"
                   GridPane.columnIndex="2"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="wizytyPlanowaneSpecjalizacjeComboBox"
                   GridPane.columnIndex="3"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <TextField fx:id="wizytyPlanowaneDataField"
                    GridPane.columnIndex="4"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <TextField fx:id="wizytyPlanowaneSzacowanyCzasField"
                    GridPane.columnIndex="5"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <Button fx:id="wizytyPlanowaneInsertButton"
                 text="Dodaj"
@@ -1145,120 +1146,68 @@
               AnchorPane.leftAnchor="200"
               visible="false">
 
-        <Label text="Pacjent"
+        <Label text="Wizyta"
                GridPane.columnIndex="0"
                GridPane.rowIndex="0"/>
 
-        <Label text="Lekarz"
+        <Label text="Czas"
                GridPane.columnIndex="1"
-               GridPane.rowIndex="0"/>
-
-        <Label text="Cel"
-               GridPane.columnIndex="2"
-               GridPane.rowIndex="0"/>
-
-        <Label text="Specjalizacja"
-               GridPane.columnIndex="3"
-               GridPane.rowIndex="0"/>
-
-        <Label text="Data"
-               GridPane.columnIndex="4"
-               GridPane.rowIndex="0"/>
-
-        <Label text="Czas trwania"
-               GridPane.columnIndex="5"
                GridPane.rowIndex="0"/>
 
         <Button fx:id="closeWizytyOdbyteButton"
                 text="X"
-                GridPane.columnIndex="6"
+                GridPane.columnIndex="2"
                 GridPane.rowIndex="0"
                 GridPane.halignment="CENTER"
                 maxWidth="60"
                 minWidth="60"
                 onAction="#hideWizytyOdbyteMenu"/>
 
-        <ComboBox fx:id="wizytyOdbytePacjenciComboBox"
+        <ComboBox fx:id="wizytyOdbytePlanowaneComboBox"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
-                  minWidth="150"
-        maxWidth="150"/>
+                  minWidth="400"
+                  maxWidth="400"
+                  onAction="#updateWizytyOdbytePlanowaneCzasField"/>
 
-        <ComboBox fx:id="wizytyOdbyteLekarzeComboBox"
-                  GridPane.columnIndex="1"
-                  GridPane.rowIndex="1"
-                  minWidth="150"
-        maxWidth="150"/>
 
-        <ComboBox fx:id="wizytyOdbyteCelComboBox"
-                  GridPane.columnIndex="2"
-                  GridPane.rowIndex="1"
-                  minWidth="150"
-        maxWidth="150"/>
-
-        <ComboBox fx:id="wizytyOdbyteSpecjalizacjeComboBox"
-                  GridPane.columnIndex="3"
-                  GridPane.rowIndex="1"
-                  minWidth="150"
-        maxWidth="150"/>
-
-        <TextField fx:id="wizytyOdbyteDataField"
-                   GridPane.columnIndex="4"
+        <TextField fx:id="wizytyOdbytePlanowaneCzasField"
+                   GridPane.columnIndex="1"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
-        <TextField fx:id="wizytyOdbyteCzasTrwaniaField"
-                   GridPane.columnIndex="5"
-                   GridPane.rowIndex="1"
-                   maxWidth="100"
-        minWidth="100"/>
 
         <Button fx:id="wizytyOdbyteInsertButton"
                 text="Dodaj"
-                GridPane.columnIndex="6"
+                GridPane.columnIndex="2"
                 GridPane.rowIndex="1"
                 maxWidth="60"
                 minWidth="60"
                 GridPane.halignment="CENTER"
-                />
+                onAction="#wizytyOdbyteMenuInsertPressed"/>
 
-        <!-- onAction="#wizytyOdbyteMenuInsertPressed" -->
-
-        <ComboBox fx:id="wizytyOdbyteBox"
+        <ComboBox fx:id="wizytyOdbyteOdbyteComboBox"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
-                  GridPane.columnSpan="7"
-                  maxWidth="800"
-                  minWidth="800"/>
+                  minWidth="400"
+                  maxWidth="400"
+                  onAction="#updateWizytyOdbyteOdbyteCzasField"/>
+
+        <TextField fx:id="wizytyOdbyteOdbyteCzasField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="2"
+                   maxWidth="100"
+                   minWidth="100"/>
 
         <Button fx:id="wizytyOdbyteUpdateButton"
                 text="Ustaw"
-                GridPane.columnIndex="6"
+                GridPane.columnIndex="2"
                 GridPane.rowIndex="2"
                 maxWidth="60"
                 minWidth="60"
                 GridPane.halignment="CENTER"
                 onAction="#wizytyOdbyteMenuUpdatePressed"/>
-
-        <ListView fx:id="wizytyOdbyteList"
-                  GridPane.rowIndex="3"
-                  GridPane.columnIndex="0"
-                  GridPane.columnSpan="7"
-                  maxWidth="800"
-                  minWidth="800"
-                  maxHeight="200"/>
-
-        <Button fx:id="wizytyOdbyteDeleteButton"
-                text="Usuń"
-                GridPane.columnIndex="6"
-                GridPane.rowIndex="3"
-                maxWidth="60"
-                minWidth="60"
-                GridPane.halignment="CENTER"
-                />
-
-        <!-- onAction="#wizytyOdbyteMenuDeletePressed" -->
 
     </GridPane>
 
@@ -1293,28 +1242,28 @@
                 onAction="#hideSkierowaniaMenu"/>
 
         <TextField fx:id="skierowaniaWizytyComboBox"
-                  GridPane.columnIndex="0"
-                  GridPane.rowIndex="1"
-                  minWidth="100"
-        maxWidth="100"/>
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"
+                   minWidth="100"
+                   maxWidth="100"/>
 
         <ComboBox fx:id="skierowaniaSpecjalizacjeComboBox"
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="skierowaniaCeleComboBox"
                   GridPane.columnIndex="2"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <TextField fx:id="skierowaniaOpisDataField"
                    GridPane.columnIndex="3"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <Button fx:id="skierowaniaInsertButton"
                 text="Dodaj"
@@ -1398,31 +1347,31 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="historiaMedycznaWydarzeniaComboBox"
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <TextField fx:id="historiaMedycznaWizytyComboBox"
-                  GridPane.columnIndex="2"
-                  GridPane.rowIndex="1"
-                  minWidth="100"
-        maxWidth="100"/>
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="1"
+                   minWidth="100"
+                   maxWidth="100"/>
 
         <TextField fx:id="historiaMedycznaOdDataField"
                    GridPane.columnIndex="3"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <TextField fx:id="historiaMedycznaDoDataField"
                    GridPane.columnIndex="4"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <Button fx:id="historiaMedycznaInsertButton"
                 text="Dodaj"
@@ -1510,37 +1459,37 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <TextField fx:id="ankietyDataDataField"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="1"
                    maxWidth="100"
-        minWidth="100"/>
+                   minWidth="100"/>
 
         <ComboBox fx:id="ankietyUprzejmoscComboBox"
                   GridPane.columnIndex="2"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="ankietyOpanowanieComboBox"
                   GridPane.columnIndex="3"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="ankietyInformacyjnoscComboBox"
                   GridPane.columnIndex="4"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <ComboBox fx:id="ankietyDokladnoscBadanComboBox"
                   GridPane.columnIndex="5"
                   GridPane.rowIndex="1"
                   minWidth="150"
-        maxWidth="150"/>
+                  maxWidth="150"/>
 
         <Button fx:id="ankietyInsertButton"
                 text="Dodaj"
@@ -1610,7 +1559,7 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="300"
-                    minWidth="300"/>
+                   minWidth="300"/>
 
         <Button fx:id="roleInsertButton"
                 text="Dodaj"
@@ -1679,7 +1628,7 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="300"
-                minWidth="300"/>
+                   minWidth="300"/>
 
         <Button fx:id="specjalizacjeInsertButton"
                 text="Dodaj"
@@ -1748,7 +1697,7 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="300"
-        minWidth="300"/>
+                   minWidth="300"/>
 
         <Button fx:id="celeWizytInsertButton"
                 text="Dodaj"
@@ -1817,7 +1766,7 @@
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="1"
                    maxWidth="300"
-        minWidth="300"/>
+                   minWidth="300"/>
 
         <Button fx:id="wydarzeniaMedyczneInsertButton"
                 text="Dodaj"
@@ -1911,14 +1860,14 @@
                   GridPane.rowIndex="1"
                   maxWidth="150"
                   minWidth="150"
-        onAction="#updateRankingiMenuOpcjeBox"/>
+                  onAction="#updateRankingiMenuOpcjeBox"/>
 
         <ComboBox fx:id="rankingiOpcjeBox"
                   GridPane.columnIndex="3"
                   GridPane.rowIndex="1"
                   maxWidth="150"
                   minWidth="150"
-                    visible="false"/>
+                  visible="false"/>
 
         <Button fx:id="showRankingButton"
                 text="Pokaż"
@@ -1930,6 +1879,13 @@
                 onAction="#showRankingPressed"/>
 
     </GridPane>
+
+    <Text fx:id="errorMessage"
+        AnchorPane.leftAnchor="0"
+        AnchorPane.bottomAnchor="0"
+        visible="false">
+        ERROR
+    </Text>
 
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="5"
