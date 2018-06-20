@@ -7,7 +7,10 @@ public class WydarzeniaMedyczne implements Table {
 	@Override
 	public ArrayList<ArrayList<String>> getContents(int...args) {	
 		
-		String sql = "SELECT * FROM wydarzenia_medyczne ORDER BY ";
+		String sql = "SELECT * FROM wydarzenia_medyczne";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
 				
 		for (int i = 0; i < args.length; ++ i) {
 			sql += args [i];

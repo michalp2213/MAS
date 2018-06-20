@@ -6,7 +6,10 @@ public class HistoriaMedyczna implements Table {
 
 	@Override
 	public ArrayList<ArrayList<String>> getContents(int... args) {		
-		String sql = "SELECT * FROM historia_medyczna ORDER BY ";
+		String sql = "SELECT * FROM historia_medyczna";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
 				
 		for (int i = 0; i < args.length; ++ i) {
 			sql += args [i];

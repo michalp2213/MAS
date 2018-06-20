@@ -6,7 +6,10 @@ public class CeleWizyty implements Table {
 
 	@Override
 	public ArrayList<ArrayList<String>> getContents(int... args) {
-		String sql = "SELECT * FROM cele_wizyty ORDER BY ";
+		String sql = "SELECT * FROM cele_wizyty";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
 				
 		for (int i = 0; i < args.length; ++ i) {
 			sql += args [i];

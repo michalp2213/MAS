@@ -8,6 +8,10 @@ public class PacjenciLPK implements Table {
     public ArrayList<ArrayList<String>> getContents(int... args) {	
 
 		String sql = "SELECT * FROM pacjenci_lpk ORDER BY ";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
 				
 		for (int i = 0; i < args.length; ++ i) {
 			sql += args [i];

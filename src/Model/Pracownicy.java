@@ -7,7 +7,10 @@ public class Pracownicy implements Table {
 	@Override
 	public ArrayList<ArrayList<String>> getContents(int...args) {	
 		
-		String sql = "SELECT * FROM pracownicy ORDER BY ";
+		String sql = "SELECT * FROM pracownicy";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
 				
 		for (int i = 0; i < args.length; ++ i) {
 			sql += args [i];
@@ -16,6 +19,8 @@ public class Pracownicy implements Table {
 		}
 		sql += ";";
 	
+		
+		System.out.println(sql);
 		return Database.executeQuery(sql);
 	}
 
