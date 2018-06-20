@@ -2,6 +2,7 @@ package Control;
 
 import Model.Database;
 import Model.Tables;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import org.postgresql.util.PGInterval;
@@ -147,6 +149,7 @@ public class GUIController {
     public TextField wizytyOdbytePlanowaneCzasField;
     public ComboBox wizytyOdbyteOdbyteComboBox;
     public TextField wizytyOdbyteOdbyteCzasField;
+    public Text errorMessage;
 
     private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 
@@ -979,16 +982,19 @@ public class GUIController {
         String imie = toEmptyString(pracownicyImieField.getText());
         String nazwisko = toEmptyString(pracownicyNazwiskoField.getText());
         String pesel = toEmptyString(pracownicyPeselField.getText());
-        Tables.pracownicy.insertItem(imie,
+        if (!Tables.pracownicy.insertItem(imie,
                 nazwisko,
                 pesel
-        );
+        )) {
+            showError();
+        }
         updatePracownicyMenuVolatile();
     }
 
     @FXML
     private void pracownicyMenuUpdatePressed() {
         if (pracownicyBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String imie = toEmptyString(pracownicyImieField.getText());
@@ -997,13 +1003,15 @@ public class GUIController {
         String zatrudniony_od = toEmptyString(pracownicyZatrudnionyOdField.getText());
         String zatrudniony_do = toEmptyString(pracownicyZatrudnionyDoField.getText());
         String[] fields = toStringArray(pracownicyBox.getSelectionModel().getSelectedItem().toString());
-        Tables.pracownicy.updateItem(fields[0],
+        if (!Tables.pracownicy.updateItem(fields[0],
                 imie == null ? fields[1] : imie,
                 nazwisko == null ? fields[2] : nazwisko,
                 pesel == null ? fields[3] : pesel,
                 zatrudniony_od == null ? fields[4] : zatrudniony_od,
                 zatrudniony_do == null ? fields[5] : zatrudniony_do
-        );
+        )) {
+            showError();
+        }
         updatePracownicyMenuVolatile();
     }
 
@@ -1012,7 +1020,9 @@ public class GUIController {
         for (Object o : pracownicyList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.pracownicy.deleteItem(toStringArray(b.getText())[0]);
+                if (!Tables.pracownicy.deleteItem(toStringArray(b.getText())[0])) {
+                    showError();
+                }
             }
         }
         updatePracownicyMenuVolatile();
@@ -1026,19 +1036,22 @@ public class GUIController {
         String nr_paszportu = toEmptyString(pacjenciNrPaszportuField.getText());
         String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
         String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
-        Tables.pacjenci.insertItem(imie,
+        if (!Tables.pacjenci.insertItem(imie,
                 nazwisko,
                 pesel,
                 nr_paszportu,
                 data_ur,
                 plec
-        );
+        )) {
+            showError();
+        }
         updatePacjenciMenuVolatile();
     }
 
     @FXML
     private void pacjenciMenuUpdatePressed() {
         if (pacjenciBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String imie = toEmptyString(pacjenciImieField.getText());
@@ -1048,14 +1061,16 @@ public class GUIController {
         String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
         String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
         String[] fields = toStringArray(pacjenciBox.getSelectionModel().getSelectedItem().toString());
-        Tables.pacjenci.updateItem(fields[0],
+        if (!Tables.pacjenci.updateItem(fields[0],
                 imie == null ? fields[1] : imie,
                 nazwisko == null ? fields[2] : nazwisko,
                 pesel == null ? fields[3] : pesel,
                 nr_paszportu == null ? fields[4] : nr_paszportu,
                 data_ur == null ? fields[4] : data_ur,
                 plec == null ? fields[5] : plec
-        );
+        )) {
+            showError();
+        }
         updatePacjenciMenuVolatile();
     }
 
@@ -1064,7 +1079,9 @@ public class GUIController {
         for (Object o : pacjenciList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.pacjenci.deleteItem(toStringArray(b.getText())[0]);
+                if (!Tables.pacjenci.deleteItem(toStringArray(b.getText())[0])) {
+                    showError();
+                }
             }
         }
         updatePacjenciMenuVolatile();
@@ -1074,18 +1091,22 @@ public class GUIController {
     private void pracownicyRoleMenuInsertPressed() {
         if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null ||
                 pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String chosenRole = pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
                 pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
         String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        Tables.pracownicy_role.insertItem(chosenRole, id_prac);
+        if (!Tables.pracownicy_role.insertItem(chosenRole, id_prac)) {
+            showError();
+        }
         updatePracownicyRoleMenuVolatile();
     }
 
     @FXML
     private void pracownicyRoleMenuDeletePressed() {
         if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1093,7 +1114,9 @@ public class GUIController {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
                 String chosenRole = b.getText().substring(1, b.getText().length() - 1);
-                Tables.pracownicy_role.deleteItem(chosenRole, id_prac);
+                if (!Tables.pracownicy_role.deleteItem(chosenRole, id_prac)) {
+                    showError();
+                }
             }
         }
         updatePracownicyRoleMenuVolatile();
@@ -1103,18 +1126,22 @@ public class GUIController {
     private void lekarzeSpecjalizacjeMenuInsertPressed() {
         if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
                 lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String chosenRole = lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
                 lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
         String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek);
+        if (!Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek)) {
+            showError();
+        }
         updateLekarzeSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void lekarzeSpecjalizacjeMenuDeletePressed() {
         if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1122,7 +1149,9 @@ public class GUIController {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
                 String chosenRole = b.getText().substring(1, b.getText().length() - 1);
-                Tables.lekarze_specjalizacje.deleteItem(chosenRole, id_lek);
+                if (!Tables.lekarze_specjalizacje.deleteItem(chosenRole, id_lek)) {
+                    showError();
+                }
             }
         }
         updateLekarzeSpecjalizacjeMenuVolatile();
@@ -1132,11 +1161,14 @@ public class GUIController {
     private void LPKMenuInsertPressed() {
         if (LPKPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                 LPKLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_pac = toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
         String id_lek = toStringArray(LPKLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        Tables.pacjenci_lpk.insertItem(id_pac, id_lek);
+        if (!Tables.pacjenci_lpk.insertItem(id_pac, id_lek)) {
+            showError();
+        }
         updateLPKMenuVolatile();
     }
 
@@ -1147,7 +1179,9 @@ public class GUIController {
             if (b.isSelected()) {
                 String id_pac = toStringArray(b.getText())[0];
                 String data = toStringArray(b.getText())[2];
-                Tables.pacjenci_lpk.deleteItem(id_pac, data);
+                if (!Tables.pacjenci_lpk.deleteItem(id_pac, data)) {
+                    showError();
+                }
             }
         }
         updateLPKMenuVolatile();
@@ -1158,6 +1192,7 @@ public class GUIController {
         if (wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                 wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ||
                 wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
@@ -1165,17 +1200,20 @@ public class GUIController {
         String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
         String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
         String data = toEmptyString(wizytyPlanowaneDataField.getText());
-        Tables.wizyty_planowane.insertItem(id_pac,
+        if (!Tables.wizyty_planowane.insertItem(id_pac,
                 cel,
                 spec,
                 data
-        );
+        )) {
+            showError();
+        }
         updateWizytyPlanowaneMenuVolatile();
     }
 
     @FXML
     private void wizytyPlanowaneMenuUpdatePressed() {
         if (wizytyPlanowaneBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
@@ -1185,14 +1223,16 @@ public class GUIController {
         String data = toEmptyString(wizytyPlanowaneDataField.getText());
         String interval = toEmptyString(wizytyPlanowaneSzacowanyCzasField.getText());
         String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
-        Tables.wizyty_planowane.updateItem(fields[0],
+        if (!Tables.wizyty_planowane.updateItem(fields[0],
                 id_pac == null ? fields[1] : id_pac,
                 id_lek == null ? fields[2] : id_lek,
                 cel == null ? celNameToId(fields[3]) : celNameToId(cel),
                 spec == null ? specNameToId(fields[4]) : specNameToId(spec),
                 data == null ? fields[5] : data,
                 interval == null ? fields[6] : interval
-        );
+        )) {
+            showError();
+        }
         updateWizytyPlanowaneMenuVolatile();
     }
 
@@ -1202,7 +1242,9 @@ public class GUIController {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
                 String id_wiz = toStringArray(b.getText())[0];
-                Tables.wizyty_planowane.deleteItem(id_wiz);
+                if (!Tables.wizyty_planowane.deleteItem(id_wiz)) {
+                    showError();
+                }
             }
         }
         updateWizytyPlanowaneMenuVolatile();
@@ -1211,29 +1253,34 @@ public class GUIController {
     @FXML
     public void wizytyOdbyteMenuUpdatePressed() {
         if (wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String czas = toNullString(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem());
         String[] fields = toStringArray(wizytyOdbyteBox.getSelectionModel().getSelectedItem().toString());
-        Tables.wizyty_odbyte.updateItem(fields[0],
+        if (!Tables.wizyty_odbyte.updateItem(fields[0],
                     fields[1],
                     fields[2],
                     fields[3],
                     fields[4],
                     fields[5],
                     czas == null ? fields[6] : czas
-        );
+        )) {
+            showError();
+        }
         updateWizytyOdbyteMenuVolatile();
     }
 
     @FXML
     public void wizytyOdbyteMenuInsertPressed() {
-        for (Object o : wizytyOdbyteList.getItems()) {
-            CheckBox c = (CheckBox) o;
-            if (c.isSelected()) {
-                String id_wizyty = toStringArray(c.getText())[0];
-                Tables.wizyty_planowane.moveToWizytyOdbyte(id_wizyty);
-            }
+        if (wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
+            return;
+        }
+        String id_wiz = toStringArray(wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        String czas = wizytyOdbytePlanowaneCzasField.getText();
+        if (!Tables.wizyty_planowane.moveToWizytyOdbyte(id_wiz, czas)) {
+            showError();
         }
         updateWizytyOdbyteMenuVolatile();
     }
@@ -1242,23 +1289,27 @@ public class GUIController {
     private void skierowaniaMenuInsertPressed() {
         if (skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ||
                 skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
         String spec_id = specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
         String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
         String opis = toEmptyString(skierowaniaOpisDataField.getText());
-        Tables.skierowania.insertItem(wiz_id,
+        if (!Tables.skierowania.insertItem(wiz_id,
                 spec_id,
                 cel_id,
                 opis
-        );
+        )) {
+            showError();
+        }
         updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void skierowaniaMenuUpdatePressed() {
         if (skierowaniaBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
@@ -1266,12 +1317,14 @@ public class GUIController {
         String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
         String opis = toEmptyString(skierowaniaOpisDataField.getText());
         String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
-        Tables.skierowania.updateItem(fields[0],
+        if (!Tables.skierowania.updateItem(fields[0],
                 wiz_id == null ? fields[1] : wiz_id,
                 spec_id == null ? fields[2] : spec_id,
                 cel_id == null ? fields[3] : cel_id,
                 opis == null ? fields[4] : opis
-        );
+        )) {
+            showError();
+        }
         updateSkierowaniaMenuVolatile();
     }
 
@@ -1280,7 +1333,9 @@ public class GUIController {
         for (Object o : skierowaniaList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.skierowania.deleteItem(toStringArray(b.getText())[0]);
+                if (!Tables.skierowania.deleteItem(toStringArray(b.getText())[0])) {
+                    showError();
+                }
             }
         }
         updateSkierowaniaMenuVolatile();
@@ -1353,19 +1408,22 @@ public class GUIController {
         String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
         String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
         String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
-        Tables.ankiety_lekarze.insertItem(id_lekarza,
+        if (!Tables.ankiety_lekarze.insertItem(id_lekarza,
                 data,
                 up,
                 op,
                 inf,
                 dok
-        );
+        )) {
+            showError();
+        }
         updateAnkietyMenuVolatile();
     }
 
     @FXML
     private void ankietyMenuUpdatePressed() {
         if (ankietyBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
@@ -1375,14 +1433,16 @@ public class GUIController {
         String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
         String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
         String[] fields = toStringArray(ankietyBox.getSelectionModel().getSelectedItem().toString());
-        Tables.ankiety_lekarze.updateItem(fields[0],
+        if (!Tables.ankiety_lekarze.updateItem(fields[0],
                 id_lekarza == null ? fields[1] : id_lekarza,
                 data == null ? fields[2] : data,
                 up == null ? fields[3] : up,
                 op == null ? fields[4] : op,
                 inf == null ? fields[5] : inf,
                 dok == null ? fields[6] : dok
-        );
+        )) {
+            showError();
+        }
         updateAnkietyMenuVolatile();
     }
 
@@ -1391,7 +1451,9 @@ public class GUIController {
         for (Object o : ankietyList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.ankiety_lekarze.deleteItem(toStringArray(b.getText())[0]);
+                if (!Tables.ankiety_lekarze.deleteItem(toStringArray(b.getText())[0])) {
+                    showError();
+                }
             }
         }
         updateAnkietyMenuVolatile();
@@ -1399,7 +1461,9 @@ public class GUIController {
 
     @FXML
     private void roleMenuInsertPressed() {
-        Tables.role.insertItem(toEmptyString(roleNazwaField.getText()));
+        if (!Tables.role.insertItem(toEmptyString(roleNazwaField.getText()))) {
+            showError();
+        }
         updateRoleMenuVolatile();
     }
 
@@ -1409,9 +1473,11 @@ public class GUIController {
             return;
         }
         String[] fields = toStringArray(roleBox.getSelectionModel().getSelectedItem().toString());
-        Tables.role.updateItem(fields[1],
+        if (!Tables.role.updateItem(fields[1],
                 roleNazwaField.getText()
-        );
+        )) {
+            showError();
+        }
         updateRoleMenuVolatile();
     }
 
@@ -1420,7 +1486,9 @@ public class GUIController {
         for (Object o : roleList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.role.deleteItem(toStringArray(b.getText())[1]);
+                if (!Tables.role.deleteItem(toStringArray(b.getText())[1])) {
+                    showError();
+                }
             }
         }
         updateRoleMenuVolatile();
@@ -1428,19 +1496,24 @@ public class GUIController {
 
     @FXML
     private void specjalizacjeMenuInsertPressed() {
-        Tables.specjalizacje.insertItem(toEmptyString(specjalizacjeNazwaField.getText()));
+        if (!Tables.specjalizacje.insertItem(toEmptyString(specjalizacjeNazwaField.getText()))) {
+            showError();
+        }
         updateSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void specjalizacjeMenuUpdatePressed() {
         if (specjalizacjeBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String[] fields = toStringArray(specjalizacjeBox.getSelectionModel().getSelectedItem().toString());
-        Tables.specjalizacje.updateItem(fields[1],
+        if (!Tables.specjalizacje.updateItem(fields[1],
                 specjalizacjeNazwaField.getText()
-        );
+        )) {
+            showError();
+        }
         updateSpecjalizacjeMenuVolatile();
     }
 
@@ -1449,7 +1522,9 @@ public class GUIController {
         for (Object o : specjalizacjeList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.specjalizacje.deleteItem(toStringArray(b.getText())[1]);
+                if (!Tables.specjalizacje.deleteItem(toStringArray(b.getText())[1])) {
+                    showError();
+                }
             }
         }
         updateSpecjalizacjeMenuVolatile();
@@ -1457,19 +1532,24 @@ public class GUIController {
 
     @FXML
     private void wydarzeniaMedyczneMenuInsertPressed() {
-        Tables.wydarzenia_medyczne.insertItem(toEmptyString(wydarzeniaMedyczneNazwaField.getText()));
+        if (!Tables.wydarzenia_medyczne.insertItem(toEmptyString(wydarzeniaMedyczneNazwaField.getText()))) {
+            showError();
+        }
         updateWydarzeniaMedyczneMenuVolatile();
     }
 
     @FXML
     private void wydarzeniaMedyczneMenuUpdatePressed() {
         if (wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String[] fields = toStringArray(wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem().toString());
-        Tables.wydarzenia_medyczne.updateItem(fields[1],
+        if (!Tables.wydarzenia_medyczne.updateItem(fields[1],
                 wydarzeniaMedyczneNazwaField.getText()
-        );
+        )) {
+            showError();
+        }
         updateWydarzeniaMedyczneMenuVolatile();
     }
 
@@ -1478,7 +1558,9 @@ public class GUIController {
         for (Object o : wydarzeniaMedyczneList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.wydarzenia_medyczne.deleteItem(toStringArray(b.getText())[1]);
+                if (!Tables.wydarzenia_medyczne.deleteItem(toStringArray(b.getText())[1])) {
+                    showError();
+                }
             }
         }
         updateWydarzeniaMedyczneMenuVolatile();
@@ -1486,19 +1568,24 @@ public class GUIController {
 
     @FXML
     private void celeWizytMenuInsertPressed() {
-        Tables.cele_wizyty.insertItem(toEmptyString(celeWizytNazwaField.getText()));
+        if (!Tables.cele_wizyty.insertItem(toEmptyString(celeWizytNazwaField.getText()))) {
+            showError();
+        }
         updateCeleWizytMenuVolatile();
     }
 
     @FXML
     private void celeWizytMenuUpdatePressed() {
         if (celeWizytBox.getSelectionModel().getSelectedItem() == null) {
+            showError();
             return;
         }
         String[] fields = toStringArray(celeWizytBox.getSelectionModel().getSelectedItem().toString());
-        Tables.cele_wizyty.updateItem(fields[1],
+        if (!Tables.cele_wizyty.updateItem(fields[1],
                 celeWizytNazwaField.getText()
-        );
+        )) {
+             showError();
+        }
         updateCeleWizytMenuVolatile();
     }
 
@@ -1507,7 +1594,9 @@ public class GUIController {
         for (Object o : celeWizytList.getItems()) {
             CheckBox b = (CheckBox) o;
             if (b.isSelected()) {
-                Tables.cele_wizyty.deleteItem(toStringArray(b.getText())[1]);
+                 if (!Tables.cele_wizyty.deleteItem(toStringArray(b.getText())[1])) {
+                     showError();
+                 }
             }
         }
         updateCeleWizytMenuVolatile();
@@ -1646,5 +1735,18 @@ public class GUIController {
 
     private String toEmptyString(String s) {
         return s.equals("") ? null : s;
+    }
+
+    private void showError() {
+        new Thread(() -> {
+            Platform.runLater(() -> errorMessage.setVisible(true));
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Platform.runLater(() -> errorMessage.setVisible(false));
+                return;
+            }
+            Platform.runLater(() -> errorMessage.setVisible(false));
+        }).start();
     }
 }

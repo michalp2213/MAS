@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Control.GUIController"
@@ -1878,6 +1879,13 @@
                 onAction="#showRankingPressed"/>
 
     </GridPane>
+
+    <Text fx:id="errorMessage"
+        AnchorPane.leftAnchor="0"
+        AnchorPane.bottomAnchor="0"
+        visible="false">
+        ERROR
+    </Text>
 
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="5"

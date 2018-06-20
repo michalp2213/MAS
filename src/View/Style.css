@@ -87,3 +87,8 @@
      -fx-border-style:solid;
      -fx-padding: 5px 5px 5px 5px;
  }
+
+ #errorMessage {
+    -fx-fill: red;
+    -fx-font-size: 40px;
+ }
