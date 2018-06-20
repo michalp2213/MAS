@@ -5,8 +5,18 @@ import java.util.ArrayList;
 public class Pracownicy implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents() {
-		return Database.executeQuery("SELECT * FROM pracownicy;");
+	public ArrayList<ArrayList<String>> getContents(int...args) {	
+		
+		String sql = "SELECT * FROM pracownicy ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
 	}
 
 	public boolean deleteItem (String id) {
