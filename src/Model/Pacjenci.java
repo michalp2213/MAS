@@ -46,7 +46,7 @@ public class Pacjenci implements Table {
 				+ Tables.nullCheck(pesel) + ", "
 				+ Tables.nullCheck(passportNo) + ", "
 				+ Tables.nullCheck(birthDate) + ", "
-				+ Tables.nullCheck(sex) + "');";
+				+ Tables.nullCheck(sex) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
