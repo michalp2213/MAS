@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Role implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents (int...args) {	
+	public ArrayList<ArrayList<String>> getContents (int...args) throws SQLException {	
 		
 		String sql = "SELECT * FROM role";
 		
@@ -22,15 +23,15 @@ public class Role implements Table {
 		return Database.executeQuery(sql);
 	}
 	
-	public boolean deleteItem (String name) {
+	public boolean deleteItem (String name) throws SQLException {
 		return Database.executeUpdate("DELETE FROM role WHERE nazwa = '" + name + "';") != 0;
 	}
 	
-	public boolean updateItem (String oldName, String newName) {
+	public boolean updateItem (String oldName, String newName) throws SQLException {
 		return Database.executeUpdate("UPDATE role SET nazwa = '" + newName + "' WHERE nazwa = '" + oldName + "';") != 0;
 	}
 		
-	public boolean insertItem (String name) {
+	public boolean insertItem (String name) throws SQLException {
 		String sql = "INSERT INTO role VALUES ("
 				+ "DEFAULT, "
 				+ "'" + name + "');";

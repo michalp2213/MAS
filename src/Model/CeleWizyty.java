@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CeleWizyty implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents(int... args) {
+	public ArrayList<ArrayList<String>> getContents(int... args) throws SQLException {
 		String sql = "SELECT * FROM cele_wizyty";
 		
 		if (args.length > 0)
@@ -21,15 +22,15 @@ public class CeleWizyty implements Table {
 		return Database.executeQuery(sql);
 	}
 	
-	public boolean deleteItem (String name) {
+	public boolean deleteItem (String name) throws SQLException {
 		return Database.executeUpdate("DELETE FROM cele_wizyty WHERE nazwa = '" + name + "';") != 0;
 	}
 	
-	public boolean updateItem (String oldName, String newName) {
+	public boolean updateItem (String oldName, String newName) throws SQLException {
 		return Database.executeUpdate("UPDATE cele_wizyty SET nazwa = '" + newName + "' WHERE nazwa = '" + oldName + "';") != 0;
 	}
 	
-	public boolean insertItem (String name) {
+	public boolean insertItem (String name) throws SQLException {
 		return Database.executeUpdate("INSERT INTO cele_wizyty VALUES (DEFAULT, '" + name + "');") != 0;
 	}
 

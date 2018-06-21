@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class WizytyOdbyte implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents(int...args) {	
+	public ArrayList<ArrayList<String>> getContents(int...args) throws SQLException {	
 		
 		String sql = "SELECT * FROM wizyty_odbyte";
 		
@@ -22,7 +23,7 @@ public class WizytyOdbyte implements Table {
 		return Database.executeQuery(sql);
 	}
 	
-	public boolean updateItem (String id, String newPacjentId, String newLekarzId, String newCel, String newSpecjalizacja, String newDate, String newInt) {
+	public boolean updateItem (String id, String newPacjentId, String newLekarzId, String newCel, String newSpecjalizacja, String newDate, String newInt) throws SQLException {
 		String sql = "UPDATE wizyty_odbyte SET (id_pacjenta, id_lekarza, cel, specjalizacja, data, czas_trwania) = ("
 				+ newPacjentId + ", "
 				+ newLekarzId + ", "

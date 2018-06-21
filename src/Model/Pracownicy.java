@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Pracownicy implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents(int...args) {	
+	public ArrayList<ArrayList<String>> getContents(int...args) throws SQLException {	
 		
 		String sql = "SELECT * FROM pracownicy";
 		
@@ -22,11 +23,11 @@ public class Pracownicy implements Table {
 		return Database.executeQuery(sql);
 	}
 
-	public boolean deleteItem (String id) {
+	public boolean deleteItem (String id) throws SQLException {
 		return Database.executeUpdate("DELETE FROM pracownicy WHERE id_pracownika = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newZatrudniony_od, String newZatrudniony_do) {
+	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newZatrudniony_od, String newZatrudniony_do) throws SQLException {
 		String zatrudniony_doStr = newZatrudniony_do == null ? "NULL" : "'" + newZatrudniony_do + "'";
 		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel, zatrudniony_od, zatrudniony_do) = ("
 				+ "'" + newName + "', "
@@ -37,7 +38,7 @@ public class Pracownicy implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 		
-	public boolean insertItem (String name, String surname, String pesel) {
+	public boolean insertItem (String name, String surname, String pesel) throws SQLException {
 		String sql = "INSERT INTO pracownicy VALUES ("
 				+ "DEFAULT, "
 				+ "'" + name + "', "
