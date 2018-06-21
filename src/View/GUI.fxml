@@ -162,6 +162,12 @@
                 maxHeight="25"
                 onAction="#showRankingiMenu"/>
 
+        <Label fx:id="errorMessage"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.bottomAnchor="0"
+               maxWidth="150"
+              visible="false"/>
+
     </VBox>
 
     <VBox fx:id="pracownicyChoiceMenu"
@@ -1879,13 +1885,6 @@
                 onAction="#showRankingPressed"/>
 
     </GridPane>
-
-    <Text fx:id="errorMessage"
-        AnchorPane.leftAnchor="0"
-        AnchorPane.bottomAnchor="0"
-        visible="false">
-        ERROR
-    </Text>
 
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="5"
