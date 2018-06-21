@@ -22,6 +22,26 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeQuery(sql);
 	}
 	
+	public ArrayList<ArrayList<String>> niceGetContents(int... args) throws SQLException {		
+		String sql = "SELECT (imie || ' ' || nazwisko || ' (' || p.id_pacjenta || ')') AS pacjent,"
+				+ "w.nazwa AS wydarzenie, "
+				+ "wizyta, "
+				+ "od, "
+				+ "\"do\" FROM historia_medyczna h natural join pacjenci p natural join wydarzenia_medyczne w";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
+	}
+	
 	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) throws SQLException {
 		String fromStr = from == null ? "NULL" : "'" + from + "'";
 		String sql = "DELETE FROM historia_medyczna WHERE "

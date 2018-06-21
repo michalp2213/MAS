@@ -23,6 +23,27 @@ public class Skierowania implements Table {
 		return Database.executeQuery(sql);
 	}
 	
+	public ArrayList<ArrayList<String>> niceGetContents(int...args) throws SQLException {	
+
+		String sql = "SELECT nr_skierowania, "
+				+ "wizyta, "
+				+ "(SELECT nazwa FROM specjalizacje WHERE id_specjalizacji = skierowania.specjalizacja) AS specjalizacja, "
+				+ "(SELECT nazwa FROM cele_wizyty WHERE id_celu = skierowania.cel_skierowania) AS cel, "
+				+ "opis FROM skierowania";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
+	}
+	
 	public boolean deleteItem (String id) throws SQLException {
 		return Database.executeUpdate("DELETE FROM skierowania WHERE nr_skierowania = " + id + ";") != 0;
 	}

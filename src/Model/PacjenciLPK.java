@@ -24,6 +24,28 @@ public class PacjenciLPK implements Table {
 		return Database.executeQuery(sql);
     }
 
+    public ArrayList<ArrayList<String>> niceGetContents(int... args) throws SQLException {	
+
+		String sql = "SELECT (p.imie || ' ' || p.nazwisko || ' (' || p.id_pacjenta || ')') AS pacjent, "
+				+ "(l.imie || ' ' || l.nazwisko || ' (' || l.id_pracownika || ')') AS lekarz, "
+				+ "od, "
+				+ "\"do\" "
+				+ "FROM pacjenci_lpk pl natural join pacjenci p join pracownicy l on l.id_pracownika = pl.id_lekarza";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
+    }
+
     public boolean deleteItem (String id, String from) throws SQLException {
         return Database.executeUpdate("DELETE FROM pacjenci_lpk WHERE id_pacjenta = " + id +
                 " and od = " + Tables.nullCheck(from) + ";") != 0;
