@@ -162,6 +162,12 @@
                 maxHeight="25"
                 onAction="#showRankingiMenu"/>
 
+        <Label fx:id="errorMessage"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.bottomAnchor="0"
+               maxWidth="140"
+              visible="false"/>
+
     </VBox>
 
     <VBox fx:id="pracownicyChoiceMenu"
@@ -1071,7 +1077,8 @@
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   minWidth="150"
-                  maxWidth="150"/>
+                  maxWidth="150"
+                onAction="#updateWizytyPlanowaneMenuSpecjalizacjeComboBox"/>
 
         <ComboBox fx:id="wizytyPlanowaneCelComboBox"
                   GridPane.columnIndex="2"
@@ -1879,13 +1886,6 @@
                 onAction="#showRankingPressed"/>
 
     </GridPane>
-
-    <Text fx:id="errorMessage"
-        AnchorPane.leftAnchor="0"
-        AnchorPane.bottomAnchor="0"
-        visible="false">
-        ERROR
-    </Text>
 
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="5"

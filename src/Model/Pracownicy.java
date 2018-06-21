@@ -30,10 +30,10 @@ public class Pracownicy implements Table {
 	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newZatrudniony_od, String newZatrudniony_do) throws SQLException {
 		String zatrudniony_doStr = newZatrudniony_do == null ? "NULL" : "'" + newZatrudniony_do + "'";
 		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel, zatrudniony_od, zatrudniony_do) = ("
-				+ "'" + newName + "', "
-				+ "'" + newSurname + "', "
-				+ "'" + newPesel + "', " 
-				+ "'" + newZatrudniony_od + "', " 
+				+ Tables.nullCheck(newName) + ", "
+				+ Tables.nullCheck(newSurname) + ", "
+				+ Tables.nullCheck(newPesel) + ", " 
+				+ Tables.nullCheck(newZatrudniony_od) + ", " 
 				+ zatrudniony_doStr + ") WHERE id_pracownika = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
@@ -41,9 +41,9 @@ public class Pracownicy implements Table {
 	public boolean insertItem (String name, String surname, String pesel) throws SQLException {
 		String sql = "INSERT INTO pracownicy VALUES ("
 				+ "DEFAULT, "
-				+ "'" + name + "', "
-				+ "'" + surname + "', "
-				+ "'" + pesel + "', "
+				+ Tables.nullCheck(name) + ", "
+				+ Tables.nullCheck(surname) + ", "
+				+ Tables.nullCheck(pesel) + ", "
 				+ "now(), "
 				+ "NULL);";
 		return Database.executeUpdate(sql) != 0;

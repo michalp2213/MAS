@@ -33,7 +33,7 @@ public class WizytyPlanowane implements Table {
 				+ newLekarzId + ", "
 				+ newCel + ", "
 				+ newSpecjalizacja + ", "
-				+ "'" + newDate + "', "
+				+ Tables.nullCheck(newDate) + ", "
 				+ newInt + ") WHERE id_wizyty = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
@@ -41,9 +41,9 @@ public class WizytyPlanowane implements Table {
 	public boolean insertItem (String pacjentId,  String cel, String specjalizacja, String date) throws SQLException {
 		String sql = "INSERT INTO terminarz VALUES ("
 				+ pacjentId + ", "
-				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = '" + cel + "'), "
-				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE nazwa = '" + specjalizacja + "'), "
-				+ "'" + date + "');";
+				+ "(SELECT id_celu FROM cele_wizyty WHERE nazwa = " + Tables.nullCheck(cel) + "), "
+				+ "(SELECT id_specjalizacji FROM specjalizacje WHERE nazwa = " + Tables.nullCheck(specjalizacja) + "), "
+				+ Tables.nullCheck(date) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -57,7 +57,7 @@ public class WizytyPlanowane implements Table {
 	}
 	
 	public boolean moveToWizytyOdbyte (String id, String interval) throws SQLException {
-		Database.executeUpdate("UPDATE wizyty_planowane SET szacowany_czas = '" + interval + "' WHERE id_wizyty = " + id + ";");
+		Database.executeUpdate("UPDATE wizyty_planowane SET szacowany_czas = " + Tables.nullCheck(interval) + " WHERE id_wizyty = " + id + ";");
 		return this.moveToWizytyOdbyte(id);
 	}
 

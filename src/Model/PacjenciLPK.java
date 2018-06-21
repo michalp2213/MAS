@@ -26,7 +26,7 @@ public class PacjenciLPK implements Table {
 
     public boolean deleteItem (String id, String from) throws SQLException {
         return Database.executeUpdate("DELETE FROM pacjenci_lpk WHERE id_pacjenta = " + id +
-                " and od = '" + from + "';") != 0;
+                " and od = " + Tables.nullCheck(from) + ";") != 0;
     }
     
     public boolean updateItem (String oldPacjentId, String oldFrom,
@@ -34,17 +34,17 @@ public class PacjenciLPK implements Table {
     	String sql = "UPDATE pacjenci_lpk SET (id_pacjenta, id_lekarza, od, do) = ("
     			+ newPacjentId + ", "
     			+ newLekarzId + ", "
-    			+ "'" + newFrom + "', "
-    			+ "'" + newTo + "') WHERE "
+    			+ Tables.nullCheck(newFrom) + ", "
+    			+ Tables.nullCheck(newTo) + ") WHERE "
     			+ "id_pacjenta = " + oldPacjentId + " AND "
-    			+ "od = '" + oldFrom + "';";
+    			+ "od = " + Tables.nullCheck(oldFrom) + ";";
     	return Database.executeUpdate(sql) != 0;
     }
 
     public boolean insertItem (String id_pacjenta, String id_lekarza) throws SQLException {
         String sql = "INSERT INTO pacjenci_lpk VALUES ("
-                + "'" + id_pacjenta + "', "
-                + "'" + id_lekarza + "', "
+                + id_pacjenta + ", "
+                + id_lekarza + ", "
                 + "now(), NULL);";
         return Database.executeUpdate(sql) != 0;
     }

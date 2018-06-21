@@ -29,7 +29,7 @@ public class WizytyOdbyte implements Table {
 				+ newLekarzId + ", "
 				+ newCel + ", "
 				+ newSpecjalizacja + ", "
-				+ "'" + newDate + "', "
+				+ Tables.nullCheck(newDate) + ", "
 				+ newInt + ") WHERE id_wizyty = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}

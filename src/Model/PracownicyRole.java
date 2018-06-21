@@ -26,7 +26,7 @@ public class PracownicyRole implements Table {
 	public boolean deleteItem (String roleName, String pracownikId) throws SQLException {
 		String sql = "DELETE FROM pracownicy_role WHERE "
 				+ "id_pracownika = " + pracownikId
-				+ " AND (SELECT nazwa FROM role WHERE id_roli = pracownicy_role.id_roli) = '" + roleName + "';";
+				+ " AND (SELECT nazwa FROM role WHERE id_roli = pracownicy_role.id_roli) = " + Tables.nullCheck(roleName) + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -40,7 +40,7 @@ public class PracownicyRole implements Table {
 	
 	public boolean insertItem (String roleName, String pracownikId) throws SQLException {
 		String sql = "INSERT INTO pracownicy_role VALUES ("
-				+ "(SELECT id_roli FROM role WHERE nazwa = '" + roleName + "'), "
+				+ "(SELECT id_roli FROM role WHERE nazwa = " + Tables.nullCheck(roleName) + "), "
 				+ pracownikId + ");";
 		return Database.executeUpdate(sql) != 0;
 	}

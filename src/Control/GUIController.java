@@ -10,16 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Pair;
-import org.postgresql.util.PGInterval;
-
-import java.awt.event.ActionEvent;
-import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -149,7 +142,7 @@ public class GUIController {
     public TextField wizytyOdbytePlanowaneCzasField;
     public ComboBox wizytyOdbyteOdbyteComboBox;
     public TextField wizytyOdbyteOdbyteCzasField;
-    public Text errorMessage;
+    public Label errorMessage;
 
     private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 
@@ -631,91 +624,151 @@ public class GUIController {
 
     @FXML
     public void showTablePracownicy() {
+        try {
         hideAllMenus();
         showTable(Tables.pracownicy.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTablePacjenci() {
+        try {
         hideAllMenus();
         showTable(Tables.pacjenci.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTablePracownicyRole() {
+        try {
         hideAllMenus();
         showTable(Tables.pracownicy_role.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableLekarzeSpecjalizacje() {
+        try {
         hideAllMenus();
         showTable(Tables.lekarze_specjalizacje.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableLPK() {
+        try {
         hideAllMenus();
         showTable(Tables.pacjenci_lpk.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableWizytyPlanowane() {
+        try {
         hideAllMenus();
         showTable(Tables.wizyty_planowane.getContents(5));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableWizytyOdbyte() {
+        try {
         hideAllMenus();
         showTable(Tables.wizyty_odbyte.getContents(5));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableSkierowania() {
+        try {
         hideAllMenus();
         showTable(Tables.skierowania.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableHistoriaMedyczna() {
+        try {
         hideAllMenus();
         showTable(Tables.historia_medyczna.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableAnkiety() {
+        try {
         hideAllMenus();
         showTable(Tables.ankiety_lekarze.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableRole() {
-        hideAllMenus();
-        showTable(Tables.role.getContents(1));
+        try {
+            hideAllMenus();
+            showTable(Tables.role.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableSpecjalizacje() {
-        hideAllMenus();
-        showTable(Tables.specjalizacje.getContents(1));
+        try {
+            hideAllMenus();
+            showTable(Tables.specjalizacje.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableWydarzeniaMedyczne() {
-        hideAllMenus();
-        showTable(Tables.wydarzenia_medyczne.getContents(1));
+        try {
+            hideAllMenus();
+            showTable(Tables.wydarzenia_medyczne.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     @FXML
     public void showTableCeleWizyt() {
-        hideAllMenus();
-        showTable(Tables.cele_wizyty.getContents(1));
+        try {
+            hideAllMenus();
+            showTable(Tables.cele_wizyty.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updatePracownicyMenuVolatile() {
-        updateListView(pracownicyList, Tables.pracownicy.getContents(1));
-        updateComboBox(pracownicyBox, Tables.pracownicy.getContents(1));
+        try {
+            updateListView(pracownicyList, Tables.pracownicy.getContents(1));
+            updateComboBox(pracownicyBox, Tables.pracownicy.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updatePracownicyMenu() {
@@ -723,8 +776,12 @@ public class GUIController {
     }
 
     private void updatePacjenciMenuVolatile() {
-        updateListView(pacjenciList, Tables.pacjenci.getContents(1));
-        updateComboBox(pacjenciBox, Tables.pacjenci.getContents(1));
+        try {
+            updateListView(pacjenciList, Tables.pacjenci.getContents(1));
+            updateComboBox(pacjenciBox, Tables.pacjenci.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updatePacjenciMenu() {
@@ -740,25 +797,33 @@ public class GUIController {
 
     @FXML
     private void updatePracownicyRoleMenuListView() {
-        if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() != null) {
-            ArrayList<ArrayList<String>> roles = Database.executeQuery(
-                    "select r.nazwa " +
-                            "from role r " +
-                            "where r.id_roli in ( " +
-                            "select pr.id_roli " +
-                            "from pracownicy_role pr " +
-                            "where pr.id_pracownika = " +
-                            toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0] +
-                            ");"
-            );
-            updateListView(pracownicyRoleRoleList, roles);
+        try {
+            if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() != null) {
+                ArrayList<ArrayList<String>> roles = Database.executeQuery(
+                        "select r.nazwa " +
+                                "from role r " +
+                                "where r.id_roli in ( " +
+                                "select pr.id_roli " +
+                                "from pracownicy_role pr " +
+                                "where pr.id_pracownika = " +
+                                toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0] +
+                                ");"
+                );
+                updateListView(pracownicyRoleRoleList, roles);
+            }
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
     }
 
     private void updatePracownicyRoleMenu() {
-        pracownicyRoleRoleList.getItems().clear();
-        updateComboBox(pracownicyRolePracownicyComboBox, filterTable(Tables.pracownicy.getContents(1), "id_pracownika", "imie", "nazwisko"));
-        updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(2), "nazwa"));
+        try {
+            pracownicyRoleRoleList.getItems().clear();
+            updateComboBox(pracownicyRolePracownicyComboBox, filterTable(Tables.pracownicy.getContents(1), "id_pracownika", "imie", "nazwisko"));
+            updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(2), "nazwa"));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateLekarzeSpecjalizacjeMenuVolatile() {
@@ -767,29 +832,41 @@ public class GUIController {
 
     @FXML
     private void updateLekarzeSpecjalizacjeMenuListView() {
-        if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() != null) {
-            ArrayList<ArrayList<String>> roles = Database.executeQuery(
-                    "select s.nazwa " +
-                            "from specjalizacje s " +
-                            "where s.id_specjalizacji in ( " +
-                            "select ls.id_specjalizacji " +
-                            "from lekarze_specjalizacje ls " +
-                            "where ls.id_lekarza = " +
-                            toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0] +
-                            ");"
-            );
-            updateListView(lekarzeSpecjalizacjeRoleList, roles);
+        try {
+            if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() != null) {
+                ArrayList<ArrayList<String>> roles = Database.executeQuery(
+                        "select s.nazwa " +
+                                "from specjalizacje s " +
+                                "where s.id_specjalizacji in ( " +
+                                "select ls.id_specjalizacji " +
+                                "from lekarze_specjalizacje ls " +
+                                "where ls.id_lekarza = " +
+                                toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0] +
+                                ");"
+                );
+                updateListView(lekarzeSpecjalizacjeRoleList, roles);
+            }
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
     }
 
     private void updateLekarzeSpecjalizacjeMenu() {
-        lekarzeSpecjalizacjeRoleList.getItems().clear();
-        updateComboBox(lekarzeSpecjalizacjeLekarzeComboBox, getSmallLekarze());
-        updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
+        try {
+            lekarzeSpecjalizacjeRoleList.getItems().clear();
+            updateComboBox(lekarzeSpecjalizacjeLekarzeComboBox, getSmallLekarze());
+            updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateLPKMenuVolatile() {
-        updateListView(LPKList, Tables.pacjenci_lpk.getContents(1));
+        try {
+            updateListView(LPKList, Tables.pacjenci_lpk.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateLPKMenu() {
@@ -798,22 +875,43 @@ public class GUIController {
         updateComboBox(LPKPacjenciComboBox, getSmallPacjenci());
     }
 
+    @FXML
+    private void updateWizytyPlanowaneMenuSpecjalizacjeComboBox() {
+        if (wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem() == null ) {
+            return;
+        }
+        String id_lek = toStringArray(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, getSpecLekarza(id_lek));
+    }
+
     private void updateWizytyPlanowaneMenuVolatile() {
-        updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(5));
-        updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(5));
+        try {
+            updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(5));
+            updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(5));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateWizytyPlanowaneMenu() {
-        updateWizytyPlanowaneMenuVolatile();
-        updateComboBox(wizytyPlanowaneCelComboBox, filterTable(Tables.cele_wizyty.getContents(2), "nazwa"));
-        updateComboBox(wizytyPlanowaneLekarzeComboBox, getSmallLekarze());
-        updateComboBox(wizytyPlanowanePacjenciComboBox, getSmallPacjenci());
-        updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
+        try {
+            updateWizytyPlanowaneMenuVolatile();
+            updateComboBox(wizytyPlanowaneCelComboBox, filterTable(Tables.cele_wizyty.getContents(2), "nazwa"));
+            updateComboBox(wizytyPlanowaneLekarzeComboBox, getSmallLekarze());
+            updateComboBox(wizytyPlanowanePacjenciComboBox, getSmallPacjenci());
+            updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateWizytyOdbyteMenuVolatile() {
-        updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(5));
-        updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(5));
+        try {
+            updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(5));
+            updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(5));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateWizytyOdbyteMenu() {
@@ -841,30 +939,50 @@ public class GUIController {
     }
 
     private void updateSkierowaniaMenuVolatile() {
-        updateListView(skierowaniaList, Tables.skierowania.getContents(1));
-        updateComboBox(skierowaniaBox, Tables.skierowania.getContents(1));
+        try {
+            updateListView(skierowaniaList, Tables.skierowania.getContents(1));
+            updateComboBox(skierowaniaBox, Tables.skierowania.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateSkierowaniaMenu() {
-        updateSkierowaniaMenuVolatile();
-        updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(1), "nazwa"));
-        updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(1), "nazwa"));
+        try {
+            updateSkierowaniaMenuVolatile();
+            updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(1), "nazwa"));
+            updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(1), "nazwa"));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateHistoriaMedycznaMenuVolatile() {
-        updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents(1));
-        updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents(1));
+        try {
+            updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents(1));
+            updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateHistoriaMedycznaMenu() {
-        updateHistoriaMedycznaMenuVolatile();
-        updateComboBox(historiaMedycznaPacjenciComboBox, getSmallPacjenci());
-        updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(2), "nazwa"));
+        try {
+            updateHistoriaMedycznaMenuVolatile();
+            updateComboBox(historiaMedycznaPacjenciComboBox, getSmallPacjenci());
+            updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(2), "nazwa"));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateAnkietyMenuVolatile() {
-        updateListView(ankietyList, Tables.ankiety_lekarze.getContents(1));
-        updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents(1));
+        try {
+            updateListView(ankietyList, Tables.ankiety_lekarze.getContents(1));
+            updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateAnkietyMenu() {
@@ -879,8 +997,12 @@ public class GUIController {
     }
 
     private void updateRoleMenuVolatile() {
-        updateListView(roleList, Tables.role.getContents(1));
-        updateComboBox(roleBox, Tables.role.getContents(1));
+        try {
+            updateListView(roleList, Tables.role.getContents(1));
+            updateComboBox(roleBox, Tables.role.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateRoleMenu() {
@@ -888,8 +1010,12 @@ public class GUIController {
     }
 
     private void updateSpecjalizacjeMenuVolatile() {
-        updateListView(specjalizacjeList, Tables.specjalizacje.getContents(1));
-        updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents(1));
+        try {
+            updateListView(specjalizacjeList, Tables.specjalizacje.getContents(1));
+            updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateSpecjalizacjeMenu() {
@@ -897,8 +1023,12 @@ public class GUIController {
     }
 
     private void updateWydarzeniaMedyczneMenuVolatile() {
-        updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents(1));
-        updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents(1));
+        try {
+            updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents(1));
+            updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateWydarzeniaMedyczneMenu() {
@@ -906,8 +1036,12 @@ public class GUIController {
     }
 
     private void updateCeleWizytMenuVolatile() {
-        updateListView(celeWizytList, Tables.cele_wizyty.getContents(1));
-        updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents(1));
+        try {
+            updateListView(celeWizytList, Tables.cele_wizyty.getContents(1));
+            updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents(1));
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateCeleWizytMenu() {
@@ -916,6 +1050,7 @@ public class GUIController {
 
     @FXML
     private void updateRankingiMenuOpcjeBox() {
+        try {
         if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
             rankingiOpcjeBox.setVisible(false);
             return;
@@ -932,6 +1067,9 @@ public class GUIController {
             rankingiOpcjeBox.setItems(opcjeItems);
             rankingiOpcjeBox.setVisible(true);
         }
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
 
     private void updateRankingiMenu() {
@@ -942,671 +1080,753 @@ public class GUIController {
 
     @FXML
     private void showRankingPressed() {
-        if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
-            return;
+        try {
+            if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz typ rankingu");
+                return;
+            }
+            switch (rankingiTypBox.getSelectionModel().getSelectedItem().toString()) {
+                case "Alfabetyczny":
+                    showTable(Tables.ankiety_lekarze.alphabeticRanking(
+                            toEmptyString(rankingiOdField.getText()),
+                            toEmptyString(rankingiDoField.getText())
+                    ));
+                    break;
+                case "Według średniej":
+                    if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+                        return;
+                    }
+                    showTable(Tables.ankiety_lekarze.bestAvg(
+                            toEmptyString(rankingiOdField.getText()),
+                            toEmptyString(rankingiDoField.getText()),
+                            specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                                    rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
+                    ));
+                    break;
+                case "Według cechy":
+                    if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
+                        return;
+                    }
+                    showTable(Tables.ankiety_lekarze.bestIn(
+                            toEmptyString(rankingiOdField.getText()),
+                            toEmptyString(rankingiDoField.getText()),
+                            rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString()
+                    ));
+                    break;
+            }
+            hideRankingiMenu();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        switch (rankingiTypBox.getSelectionModel().getSelectedItem().toString()) {
-            case "Alfabetyczny":
-                showTable(Tables.ankiety_lekarze.alphabeticRanking(
-                        toEmptyString(rankingiOdField.getText()),
-                        toEmptyString(rankingiDoField.getText())
-                ));
-                break;
-            case "Według średniej":
-                if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
-                    return;
-                }
-                showTable(Tables.ankiety_lekarze.bestAvg(
-                        toEmptyString(rankingiOdField.getText()),
-                        toEmptyString(rankingiDoField.getText()),
-                        specNameToId(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                                rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString().length() - 1))
-                ));
-                break;
-            case "Według cechy":
-                if (rankingiOpcjeBox.getSelectionModel().getSelectedItem() == null) {
-                    return;
-                }
-                showTable(Tables.ankiety_lekarze.bestIn(
-                        toEmptyString(rankingiOdField.getText()),
-                        toEmptyString(rankingiDoField.getText()),
-                        rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString()
-                ));
-                break;
-        }
-        hideRankingiMenu();
     }
 
     @FXML
     private void pracownicyMenuInsertPressed() {
-        String imie = toEmptyString(pracownicyImieField.getText());
-        String nazwisko = toEmptyString(pracownicyNazwiskoField.getText());
-        String pesel = toEmptyString(pracownicyPeselField.getText());
-        if (!Tables.pracownicy.insertItem(imie,
-                nazwisko,
-                pesel
-        )) {
-            showError();
+        try {
+            String imie = toEmptyString(pracownicyImieField.getText());
+            String nazwisko = toEmptyString(pracownicyNazwiskoField.getText());
+            String pesel = toEmptyString(pracownicyPeselField.getText());
+            Tables.pracownicy.insertItem(imie,
+                    nazwisko,
+                    pesel
+            );
+            updatePracownicyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updatePracownicyMenuVolatile();
     }
 
     @FXML
     private void pracownicyMenuUpdatePressed() {
-        if (pracownicyBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (pracownicyBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pracownika");
+                return;
+            }
+            String imie = toEmptyString(pracownicyImieField.getText());
+            String nazwisko = toEmptyString(pracownicyNazwiskoField.getText());
+            String pesel = toEmptyString(pracownicyPeselField.getText());
+            String zatrudniony_od = toEmptyString(pracownicyZatrudnionyOdField.getText());
+            String zatrudniony_do = toEmptyString(pracownicyZatrudnionyDoField.getText());
+            String[] fields = toStringArray(pracownicyBox.getSelectionModel().getSelectedItem().toString());
+            Tables.pracownicy.updateItem(fields[0],
+                    imie == null ? fields[1] : imie,
+                    nazwisko == null ? fields[2] : nazwisko,
+                    pesel == null ? fields[3] : pesel,
+                    zatrudniony_od == null ? fields[4] : zatrudniony_od,
+                    zatrudniony_do == null ? fields[5] : zatrudniony_do
+            );
+            updatePracownicyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String imie = toEmptyString(pracownicyImieField.getText());
-        String nazwisko = toEmptyString(pracownicyNazwiskoField.getText());
-        String pesel = toEmptyString(pracownicyPeselField.getText());
-        String zatrudniony_od = toEmptyString(pracownicyZatrudnionyOdField.getText());
-        String zatrudniony_do = toEmptyString(pracownicyZatrudnionyDoField.getText());
-        String[] fields = toStringArray(pracownicyBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.pracownicy.updateItem(fields[0],
-                imie == null ? fields[1] : imie,
-                nazwisko == null ? fields[2] : nazwisko,
-                pesel == null ? fields[3] : pesel,
-                zatrudniony_od == null ? fields[4] : zatrudniony_od,
-                zatrudniony_do == null ? fields[5] : zatrudniony_do
-        )) {
-            showError();
-        }
-        updatePracownicyMenuVolatile();
     }
 
     @FXML
     private void pracownicyMenuDeletePressed() {
-        for (Object o : pracownicyList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.pracownicy.deleteItem(toStringArray(b.getText())[0])) {
-                    showError();
+        try {
+            for (Object o : pracownicyList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.pracownicy.deleteItem(toStringArray(b.getText())[0]);
                 }
             }
+            updatePracownicyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updatePracownicyMenuVolatile();
     }
 
     @FXML
     private void pacjenciMenuInsertPressed() {
-        String imie = toEmptyString(pacjenciImieField.getText());
-        String nazwisko = toEmptyString(pacjenciNazwiskoField.getText());
-        String pesel = toEmptyString(pacjenciPeselField.getText());
-        String nr_paszportu = toEmptyString(pacjenciNrPaszportuField.getText());
-        String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
-        String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
-        if (!Tables.pacjenci.insertItem(imie,
-                nazwisko,
-                pesel,
-                nr_paszportu,
-                data_ur,
-                plec
-        )) {
-            showError();
+        try {
+            String imie = toEmptyString(pacjenciImieField.getText());
+            String nazwisko = toEmptyString(pacjenciNazwiskoField.getText());
+            String pesel = toEmptyString(pacjenciPeselField.getText());
+            String nr_paszportu = toEmptyString(pacjenciNrPaszportuField.getText());
+            String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
+            String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
+            Tables.pacjenci.insertItem(imie,
+                    nazwisko,
+                    pesel,
+                    nr_paszportu,
+                    data_ur,
+                    plec
+            );
+            updatePacjenciMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updatePacjenciMenuVolatile();
     }
 
     @FXML
     private void pacjenciMenuUpdatePressed() {
-        if (pacjenciBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (pacjenciBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pacjenta");
+                return;
+            }
+            String imie = toEmptyString(pacjenciImieField.getText());
+            String nazwisko = toEmptyString(pacjenciNazwiskoField.getText());
+            String pesel = toEmptyString(pacjenciPeselField.getText());
+            String nr_paszportu = toEmptyString(pacjenciNrPaszportuField.getText());
+            String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
+            String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
+            String[] fields = toStringArray(pacjenciBox.getSelectionModel().getSelectedItem().toString());
+            Tables.pacjenci.updateItem(fields[0],
+                    imie == null ? fields[1] : imie,
+                    nazwisko == null ? fields[2] : nazwisko,
+                    pesel == null ? fields[3] : pesel,
+                    nr_paszportu == null ? fields[4] : nr_paszportu,
+                    data_ur == null ? fields[5] : data_ur,
+                    plec == null ? fields[6] : plec
+            );
+            updatePacjenciMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String imie = toEmptyString(pacjenciImieField.getText());
-        String nazwisko = toEmptyString(pacjenciNazwiskoField.getText());
-        String pesel = toEmptyString(pacjenciPeselField.getText());
-        String nr_paszportu = toEmptyString(pacjenciNrPaszportuField.getText());
-        String data_ur = toEmptyString(pacjenciDataUrodzeniaField.getText());
-        String plec = toNullString(pacjenciPlecField.getSelectionModel().getSelectedItem());
-        String[] fields = toStringArray(pacjenciBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.pacjenci.updateItem(fields[0],
-                imie == null ? fields[1] : imie,
-                nazwisko == null ? fields[2] : nazwisko,
-                pesel == null ? fields[3] : pesel,
-                nr_paszportu == null ? fields[4] : nr_paszportu,
-                data_ur == null ? fields[4] : data_ur,
-                plec == null ? fields[5] : plec
-        )) {
-            showError();
-        }
-        updatePacjenciMenuVolatile();
     }
 
     @FXML
     private void pacjenciMenuDeletePressed() {
-        for (Object o : pacjenciList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.pacjenci.deleteItem(toStringArray(b.getText())[0])) {
-                    showError();
+        try {
+            for (Object o : pacjenciList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.pacjenci.deleteItem(toStringArray(b.getText())[0]);
                 }
             }
+            updatePacjenciMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updatePacjenciMenuVolatile();
     }
 
     @FXML
     private void pracownicyRoleMenuInsertPressed() {
-        if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null ||
-                pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null ||
+                    pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pracownika i rolę");
+                return;
+            }
+            String chosenRole = pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                    pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+            String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            Tables.pracownicy_role.insertItem(chosenRole, id_prac);
+            updatePracownicyRoleMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String chosenRole = pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
-        String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        if (!Tables.pracownicy_role.insertItem(chosenRole, id_prac)) {
-            showError();
-        }
-        updatePracownicyRoleMenuVolatile();
     }
 
     @FXML
     private void pracownicyRoleMenuDeletePressed() {
-        if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
-        }
-        String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        for (Object o : pracownicyRoleRoleList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                String chosenRole = b.getText().substring(1, b.getText().length() - 1);
-                if (!Tables.pracownicy_role.deleteItem(chosenRole, id_prac)) {
-                    showError();
+        try {
+            if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pracownika");
+                return;
+            }
+            String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            for (Object o : pracownicyRoleRoleList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    String chosenRole = b.getText().substring(1, b.getText().length() - 1);
+                    Tables.pracownicy_role.deleteItem(chosenRole, id_prac);
                 }
             }
+            updatePracownicyRoleMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updatePracownicyRoleMenuVolatile();
     }
 
     @FXML
     private void lekarzeSpecjalizacjeMenuInsertPressed() {
-        if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
-                lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
+                    lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz lekarza i specjalizację");
+                return;
+            }
+            String chosenRole = lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
+                    lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
+            String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek);
+            updateLekarzeSpecjalizacjeMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String chosenRole = lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().substring(1,
-                lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString().length() - 1);
-        String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        if (!Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek)) {
-            showError();
-        }
-        updateLekarzeSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void lekarzeSpecjalizacjeMenuDeletePressed() {
-        if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
-        }
-        String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        for (Object o : lekarzeSpecjalizacjeRoleList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                String chosenRole = b.getText().substring(1, b.getText().length() - 1);
-                if (!Tables.lekarze_specjalizacje.deleteItem(chosenRole, id_lek)) {
-                    showError();
+        try {
+            if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz lekarza");
+                return;
+            }
+            String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            for (Object o : lekarzeSpecjalizacjeRoleList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    String chosenRole = b.getText().substring(1, b.getText().length() - 1);
+                    Tables.lekarze_specjalizacje.deleteItem(chosenRole, id_lek);
                 }
             }
+            updateLekarzeSpecjalizacjeMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateLekarzeSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void LPKMenuInsertPressed() {
-        if (LPKPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
-                LPKLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (LPKPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                    LPKLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pacjenta i lekarza");
+                return;
+            }
+            String id_pac = toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String id_lek = toStringArray(LPKLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            Tables.pacjenci_lpk.insertItem(id_pac, id_lek);
+            updateLPKMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String id_pac = toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String id_lek = toStringArray(LPKLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        if (!Tables.pacjenci_lpk.insertItem(id_pac, id_lek)) {
-            showError();
-        }
-        updateLPKMenuVolatile();
     }
 
     @FXML
     private void LPKMenuDeletePressed() {
-        for (Object o : LPKList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                String id_pac = toStringArray(b.getText())[0];
-                String data = toStringArray(b.getText())[2];
-                if (!Tables.pacjenci_lpk.deleteItem(id_pac, data)) {
-                    showError();
+        try {
+            for (Object o : LPKList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    String id_pac = toStringArray(b.getText())[0];
+                    String data = toStringArray(b.getText())[2];
+                    Tables.pacjenci_lpk.deleteItem(id_pac, data);
                 }
             }
+            updateLPKMenuVolatile();
+        } catch (SQLException e ) {
+            showError(e.getMessage());
         }
-        updateLPKMenuVolatile();
     }
 
     @FXML
     private void wizytyPlanowaneMenuInsertPressed() {
-        if (wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
-                wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ||
-                wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                    wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ||
+                    wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pacjenta, cel i specjalizację");
+                return;
+            }
+            String id_pac = toStringArray(toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem()))[0];
+            String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
+            String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
+            String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
+            String data = toEmptyString(wizytyPlanowaneDataField.getText());
+            Tables.wizyty_planowane.insertItem(id_pac,
+                    cel,
+                    spec,
+                    data
+            );
+            updateWizytyPlanowaneMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String id_pac = toStringArray(toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem()))[0];
-        String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
-        String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
-        String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
-        String data = toEmptyString(wizytyPlanowaneDataField.getText());
-        if (!Tables.wizyty_planowane.insertItem(id_pac,
-                cel,
-                spec,
-                data
-        )) {
-            showError();
-        }
-        updateWizytyPlanowaneMenuVolatile();
     }
 
     @FXML
     private void wizytyPlanowaneMenuUpdatePressed() {
-        if (wizytyPlanowaneBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (wizytyPlanowaneBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz wizytę");
+                return;
+            }
+            String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
+            String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
+            String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
+            String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
+            String data = toEmptyString(wizytyPlanowaneDataField.getText());
+            String interval = toEmptyString(wizytyPlanowaneSzacowanyCzasField.getText());
+            String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
+            Tables.wizyty_planowane.updateItem(fields[0],
+                    id_pac == null ? fields[1] : id_pac,
+                    id_lek == null ? fields[2] : id_lek,
+                    cel == null ? celNameToId(fields[3]) : celNameToId(cel),
+                    spec == null ? specNameToId(fields[4]) : specNameToId(spec),
+                    data == null ? fields[5] : data,
+                    interval == null ? fields[6] : interval
+            );
+            updateWizytyPlanowaneMenuVolatile();
+        } catch (SQLException e ) {
+            showError(e.getMessage());
         }
-        String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
-        String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
-        String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
-        String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
-        String data = toEmptyString(wizytyPlanowaneDataField.getText());
-        String interval = toEmptyString(wizytyPlanowaneSzacowanyCzasField.getText());
-        String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.wizyty_planowane.updateItem(fields[0],
-                id_pac == null ? fields[1] : id_pac,
-                id_lek == null ? fields[2] : id_lek,
-                cel == null ? celNameToId(fields[3]) : celNameToId(cel),
-                spec == null ? specNameToId(fields[4]) : specNameToId(spec),
-                data == null ? fields[5] : data,
-                interval == null ? fields[6] : interval
-        )) {
-            showError();
-        }
-        updateWizytyPlanowaneMenuVolatile();
     }
 
     @FXML
     public void wizytyPlanowaneMenuDeletePressed() {
-        for (Object o : wizytyPlanowaneList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                String id_wiz = toStringArray(b.getText())[0];
-                if (!Tables.wizyty_planowane.deleteItem(id_wiz)) {
-                    showError();
+        try {
+            for (Object o : wizytyPlanowaneList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    String id_wiz = toStringArray(b.getText())[0];
+                    Tables.wizyty_planowane.deleteItem(id_wiz);
                 }
             }
+            updateWizytyPlanowaneMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateWizytyPlanowaneMenuVolatile();
     }
 
     @FXML
     public void wizytyOdbyteMenuUpdatePressed() {
-        if (wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
-        }
-        String czas = toEmptyString(wizytyOdbyteOdbyteCzasField.getText());
-        String[] fields = toStringArray(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.wizyty_odbyte.updateItem(fields[0],
+        try {
+            if (wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz wizytę");
+                return;
+            }
+            String czas = toEmptyString(wizytyOdbyteOdbyteCzasField.getText());
+            String[] fields = toStringArray(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem().toString());
+            Tables.wizyty_odbyte.updateItem(fields[0],
                     fields[1],
                     fields[2],
                     fields[3],
                     fields[4],
                     fields[5],
                     czas == null ? fields[6] : czas
-        )) {
-            showError();
+            );
+            updateWizytyOdbyteMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateWizytyOdbyteMenuVolatile();
     }
 
     @FXML
     public void wizytyOdbyteMenuInsertPressed() {
-        if (wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz wizytę");
+                return;
+            }
+            String id_wiz = toStringArray(wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String czas = wizytyOdbytePlanowaneCzasField.getText();
+            Tables.wizyty_planowane.moveToWizytyOdbyte(id_wiz, czas);
+            updateWizytyOdbyteMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String id_wiz = toStringArray(wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String czas = wizytyOdbytePlanowaneCzasField.getText();
-        if (!Tables.wizyty_planowane.moveToWizytyOdbyte(id_wiz, czas)) {
-            showError();
-        }
-        updateWizytyOdbyteMenuVolatile();
     }
 
     @FXML
     private void skierowaniaMenuInsertPressed() {
-        if (skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ||
-                skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ||
+                    skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz specjalizację i cel");
+                return;
+            }
+            String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
+            String spec_id = specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
+            String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
+            String opis = toEmptyString(skierowaniaOpisDataField.getText());
+            Tables.skierowania.insertItem(wiz_id,
+                    spec_id,
+                    cel_id,
+                    opis
+            );
+            updateSkierowaniaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
-        String spec_id = specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
-        String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
-        String opis = toEmptyString(skierowaniaOpisDataField.getText());
-        if (!Tables.skierowania.insertItem(wiz_id,
-                spec_id,
-                cel_id,
-                opis
-        )) {
-            showError();
-        }
-        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void skierowaniaMenuUpdatePressed() {
-        if (skierowaniaBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (skierowaniaBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz skierowanie");
+                return;
+            }
+            String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
+            String spec_id = skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                    specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
+            String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
+            String opis = toEmptyString(skierowaniaOpisDataField.getText());
+            String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
+            Tables.skierowania.updateItem(fields[0],
+                    wiz_id == null ? fields[1] : wiz_id,
+                    spec_id == null ? fields[2] : spec_id,
+                    cel_id == null ? fields[3] : cel_id,
+                    opis == null ? fields[4] : opis
+            );
+            updateSkierowaniaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
-        String spec_id = skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
-        String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
-        String opis = toEmptyString(skierowaniaOpisDataField.getText());
-        String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.skierowania.updateItem(fields[0],
-                wiz_id == null ? fields[1] : wiz_id,
-                spec_id == null ? fields[2] : spec_id,
-                cel_id == null ? fields[3] : cel_id,
-                opis == null ? fields[4] : opis
-        )) {
-            showError();
-        }
-        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void skierowaniaMenuDeletePressed() {
-        for (Object o : skierowaniaList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.skierowania.deleteItem(toStringArray(b.getText())[0])) {
-                    showError();
+        try {
+            for (Object o : skierowaniaList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.skierowania.deleteItem(toStringArray(b.getText())[0]);
                 }
             }
+            updateSkierowaniaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void historiaMedycznaMenuInsertPressed() {
-        if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
-                historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
+                    historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz pacjenta i wydarzenie");
+                return;
+            }
+            String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String wydarzenie_id = toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String from = toEmptyString(historiaMedycznaOdDataField.getText());
+            String to = toEmptyString(historiaMedycznaDoDataField.getText());
+            String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
+            Tables.historia_medyczna.insertItem(pacjent_id,
+                    wydarzenie_id,
+                    id_wizyty,
+                    from,
+                    to
+            );
+            updateHistoriaMedycznaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String wydarzenie_id = toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String from = toEmptyString(historiaMedycznaOdDataField.getText());
-        String to = toEmptyString(historiaMedycznaDoDataField.getText());
-        String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
-        if (!Tables.historia_medyczna.insertItem(pacjent_id,
-                wydarzenie_id,
-                id_wizyty,
-                from,
-                to
-        )) {
-            showError();
-        }
-        updateHistoriaMedycznaMenuVolatile();
     }
 
     @FXML
     private void historiaMedycznaMenuUpdatePressed() {
-        if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz wpis historii");
+                return;
+            }
+            String[] fields = toStringArray(historiaMedycznaBox.getSelectionModel().getSelectedItem().toString());
+            String pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                    toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String wydarzenie_id = historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                    toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String from = toEmptyString(historiaMedycznaOdDataField.getText());
+            String to = toEmptyString(historiaMedycznaDoDataField.getText());
+            String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
+            Tables.historia_medyczna.updateItem(fields[0],
+                    fields[1],
+                    fields[3],
+                    pacjent_id == null ? fields[0] : pacjent_id,
+                    wydarzenie_id == null ? fields[1] : wydarzenie_id,
+                    id_wizyty == null ? fields[2] : id_wizyty,
+                    from == null ? fields[3] : from,
+                    to == null ? fields[4] : to
+            );
+            updateSkierowaniaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String[] fields = toStringArray(historiaMedycznaBox.getSelectionModel().getSelectedItem().toString());
-        String pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String wydarzenie_id = historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
-        String from = toEmptyString(historiaMedycznaOdDataField.getText());
-        String to = toEmptyString(historiaMedycznaDoDataField.getText());
-        String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
-        if (!Tables.historia_medyczna.updateItem(fields[0],
-                fields[1],
-                fields[3],
-                pacjent_id == null ? fields[0] : pacjent_id,
-                wydarzenie_id == null ? fields[1] : wydarzenie_id,
-                id_wizyty == null ? fields[2] : id_wizyty,
-                from == null ? fields[3] : from,
-                to == null ? fields[4] : to
-        )) {
-            showError();
-        }
-        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void historiaMedycznaMenuDeletePressed() {
-        for (Object o : historiaMedycznaList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                String[] fields = toStringArray(b.getText());
-                if (!Tables.historia_medyczna.deleteItem(fields[0], fields[1], fields[3])) {
-                    showError();
+        try {
+            for (Object o : historiaMedycznaList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    String[] fields = toStringArray(b.getText());
+                    Tables.historia_medyczna.deleteItem(fields[0], fields[1], fields[3]);
                 }
             }
+            updateSkierowaniaMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateSkierowaniaMenuVolatile();
     }
 
     @FXML
     private void ankietyMenuInsertPressed() {
-        String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
-        String data = toEmptyString(ankietyDataDataField.getText());
-        String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
-        String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
-        String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
-        String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
-        if (!Tables.ankiety_lekarze.insertItem(id_lekarza,
-                data,
-                up,
-                op,
-                inf,
-                dok
-        )) {
-            showError();
+        try {
+            String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
+            String data = toEmptyString(ankietyDataDataField.getText());
+            String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
+            String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
+            String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
+            String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
+            Tables.ankiety_lekarze.insertItem(id_lekarza,
+                    data,
+                    up,
+                    op,
+                    inf,
+                    dok
+            );
+            updateAnkietyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateAnkietyMenuVolatile();
     }
 
     @FXML
     private void ankietyMenuUpdatePressed() {
-        if (ankietyBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (ankietyBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz ankietę");
+                return;
+            }
+            String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
+            String data = toEmptyString(ankietyDataDataField.getText());
+            String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
+            String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
+            String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
+            String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
+            String[] fields = toStringArray(ankietyBox.getSelectionModel().getSelectedItem().toString());
+            Tables.ankiety_lekarze.updateItem(fields[0],
+                    id_lekarza == null ? fields[1] : id_lekarza,
+                    data == null ? fields[2] : data,
+                    up == null ? fields[3] : up,
+                    op == null ? fields[4] : op,
+                    inf == null ? fields[5] : inf,
+                    dok == null ? fields[6] : dok
+            );
+            updateAnkietyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
-        String data = toEmptyString(ankietyDataDataField.getText());
-        String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
-        String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
-        String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
-        String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
-        String[] fields = toStringArray(ankietyBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.ankiety_lekarze.updateItem(fields[0],
-                id_lekarza == null ? fields[1] : id_lekarza,
-                data == null ? fields[2] : data,
-                up == null ? fields[3] : up,
-                op == null ? fields[4] : op,
-                inf == null ? fields[5] : inf,
-                dok == null ? fields[6] : dok
-        )) {
-            showError();
-        }
-        updateAnkietyMenuVolatile();
     }
 
     @FXML
     private void ankietyMenuDeletePressed() {
-        for (Object o : ankietyList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.ankiety_lekarze.deleteItem(toStringArray(b.getText())[0])) {
-                    showError();
+        try {
+            for (Object o : ankietyList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.ankiety_lekarze.deleteItem(toStringArray(b.getText())[0]);
                 }
             }
+            updateAnkietyMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateAnkietyMenuVolatile();
     }
 
     @FXML
     private void roleMenuInsertPressed() {
-        if (!Tables.role.insertItem(toEmptyString(roleNazwaField.getText()))) {
-            showError();
+        try {
+            Tables.role.insertItem(toEmptyString(roleNazwaField.getText()));
+            updateRoleMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateRoleMenuVolatile();
     }
 
     @FXML
     private void roleMenuUpdatePressed() {
-        if (roleBox.getSelectionModel().getSelectedItem() == null) {
-            return;
+        try {
+            if (roleBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz rolę");
+                return;
+            }
+            String[] fields = toStringArray(roleBox.getSelectionModel().getSelectedItem().toString());
+            Tables.role.updateItem(fields[1],
+                    roleNazwaField.getText()
+            );
+            updateRoleMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String[] fields = toStringArray(roleBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.role.updateItem(fields[1],
-                roleNazwaField.getText()
-        )) {
-            showError();
-        }
-        updateRoleMenuVolatile();
     }
 
     @FXML
     private void roleMenuDeletePressed() {
-        for (Object o : roleList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.role.deleteItem(toStringArray(b.getText())[1])) {
-                    showError();
+        try {
+            for (Object o : roleList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.role.deleteItem(toStringArray(b.getText())[1]);
                 }
             }
+            updateRoleMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateRoleMenuVolatile();
     }
 
     @FXML
     private void specjalizacjeMenuInsertPressed() {
-        if (!Tables.specjalizacje.insertItem(toEmptyString(specjalizacjeNazwaField.getText()))) {
-            showError();
+        try {
+            Tables.specjalizacje.insertItem(toEmptyString(specjalizacjeNazwaField.getText()));
+            updateSpecjalizacjeMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void specjalizacjeMenuUpdatePressed() {
-        if (specjalizacjeBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (specjalizacjeBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz specjalizację");
+                return;
+            }
+            String[] fields = toStringArray(specjalizacjeBox.getSelectionModel().getSelectedItem().toString());
+            Tables.specjalizacje.updateItem(fields[1],
+                    specjalizacjeNazwaField.getText()
+            );
+            updateSpecjalizacjeMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String[] fields = toStringArray(specjalizacjeBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.specjalizacje.updateItem(fields[1],
-                specjalizacjeNazwaField.getText()
-        )) {
-            showError();
-        }
-        updateSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void specjalizacjeMenuDeletePressed() {
-        for (Object o : specjalizacjeList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.specjalizacje.deleteItem(toStringArray(b.getText())[1])) {
-                    showError();
+        try {
+            for (Object o : specjalizacjeList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.specjalizacje.deleteItem(toStringArray(b.getText())[1]);
                 }
             }
+            updateSpecjalizacjeMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateSpecjalizacjeMenuVolatile();
     }
 
     @FXML
     private void wydarzeniaMedyczneMenuInsertPressed() {
-        if (!Tables.wydarzenia_medyczne.insertItem(toEmptyString(wydarzeniaMedyczneNazwaField.getText()))) {
-            showError();
+        try {
+            Tables.wydarzenia_medyczne.insertItem(toEmptyString(wydarzeniaMedyczneNazwaField.getText()));
+            updateWydarzeniaMedyczneMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateWydarzeniaMedyczneMenuVolatile();
     }
 
     @FXML
     private void wydarzeniaMedyczneMenuUpdatePressed() {
-        if (wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz wydarzenie");
+                return;
+            }
+            String[] fields = toStringArray(wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem().toString());
+            Tables.wydarzenia_medyczne.updateItem(fields[1],
+                    wydarzeniaMedyczneNazwaField.getText()
+            );
+            updateWydarzeniaMedyczneMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String[] fields = toStringArray(wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.wydarzenia_medyczne.updateItem(fields[1],
-                wydarzeniaMedyczneNazwaField.getText()
-        )) {
-            showError();
-        }
-        updateWydarzeniaMedyczneMenuVolatile();
     }
 
     @FXML
     private void wydarzeniaMedyczneMenuDeletePressed() {
-        for (Object o : wydarzeniaMedyczneList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                if (!Tables.wydarzenia_medyczne.deleteItem(toStringArray(b.getText())[1])) {
-                    showError();
+        try {
+            for (Object o : wydarzeniaMedyczneList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.wydarzenia_medyczne.deleteItem(toStringArray(b.getText())[1]);
                 }
             }
+            updateWydarzeniaMedyczneMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateWydarzeniaMedyczneMenuVolatile();
     }
 
     @FXML
     private void celeWizytMenuInsertPressed() {
-        if (!Tables.cele_wizyty.insertItem(toEmptyString(celeWizytNazwaField.getText()))) {
-            showError();
+        try {
+            Tables.cele_wizyty.insertItem(toEmptyString(celeWizytNazwaField.getText()));
+            updateCeleWizytMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateCeleWizytMenuVolatile();
     }
 
     @FXML
     private void celeWizytMenuUpdatePressed() {
-        if (celeWizytBox.getSelectionModel().getSelectedItem() == null) {
-            showError();
-            return;
+        try {
+            if (celeWizytBox.getSelectionModel().getSelectedItem() == null) {
+                showError("Wybierz cel");
+                return;
+            }
+            String[] fields = toStringArray(celeWizytBox.getSelectionModel().getSelectedItem().toString());
+            Tables.cele_wizyty.updateItem(fields[1],
+                    celeWizytNazwaField.getText()
+            );
+            updateCeleWizytMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        String[] fields = toStringArray(celeWizytBox.getSelectionModel().getSelectedItem().toString());
-        if (!Tables.cele_wizyty.updateItem(fields[1],
-                celeWizytNazwaField.getText()
-        )) {
-             showError();
-        }
-        updateCeleWizytMenuVolatile();
     }
 
     @FXML
     private void celeWizytMenuDeletePressed() {
-        for (Object o : celeWizytList.getItems()) {
-            CheckBox b = (CheckBox) o;
-            if (b.isSelected()) {
-                 if (!Tables.cele_wizyty.deleteItem(toStringArray(b.getText())[1])) {
-                     showError();
-                 }
+        try {
+            for (Object o : celeWizytList.getItems()) {
+                CheckBox b = (CheckBox) o;
+                if (b.isSelected()) {
+                    Tables.cele_wizyty.deleteItem(toStringArray(b.getText())[1]);
+                }
             }
+            updateCeleWizytMenuVolatile();
+        } catch (SQLException e) {
+            showError(e.getMessage());
         }
-        updateCeleWizytMenuVolatile();
     }
 
     private ArrayList<ArrayList<String>> filterTable(ArrayList<ArrayList<String>> rows, String... cols) {
@@ -1689,51 +1909,98 @@ public class GUIController {
     }
 
     private ArrayList<ArrayList<String>> getSmallLekarze() {
-        return Database.executeQuery("SELECT id_pracownika, imie, nazwisko from pracownicy p " +
-                "where p.id_pracownika in ( " +
-                "select pr.id_pracownika " +
-                "from pracownicy_role pr " +
-                "where pr.id_roli = ( " +
-                "select r.id_roli " +
-                "from role r " +
-                "where r.nazwa = 'Lekarz'));");
+        try {
+            return Database.executeQuery("SELECT id_pracownika, imie, nazwisko from pracownicy p " +
+                    "where p.id_pracownika in ( " +
+                    "select pr.id_pracownika " +
+                    "from pracownicy_role pr " +
+                    "where pr.id_roli = ( " +
+                    "select r.id_roli " +
+                    "from role r " +
+                    "where r.nazwa = 'Lekarz'))" +
+                    "order by p.id_pracownika;");
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
     }
 
     private ArrayList<ArrayList<String>> getSmallPacjenci() {
-        return filterTable(Tables.pacjenci.getContents(1), "id_pacjenta", "imie", "nazwisko");
+        try {
+            return filterTable(Tables.pacjenci.getContents(1), "id_pacjenta", "imie", "nazwisko");
+        } catch (SQLException e){
+            showError(e.getMessage());
+            return null;
+        }
     }
 
+    private ArrayList<ArrayList<String>> getSpecLekarza(String id_lek) {
+        try {
+            return Database.executeQuery(
+                    "select s.nazwa " +
+                            "from lekarze_specjalizacje ls " +
+                            "join specjalizacje s " +
+                            "on ls.id_specjalizacji = s.id_specjalizacji " +
+                            "where ls.id_lekarza = " + id_lek +
+                            " order by s.nazwa;"
+            );
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
+    }
     private String celNameToId(String cel) {
-        if (cel == null) return null;
-        return Database.executeQuery(
-                "select c.id_celu " +
-                        "from cele c " +
-                        "where c.nazwa = " +
-                        cel +
-                        ";"
-        ).get(1).get(0);
+        try {
+            if (cel == null) {
+                return null;
+            }
+            return Database.executeQuery(
+                    "select c.id_celu " +
+                            "from cele c " +
+                            "where c.nazwa = " +
+                            cel +
+                            ";"
+            ).get(1).get(0);
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
     }
 
     private String specNameToId(String spec) {
-        if (spec == null) return null;
-        return Database.executeQuery(
-                "select s.id_specjalizacji " +
-                        "from specjalizacje s " +
-                        "where s.nazwa = '" +
-                        spec + "'" +
-                        ";"
-        ).get(1).get(0);
+        try {
+            if (spec == null) {
+                return null;
+            }
+            return Database.executeQuery(
+                    "select s.id_specjalizacji " +
+                            "from specjalizacje s " +
+                            "where s.nazwa = '" +
+                            spec + "'" +
+                            ";"
+            ).get(1).get(0);
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
     }
 
     public String wydarzenieNameToId(String wydarzenie) {
-        if (wydarzenie == null) return null;
-        return Database.executeQuery(
-                "select w.id_wydarzenia " +
-                        "from wydarzenia_medyczne w " +
-                        "where w.nazwa = " +
-                        wydarzenie +
-                        ";"
-        ).get(1).get(0);
+        try {
+            if (wydarzenie == null) {
+                return null;
+            }
+            return Database.executeQuery(
+                    "select w.id_wydarzenia " +
+                            "from wydarzenia_medyczne w " +
+                            "where w.nazwa = " +
+                            wydarzenie +
+                            ";"
+            ).get(1).get(0);
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
     }
 
     private String toNullString(Object o) {
@@ -1744,11 +2011,13 @@ public class GUIController {
         return s.equals("") ? null : s;
     }
 
-    private void showError() {
+    private void showError(String mess) {
         new Thread(() -> {
+            Platform.runLater(() ->errorMessage.setWrapText(true));
+            Platform.runLater(() ->errorMessage.setText(mess));
             Platform.runLater(() -> errorMessage.setVisible(true));
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2000 + 50*mess.length());
             } catch (InterruptedException e) {
                 Platform.runLater(() -> errorMessage.setVisible(false));
                 return;
