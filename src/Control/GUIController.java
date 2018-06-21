@@ -1081,6 +1081,21 @@ public class GUIController {
     }
 
     @FXML
+    public String zdepolonizujCeche(String s) {
+        switch (s) {
+            case "uprzejmość":
+                return "uprzejmosc";
+            case "opanowanie":
+                return "opanowanie";
+            case "informacyjność":
+                return "informacyjnosc";
+            case "dokładność badań":
+                return "dokladnosc_badan";
+        }
+        return null;
+    }
+
+    @FXML
     private void showRankingPressed() {
         try {
             if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
@@ -1111,7 +1126,7 @@ public class GUIController {
                     showTable(Tables.ankiety_lekarze.bestIn(
                             toEmptyString(rankingiOdField.getText()),
                             toEmptyString(rankingiDoField.getText()),
-                            rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString()
+                            zdepolonizujCeche(rankingiOpcjeBox.getSelectionModel().getSelectedItem().toString())
                     ));
                     break;
             }
