@@ -655,3 +655,26 @@ CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
 
 CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
   WHERE OLD.id_roli = 1 DO INSTEAD NOTHING;
+
+CREATE OR REPLACE FUNCTION historia_check()
+  RETURNS TRIGGER AS $historia_check$
+BEGIN
+  IF NEW.od < (SELECT data_urodzenia
+               FROM pacjenci
+               WHERE id_pacjenta = NEW.id_pacjenta)
+  THEN RAISE EXCEPTION 'Pacjent jeszcze nie byl urodzony';
+  END IF;
+  IF NEW.wizyta IS NOT NULL AND (SELECT id_pacjenta
+                                 FROM wizyty_odbyte
+                                 WHERE id_wizyty = NEW.wizyta) <> NEW.id_pacjenta
+  THEN RAISE EXCEPTION 'Pacjent nie byl na wizycie';
+  END IF;
+  RETURN NEW;
+END;
+$historia_check$
+language plpgsql;
+
+CREATE TRIGGER historia_check
+  BEFORE INSERT OR UPDATE
+  ON historia_medyczna
+  FOR EACH ROW EXECUTE PROCEDURE historia_check();
