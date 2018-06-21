@@ -27,7 +27,7 @@ public class Skierowania implements Table {
 	}
 	
 	public boolean updateItem (String id, String newWizytaId, String newSpecId, String newCelId, String newDesc) {
-		String sql = "UPDATE skierowania SET (id_wizyty, id_specjalizacji, id_celu, opis) = ("
+		String sql = "UPDATE skierowania SET (wizyta, specjalizacja, cel_skierowania, opis) = ("
 				+ newWizytaId + ", "
 				+ newSpecId + ", "
 				+ newCelId + ", "

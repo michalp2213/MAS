@@ -7,7 +7,7 @@ public class PacjenciLPK implements Table {
     @Override
     public ArrayList<ArrayList<String>> getContents(int... args) {	
 
-		String sql = "SELECT * FROM pacjenci_lpk ORDER BY ";
+		String sql = "SELECT * FROM pacjenci_lpk";
 		
 		if (args.length > 0)
 			sql += " ORDER BY ";
@@ -41,7 +41,7 @@ public class PacjenciLPK implements Table {
     }
 
     public boolean insertItem (String id_pacjenta, String id_lekarza) {
-        String sql = "INSERT INTO pacjenci VALUES ("
+        String sql = "INSERT INTO pacjenci_lpk VALUES ("
                 + "'" + id_pacjenta + "', "
                 + "'" + id_lekarza + "', "
                 + "now(), NULL);";
