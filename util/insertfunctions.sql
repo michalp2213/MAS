@@ -577,10 +577,15 @@ WHERE id_pracownika = OLD.id_pracownika;
 CREATE OR REPLACE FUNCTION ankiety_check()
   RETURNS TRIGGER AS $ankety_check$
 BEGIN
-  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.data, NULL)
-  THEN RETURN NEW;
-  ELSE RAISE EXCEPTION 'Nie aktywny lekarz';
+  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.data, NULL) = FALSE
+  THEN RAISE EXCEPTION 'Nie aktywny lekarz';
   END IF;
+  IF (SELECT count(*)
+      FROM wizyty_odbyte
+      WHERE DATE(data) = NEW.data) = 0
+  THEN RAISE EXCEPTION 'Nie mial wizyty';
+  END IF;
+  RETURN NEW;
 END;
 $ankety_check$
 language plpgsql;

@@ -26,7 +26,7 @@ INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VAL
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (18, 53, 26, '2003-04-06 00:00:00.000000', '2006-12-26 00:00:00.000000');
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (18, 74, 27, '2016-02-09 00:00:00.000000', '2019-06-22 00:00:00.000000');
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (19, 48, 28, '2009-07-23 00:00:00.000000', '2012-12-05 00:00:00.000000');
-INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (20, 12, 29, '2018-08-20 00:00:00.000000', '2021-01-09 00:00:00.000000');
+INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (20, 12, 29, '2017-08-20 00:00:00.000000', '2021-01-09 00:00:00.000000');
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (20, 72, 30, '2003-11-28 00:00:00.000000', '2008-07-30 00:00:00.000000');
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (20, 61, 31, '2015-06-26 00:00:00.000000', '2018-07-06 00:00:00.000000');
 INSERT INTO historia_medyczna (id_pacjenta, id_wydarzenia, wizyta, od, "do") VALUES (21, 2, 32, '2003-12-09 00:00:00.000000', '2006-08-01 00:00:00.000000');
