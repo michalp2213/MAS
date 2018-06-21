@@ -886,8 +886,8 @@ public class GUIController {
 
     private void updateWizytyPlanowaneMenuVolatile() {
         try {
-            updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(5));
-            updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(5));
+            updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(6));
+            updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(6));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -907,8 +907,8 @@ public class GUIController {
 
     private void updateWizytyOdbyteMenuVolatile() {
         try {
-            updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(5));
-            updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(5));
+            updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(6));
+            updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(6));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -1365,8 +1365,8 @@ public class GUIController {
             }
             String id_pac = toStringArray(toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem()))[0];
             String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
-            String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
-            String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
+            String cel = cutBraces(toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem()));
+            String spec = cutBraces(toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
             String data = toEmptyString(wizytyPlanowaneDataField.getText());
             Tables.wizyty_planowane.insertItem(id_pac,
                     cel,
@@ -1388,8 +1388,8 @@ public class GUIController {
             }
             String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
             String id_lek = toNullString(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem());
-            String cel = toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem());
-            String spec = toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem());
+            String cel = cutBraces(toNullString(wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem()));
+            String spec = cutBraces(toNullString(wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
             String data = toEmptyString(wizytyPlanowaneDataField.getText());
             String interval = toEmptyString(wizytyPlanowaneSzacowanyCzasField.getText());
             String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
@@ -1471,8 +1471,8 @@ public class GUIController {
                 return;
             }
             String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
-            String spec_id = specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
-            String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
+            String spec_id = specNameToId(cutBraces(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem())));
+            String cel_id = celNameToId(cutBraces(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem())));
             String opis = toEmptyString(skierowaniaOpisDataField.getText());
             Tables.skierowania.insertItem(wiz_id,
                     spec_id,
@@ -1494,8 +1494,8 @@ public class GUIController {
             }
             String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
             String spec_id = skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                    specNameToId(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem()));
-            String cel_id = celNameToId(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem()));
+                    specNameToId(cutBraces(toNullString(skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem())));
+            String cel_id = celNameToId(cutBraces(toNullString(skierowaniaCeleComboBox.getSelectionModel().getSelectedItem())));
             String opis = toEmptyString(skierowaniaOpisDataField.getText());
             String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
             Tables.skierowania.updateItem(fields[0],
@@ -2009,6 +2009,13 @@ public class GUIController {
 
     private String toEmptyString(String s) {
         return s.equals("") ? null : s;
+    }
+
+    private String cutBraces(String s) {
+        if (s == null){
+            return null;
+        }
+        return s.substring(1, s.length() - 1);
     }
 
     private void showError(String mess) {
