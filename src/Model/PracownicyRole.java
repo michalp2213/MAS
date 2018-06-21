@@ -23,6 +23,26 @@ public class PracownicyRole implements Table {
 		return Database.executeQuery(sql);
 	}
 
+	public ArrayList<ArrayList<String>> niceGetContents(int...args) throws SQLException {	
+
+		String sql = "SELECT (p.imie || ' ' || p.nazwisko || ' (' || p.id_pracownika || ')') AS pracownik, "
+				+ "string_agg(r.nazwa, ', ') AS specjalizacje "
+				+ "FROM pracownicy_role pr natural join role r natural join pracownicy p "
+				+ "GROUP BY p.id_pracownika";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
+	}
+
 	public boolean deleteItem (String roleName, String pracownikId) throws SQLException {
 		String sql = "DELETE FROM pracownicy_role WHERE "
 				+ "id_pracownika = " + pracownikId

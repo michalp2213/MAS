@@ -22,16 +22,38 @@ public class AnkietyLekarze implements Table {
 		return Database.executeQuery(sql);
 	}
 	
+	public ArrayList<ArrayList<String>> niceGetContents(int...args) throws SQLException {
+		String sql = "SELECT id_ankiety, "
+				+ "(SELECT imie || ' ' || nazwisko || ' (' || id_pracownika || ')' FROM pracownicy "
+					+ "WHERE id_pracownika = ankiety_lekarze.id_lekarza) AS lekarz, "
+				+ "data, "
+				+ "uprzejmosc, "
+				+ "opanowanie, "
+				+ "informacyjnosc, "
+				+ "dokladnosc_badan FROM ankiety_lekarze";
+			
+		if (args.length > 0)
+			sql += " ORDER BY ";
+		
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+
+		return Database.executeQuery(sql);
+	}
+	
 	public boolean deleteItem (String id) throws SQLException {
 		return Database.executeUpdate("DELETE FROM ankiety_lekarze WHERE id_ankiety = " + id + ";") != 0;
 	}
 	
 	public boolean updateItem (String id, String newLekarzId, String newDate, String newUprzejmosc, String newOpanowanie, String newInformacyjnosc, String newDokladnosc_badan) throws SQLException {
-		String strNewDate = newDate == null ? "NULL" : "'" + newDate + "'";
 		String sql = "UPDATE ankiety_lekarze SET "
 				+ "(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) = ("
 				+ newLekarzId + ", "
-				+ strNewDate + ", "
+				+ Tables.nullCheck(newDate) + ", "
 				+ newUprzejmosc + ", "
 				+ newOpanowanie + ", "
 				+ newInformacyjnosc + ", "
@@ -41,10 +63,9 @@ public class AnkietyLekarze implements Table {
 	}
 	
 	public boolean insertItem (String lekarzId, String date, String uprzejmosc, String opanowanie, String informacyjnosc, String dokladnosc_badan) throws SQLException {
-		String strDate = date == null ? "NULL" : "'" + date + "'";
 		String sql = "INSERT INTO ankiety_lekarze(id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ("
 				+ lekarzId + ","
-				+  strDate + ","
+				+ Tables.nullCheck(date) + ","
 				+ uprzejmosc + ","
 				+ opanowanie + ","
 				+ informacyjnosc + ","
@@ -53,22 +74,21 @@ public class AnkietyLekarze implements Table {
 	}
 	
 	public ArrayList<ArrayList<String>> alphabeticRanking (String from, String to) throws SQLException {
-		String fromStr = from == null ? "NULL" : "'" + from + "'";
-		String toStr = to == null ? "NULL" : "'" + to + "'";
-		return Database.executeQuery("SELECT * from ranking_alfabetyczny (" + fromStr + ", " + toStr + ");");
+		return Database.executeQuery("SELECT * from ranking_alfabetyczny (" + Tables.nullCheck(from) + ", " + Tables.nullCheck(to) + ");");
 	}
 	
 	public ArrayList<ArrayList<String>> bestIn (String from, String to, String cecha) throws SQLException {
-		String fromStr = from == null ? "NULL" : "'" + from + "'";
-		String toStr = to == null ? "NULL" : "'" + to + "'";
-		String cechaStr = cecha == null ? "NULL" : "'" + cecha + "'";
-		return Database.executeQuery("SELECT * from ranking_cecha (" + fromStr + ", " + toStr + ", " + cechaStr + ");");
+		return Database.executeQuery("SELECT * from ranking_cecha (" 
+					+ Tables.nullCheck(from) + ", " 
+					+ Tables.nullCheck(to) + ", " 
+					+ Tables.nullCheck(cecha) + ");");
 	}
 	
 	public ArrayList<ArrayList<String>> bestAvg (String from, String to, String specjalizacjaId) throws SQLException {
-		String fromStr = from == null ? "NULL" : "'" + from + "'";
-		String toStr = to == null ? "NULL" : "'" + to + "'";
-		return Database.executeQuery("SELECT * from ranking_specjalizacje (" + fromStr + ", " + toStr + ", " + specjalizacjaId + ");");
+		return Database.executeQuery("SELECT * from ranking_specjalizacje (" 
+						+ Tables.nullCheck(from) + ", " 
+						+ Tables.nullCheck(to) + ", " 
+						+ specjalizacjaId + ");");
 	}
 
 }

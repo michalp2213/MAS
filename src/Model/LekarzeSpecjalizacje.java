@@ -23,13 +23,32 @@ public class LekarzeSpecjalizacje implements Table {
 		return Database.executeQuery(sql);
 	}
 	
+	public ArrayList<ArrayList<String>> niceGetContents(int... args) throws SQLException {	
+
+		String sql = "SELECT (p.imie || ' ' || p.nazwisko || ' (' || p.id_pracownika || ')') AS lekarz, "
+				+ "string_agg(s.nazwa, ', ') AS specjalizacje "
+				+ "FROM lekarze_specjalizacje ls natural join specjalizacje s join pracownicy p on ls.id_lekarza = p.id_pracownika "
+				+ "GROUP BY p.id_pracownika";
+		
+		if (args.length > 0)
+			sql += " ORDER BY ";
+				
+		for (int i = 0; i < args.length; ++ i) {
+			sql += args [i];
+			if (i != args.length - 1)
+				sql += ", ";
+		}
+		sql += ";";
+	
+		return Database.executeQuery(sql);
+	}
+	
 	public boolean deleteItem (String specjalizacjaName, String lekarzId) throws SQLException {
-		String specjalizacjaStr = specjalizacjaName == null ? "NULL" : "'" + specjalizacjaName + "'";
 		String sql = "DELETE FROM lekarze_specjalizacje WHERE "
 				+ "id_lekarza = " + lekarzId
 				+ " AND (SELECT nazwa FROM specjalizacje WHERE "
 					+ "id_specjalizacji = lekarze_specjalizacje.id_specjalizacji"
-				+ ") = " + specjalizacjaStr + ";";
+				+ ") = " + Tables.nullCheck(specjalizacjaName) + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	

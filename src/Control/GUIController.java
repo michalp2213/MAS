@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GUIController {
     public TableView tableView;
@@ -646,7 +648,7 @@ public class GUIController {
     public void showTablePracownicyRole() {
         try {
         hideAllMenus();
-        showTable(Tables.pracownicy_role.getContents(1));
+        showTable(Tables.pracownicy_role.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -656,7 +658,7 @@ public class GUIController {
     public void showTableLekarzeSpecjalizacje() {
         try {
         hideAllMenus();
-        showTable(Tables.lekarze_specjalizacje.getContents(1));
+        showTable(Tables.lekarze_specjalizacje.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -666,7 +668,7 @@ public class GUIController {
     public void showTableLPK() {
         try {
         hideAllMenus();
-        showTable(Tables.pacjenci_lpk.getContents(1));
+        showTable(Tables.pacjenci_lpk.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -676,7 +678,7 @@ public class GUIController {
     public void showTableWizytyPlanowane() {
         try {
         hideAllMenus();
-        showTable(Tables.wizyty_planowane.getContents(5));
+        showTable(Tables.wizyty_planowane.niceGetContents(5));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -686,7 +688,7 @@ public class GUIController {
     public void showTableWizytyOdbyte() {
         try {
         hideAllMenus();
-        showTable(Tables.wizyty_odbyte.getContents(5));
+        showTable(Tables.wizyty_odbyte.niceGetContents(5));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -696,7 +698,7 @@ public class GUIController {
     public void showTableSkierowania() {
         try {
         hideAllMenus();
-        showTable(Tables.skierowania.getContents(1));
+        showTable(Tables.skierowania.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -706,7 +708,7 @@ public class GUIController {
     public void showTableHistoriaMedyczna() {
         try {
         hideAllMenus();
-        showTable(Tables.historia_medyczna.getContents(1));
+        showTable(Tables.historia_medyczna.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -716,7 +718,7 @@ public class GUIController {
     public void showTableAnkiety() {
         try {
         hideAllMenus();
-        showTable(Tables.ankiety_lekarze.getContents(1));
+        showTable(Tables.ankiety_lekarze.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -863,7 +865,7 @@ public class GUIController {
 
     private void updateLPKMenuVolatile() {
         try {
-            updateListView(LPKList, Tables.pacjenci_lpk.getContents(1));
+            updateListView(LPKList, Tables.pacjenci_lpk.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -886,8 +888,8 @@ public class GUIController {
 
     private void updateWizytyPlanowaneMenuVolatile() {
         try {
-            updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(6));
-            updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.getContents(6));
+            updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.niceGetContents(6));
+            updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.niceGetContents(6));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -907,8 +909,8 @@ public class GUIController {
 
     private void updateWizytyOdbyteMenuVolatile() {
         try {
-            updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.getContents(6));
-            updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.getContents(6));
+            updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.niceGetContents(6));
+            updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.niceGetContents(6));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -940,8 +942,8 @@ public class GUIController {
 
     private void updateSkierowaniaMenuVolatile() {
         try {
-            updateListView(skierowaniaList, Tables.skierowania.getContents(1));
-            updateComboBox(skierowaniaBox, Tables.skierowania.getContents(1));
+            updateListView(skierowaniaList, Tables.skierowania.niceGetContents(1));
+            updateComboBox(skierowaniaBox, Tables.skierowania.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -959,8 +961,8 @@ public class GUIController {
 
     private void updateHistoriaMedycznaMenuVolatile() {
         try {
-            updateListView(historiaMedycznaList, Tables.historia_medyczna.getContents(1));
-            updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.getContents(1));
+            updateListView(historiaMedycznaList, Tables.historia_medyczna.niceGetContents(1));
+            updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -978,8 +980,8 @@ public class GUIController {
 
     private void updateAnkietyMenuVolatile() {
         try {
-            updateListView(ankietyList, Tables.ankiety_lekarze.getContents(1));
-            updateComboBox(ankietyBox, Tables.ankiety_lekarze.getContents(1));
+            updateListView(ankietyList, Tables.ankiety_lekarze.niceGetContents(1));
+            updateComboBox(ankietyBox, Tables.ankiety_lekarze.niceGetContents(1));
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -1343,7 +1345,7 @@ public class GUIController {
             for (Object o : LPKList.getItems()) {
                 CheckBox b = (CheckBox) o;
                 if (b.isSelected()) {
-                    String id_pac = toStringArray(b.getText())[0];
+                    String id_pac = nicePersonToId(toStringArray(b.getText())[0]);
                     String data = toStringArray(b.getText())[2];
                     Tables.pacjenci_lpk.deleteItem(id_pac, data);
                 }
@@ -1394,8 +1396,8 @@ public class GUIController {
             String interval = toEmptyString(wizytyPlanowaneSzacowanyCzasField.getText());
             String[] fields = toStringArray(wizytyPlanowaneBox.getSelectionModel().getSelectedItem().toString());
             Tables.wizyty_planowane.updateItem(fields[0],
-                    id_pac == null ? fields[1] : id_pac,
-                    id_lek == null ? fields[2] : id_lek,
+                    id_pac == null ? nicePersonToId(fields[1]) : toStringArray(id_pac)[0],
+                    id_lek == null ? nicePersonToId(fields[2]) : toStringArray(id_lek)[0],
                     cel == null ? celNameToId(fields[3]) : celNameToId(cel),
                     spec == null ? specNameToId(fields[4]) : specNameToId(spec),
                     data == null ? fields[5] : data,
@@ -1433,10 +1435,10 @@ public class GUIController {
             String czas = toEmptyString(wizytyOdbyteOdbyteCzasField.getText());
             String[] fields = toStringArray(wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem().toString());
             Tables.wizyty_odbyte.updateItem(fields[0],
-                    fields[1],
-                    fields[2],
-                    fields[3],
-                    fields[4],
+                    nicePersonToId(fields[1]),
+                    nicePersonToId(fields[2]),
+                    celNameToId(fields[3]),
+                    specNameToId(fields[4]),
                     fields[5],
                     czas == null ? fields[6] : czas
             );
@@ -1500,8 +1502,8 @@ public class GUIController {
             String[] fields = toStringArray(skierowaniaBox.getSelectionModel().getSelectedItem().toString());
             Tables.skierowania.updateItem(fields[0],
                     wiz_id == null ? fields[1] : wiz_id,
-                    spec_id == null ? fields[2] : spec_id,
-                    cel_id == null ? fields[3] : cel_id,
+                    spec_id == null ? specNameToId(fields[2]) : spec_id,
+                    cel_id == null ? celNameToId(fields[3]) : cel_id,
                     opis == null ? fields[4] : opis
             );
             updateSkierowaniaMenuVolatile();
@@ -1534,7 +1536,7 @@ public class GUIController {
                 return;
             }
             String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
-            String wydarzenie_id = toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String wydarzenie_id = wydarzenieNameToId(toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0]);
             String from = toEmptyString(historiaMedycznaOdDataField.getText());
             String to = toEmptyString(historiaMedycznaDoDataField.getText());
             String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
@@ -1561,20 +1563,20 @@ public class GUIController {
             String pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null :
                     toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
             String wydarzenie_id = historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                    toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+                    wydarzenieNameToId(toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0]);
             String from = toEmptyString(historiaMedycznaOdDataField.getText());
             String to = toEmptyString(historiaMedycznaDoDataField.getText());
             String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
-            Tables.historia_medyczna.updateItem(fields[0],
-                    fields[1],
+            Tables.historia_medyczna.updateItem(nicePersonToId(fields[0]),
+                    wydarzenieNameToId(fields[1]),
                     fields[3],
-                    pacjent_id == null ? fields[0] : pacjent_id,
-                    wydarzenie_id == null ? fields[1] : wydarzenie_id,
+                    pacjent_id == null ? nicePersonToId(fields[0]) : pacjent_id,
+                    wydarzenie_id == null ? wydarzenieNameToId(fields[1]) : wydarzenie_id,
                     id_wizyty == null ? fields[2] : id_wizyty,
                     from == null ? fields[3] : from,
                     to == null ? fields[4] : to
             );
-            updateSkierowaniaMenuVolatile();
+            updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -1587,10 +1589,10 @@ public class GUIController {
                 CheckBox b = (CheckBox) o;
                 if (b.isSelected()) {
                     String[] fields = toStringArray(b.getText());
-                    Tables.historia_medyczna.deleteItem(fields[0], fields[1], fields[3]);
+                    Tables.historia_medyczna.deleteItem(nicePersonToId(fields[0]), wydarzenieNameToId(fields[1]), fields[3]);
                 }
             }
-            updateSkierowaniaMenuVolatile();
+            updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -1633,7 +1635,7 @@ public class GUIController {
             String dok = toNullString(ankietyDokladnoscBadanComboBox.getSelectionModel().getSelectedItem());
             String[] fields = toStringArray(ankietyBox.getSelectionModel().getSelectedItem().toString());
             Tables.ankiety_lekarze.updateItem(fields[0],
-                    id_lekarza == null ? fields[1] : id_lekarza,
+                    id_lekarza == null ? nicePersonToId(fields[1]) : id_lekarza,
                     data == null ? fields[2] : data,
                     up == null ? fields[3] : up,
                     op == null ? fields[4] : op,
@@ -1852,6 +1854,18 @@ public class GUIController {
         return toReturn;
     }
 
+    private boolean isInteger (String s) {
+        if (s == null || s.length() >= 9) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (!(s.charAt(i) <= '9' && s.charAt(i) >= '0')){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void showTable(ArrayList<ArrayList<String>> rows) {
         tableView.getItems().clear();
         tableView.getColumns().clear();
@@ -1862,6 +1876,26 @@ public class GUIController {
             col.prefWidthProperty().bind(tableView.widthProperty().divide(
                     rows.get(0).size()).subtract(i == 0 ? 20 : 0));
             int j = i;
+            col.setComparator((s1, s2) -> {
+                if (!(s1 instanceof String && s2 instanceof String)) {
+                    return 0;
+                }
+                String st1 = (String) s1;
+                String st2 = (String) s2;
+                if (!(isInteger(st1) && isInteger(st2))) {
+                    return st1.compareTo(st2);
+                }
+                return Integer.valueOf(st1).compareTo(Integer.valueOf(st2));
+            });
+            col.setCellFactory(cell -> {
+                TableCell<String, String> c = new TableCell<>();
+                Text t = new Text();
+                c.setGraphic(t);
+                c.setPrefHeight(Control.USE_COMPUTED_SIZE);
+                t.wrappingWidthProperty().bind(col.widthProperty());
+                t.textProperty().bind(c.itemProperty());
+                return c;
+            });
             col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                     return new SimpleStringProperty(param.getValue().get(j) == null ? "NULL" : param.getValue().get(j).toString());
@@ -1949,6 +1983,7 @@ public class GUIController {
             return null;
         }
     }
+
     private String celNameToId(String cel) {
         try {
             if (cel == null) {
@@ -1956,10 +1991,10 @@ public class GUIController {
             }
             return Database.executeQuery(
                     "select c.id_celu " +
-                            "from cele c " +
-                            "where c.nazwa = " +
+                            "from cele_wizyty c " +
+                            "where c.nazwa = '" +
                             cel +
-                            ";"
+                            "';"
             ).get(1).get(0);
         } catch (SQLException e) {
             showError(e.getMessage());
@@ -1985,7 +2020,7 @@ public class GUIController {
         }
     }
 
-    public String wydarzenieNameToId(String wydarzenie) {
+    private String wydarzenieNameToId(String wydarzenie) {
         try {
             if (wydarzenie == null) {
                 return null;
@@ -1993,9 +2028,9 @@ public class GUIController {
             return Database.executeQuery(
                     "select w.id_wydarzenia " +
                             "from wydarzenia_medyczne w " +
-                            "where w.nazwa = " +
+                            "where w.nazwa = '" +
                             wydarzenie +
-                            ";"
+                            "';"
             ).get(1).get(0);
         } catch (SQLException e) {
             showError(e.getMessage());
@@ -2031,5 +2066,12 @@ public class GUIController {
             }
             Platform.runLater(() -> errorMessage.setVisible(false));
         }).start();
+    }
+
+    private String nicePersonToId(String p) {
+        Pattern pat = Pattern.compile("\\d+");
+        Matcher mat = pat.matcher(p);
+        mat.find();
+        return mat.group();
     }
 }
