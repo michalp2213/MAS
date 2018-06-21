@@ -72,7 +72,7 @@ public class WizytyPlanowane implements Table {
 	
 	public boolean moveToWizytyOdbyte (String id) throws SQLException {
 		if (Database.executeUpdate("INSERT INTO wizyty_odbyte (id_pacjenta, id_lekarza, cel, specjalizacja, data, czas_trwania) "
-				+ "SELECT id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas as czas_trwania "
+				+ "SELECT id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas AS czas_trwania "
 				+ "FROM wizyty_planowane WHERE id_wizyty = " + id + ";") == 0) {
 			return false;
 		}
@@ -80,8 +80,11 @@ public class WizytyPlanowane implements Table {
 	}
 	
 	public boolean moveToWizytyOdbyte (String id, String interval) throws SQLException {
-		Database.executeUpdate("UPDATE wizyty_planowane SET szacowany_czas = " + Tables.nullCheck(interval) + " WHERE id_wizyty = " + id + ";");
-		return this.moveToWizytyOdbyte(id);
+		if (!this.moveToWizytyOdbyte(id)) {
+			return false;
+		}
+		return Database.executeUpdate("UPDATE wizyty_odbyte SET czas_wizyty = " + Tables.nullCheck(interval) 
+				+ " WHERE id_wizyty = " + id + ";") != 0;
 	}
 
 }
