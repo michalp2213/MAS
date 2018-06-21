@@ -32,7 +32,7 @@ public class Skierowania implements Table {
 				+ newWizytaId + ", "
 				+ newSpecId + ", "
 				+ newCelId + ", "
-				+ "'" + newDesc + "') WHERE nr_skierowania = " + id + ";";
+				+ Tables.nullCheck(newDesc) + ") WHERE nr_skierowania = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -42,7 +42,7 @@ public class Skierowania implements Table {
 				+ wizytaId + ", "
 				+ specjalizacjaId + ", "
 				+ celId + ", "
-				+ "'" + desc + "');";
+				+ Tables.nullCheck(desc) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
 

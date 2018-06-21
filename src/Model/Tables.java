@@ -1,6 +1,10 @@
 package Model;
 
 public class Tables {
+	static String nullCheck (String str) {
+		return str == null ? "NULL" : "'" + str + "'";
+	}
+	
 	public static Pacjenci pacjenci = new Pacjenci();
 	public static HistoriaMedyczna historia_medyczna = new HistoriaMedyczna();
 	public static WydarzeniaMedyczne wydarzenia_medyczne = new WydarzeniaMedyczne();

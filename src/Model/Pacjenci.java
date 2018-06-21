@@ -29,24 +29,24 @@ public class Pacjenci implements Table {
 	
 	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newPassportNo, String newBirthDate, String newSex) throws SQLException {
 		String sql = "UPDATE pacjenci SET (imie, nazwisko, pesel, nr_paszportu, data_urodzenia, plec) = ("
-				+ "'" + newName + "', "
-				+ "'" + newSurname + "', "
-				+ "'" + newPesel + "', "
-				+ "'" + newPassportNo + "', "
-				+ "'" + newBirthDate + "', "
-				+ "'" + newSex + "') WHERE id_pacjenta = " + id + ";";
+				+ Tables.nullCheck(newName) + ", "
+				+ Tables.nullCheck(newSurname) + ", "
+				+ Tables.nullCheck(newPesel) + ", "
+				+ Tables.nullCheck(newPassportNo) + ", "
+				+ Tables.nullCheck(newBirthDate) + ", "
+				+ Tables.nullCheck(newSex) + ") WHERE id_pacjenta = " + id + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
 	public boolean insertItem (String name, String surname, String pesel, String passportNo, String birthDate, String sex) throws SQLException {
 		String sql = "INSERT INTO pacjenci VALUES ("
 				+ "DEFAULT, "
-				+ "'" + name + "', "
-				+ "'" + surname + "', "
-				+ "'" + pesel + "', "
-				+ "'" + passportNo + "', "
-				+ "'" + birthDate + "', "
-				+ "'" + sex + "');";
+				+ Tables.nullCheck(name) + ", "
+				+ Tables.nullCheck(surname) + ", "
+				+ Tables.nullCheck(pesel) + ", "
+				+ Tables.nullCheck(passportNo) + ", "
+				+ Tables.nullCheck(birthDate) + ", "
+				+ Tables.nullCheck(sex) + "');";
 		return Database.executeUpdate(sql) != 0;
 	}
 	

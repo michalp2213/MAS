@@ -24,17 +24,18 @@ public class WydarzeniaMedyczne implements Table {
 	}
 	
 	public boolean deleteItem (String name) throws SQLException {
-		return Database.executeUpdate("DELETE FROM wydarzenia_medyczne WHERE nazwa = '" + name + "';") != 0;
+		return Database.executeUpdate("DELETE FROM wydarzenia_medyczne WHERE nazwa = " + Tables.nullCheck(name) + ";") != 0;
 	}
 	
 	public boolean updateItem (String oldName, String newName) throws SQLException {
-		return Database.executeUpdate("UPDATE wydarzenia_medyczne SET nazwa = " + newName + " WHERE nazwa = " + oldName + ";") != 0;
+		return Database.executeUpdate("UPDATE wydarzenia_medyczne SET nazwa = " + Tables.nullCheck(newName) 
+										+ " WHERE nazwa = " + Tables.nullCheck(oldName) + ";") != 0;
 	}
 	
 	public boolean insertItem (String name) throws SQLException {
 		String sql = "INSERT INTO wydarzenia_medyczne VALUES ("
 				+ "DEFAULT, "
-				+ "'" + name + "');";
+				+ Tables.nullCheck(name) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
 
