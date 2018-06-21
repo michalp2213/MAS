@@ -104,13 +104,30 @@ language plpgsql;
 
 CREATE OR REPLACE FUNCTION pacjent_check()
   RETURNS TRIGGER AS $pacjent_check$
+DECLARE pesel CHAR[];
+  p INTEGER;
+  d DATE;
 BEGIN
   IF NEW.pesel IS NULL OR length(NEW.pesel) <> 11
   THEN RETURN NEW; END IF;
-  IF pesel_check(NEW.pesel)
-  THEN RETURN NEW;
-  ELSE RAISE EXCEPTION 'Niepoprawny PESEL';
+  IF pesel_check(NEW.pesel) = FALSE
+  THEN RAISE EXCEPTION 'Niepoprawny PESEL';
   END IF;
+  pesel = string_to_array(NEW.pesel, NULL);
+  p = pesel[10]::INTEGER;
+  IF (p % 2 = 0 AND NEW.plec = 'M') OR (p % 2 = 1 AND NEW.plec = 'F')
+    THEN RAISE EXCEPTION 'Zla plec';
+    END IF ;
+  p = pesel[3]::INT*10 + pesel[4]::INT;
+  IF p > 20 THEN
+    d = DATE('20'||pesel[1]||pesel[2]||'.'||(p-20)::TEXT||'.'||pesel[5]||pesel[6]);
+    ELSE
+    d = DATE('19'||pesel[1]||pesel[2]||'.'||p::TEXT||'.'||pesel[5]||pesel[6]);
+  END IF;
+  IF d <> NEW.data_urodzenia THEN
+    RAISE EXCEPTION 'Nie poprawna data urodzenia';
+  END IF;
+  RETURN NEW;
 END;
 $pacjent_check$
 language plpgsql;
