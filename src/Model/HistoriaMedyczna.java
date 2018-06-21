@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class HistoriaMedyczna implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents(int... args) {		
+	public ArrayList<ArrayList<String>> getContents(int... args) throws SQLException {		
 		String sql = "SELECT * FROM historia_medyczna";
 		
 		if (args.length > 0)
@@ -21,7 +22,7 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeQuery(sql);
 	}
 	
-	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) {
+	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) throws SQLException {
 		String sql = "DELETE FROM historia_medyczna WHERE "
 				+ "id_pacjenta = " + pacjentId + ","
 				+ "id_wydarzenia = " + wydarzenieId + ","
@@ -30,7 +31,7 @@ public class HistoriaMedyczna implements Table {
 	}
 	
 	public boolean updateItem (String pacjentId, String wydarzenieId, String from,
-			String newPacjentId, String newWydarzenieId, String newWizytaId, String newFrom, String newTo) {
+			String newPacjentId, String newWydarzenieId, String newWizytaId, String newFrom, String newTo) throws SQLException {
 		String sql = "UPDATE historia_medyczna SET ("
 				+ "id_pacjenta, "
 				+ "id_wydarzenia, "
@@ -48,7 +49,7 @@ public class HistoriaMedyczna implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (String pacjentId, String wydarzenieId, String wizytaId, String from, String to) {
+	public boolean insertItem (String pacjentId, String wydarzenieId, String wizytaId, String from, String to) throws SQLException {
 		String sql = "INSERT INTO historia_medyczna VALUES ("
 				+ pacjentId + ","
 				+ wydarzenieId + ","

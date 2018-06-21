@@ -1,11 +1,12 @@
 package Model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Skierowania implements Table {
 
 	@Override
-	public ArrayList<ArrayList<String>> getContents(int...args) {	
+	public ArrayList<ArrayList<String>> getContents(int...args) throws SQLException {	
 
 		String sql = "SELECT * FROM skierowania";
 		
@@ -22,11 +23,11 @@ public class Skierowania implements Table {
 		return Database.executeQuery(sql);
 	}
 	
-	public boolean deleteItem (String id) {
+	public boolean deleteItem (String id) throws SQLException {
 		return Database.executeUpdate("DELETE FROM skierowania WHERE nr_skierowania = " + id + ";") != 0;
 	}
 	
-	public boolean updateItem (String id, String newWizytaId, String newSpecId, String newCelId, String newDesc) {
+	public boolean updateItem (String id, String newWizytaId, String newSpecId, String newCelId, String newDesc) throws SQLException {
 		String sql = "UPDATE skierowania SET (wizyta, specjalizacja, cel_skierowania, opis) = ("
 				+ newWizytaId + ", "
 				+ newSpecId + ", "
@@ -35,7 +36,7 @@ public class Skierowania implements Table {
 		return Database.executeUpdate(sql) != 0;
 	}
 	
-	public boolean insertItem (String wizytaId, String specjalizacjaId, String celId, String desc) {
+	public boolean insertItem (String wizytaId, String specjalizacjaId, String celId, String desc) throws SQLException {
 		String sql = "INSERT INTO skierowania VALUES ("
 				+ "DEFAULT, "
 				+ wizytaId + ", "

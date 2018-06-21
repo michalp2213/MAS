@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class Database {
 		}
 	}
 
-	public static ArrayList <ArrayList <String>> executeQuery(String sql) {
+	public static ArrayList <ArrayList <String>> executeQuery(String sql) throws SQLException {
 		Statement stmt = null;
 		try {
 			stmt = dbConn.createStatement();
@@ -63,9 +64,6 @@ public class Database {
 			}
 
 			return arr;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				stmt.close();
@@ -74,17 +72,13 @@ public class Database {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		}
-		return null;
 	}
 	
-	public static int executeUpdate(String sql) {
+	public static int executeUpdate(String sql) throws SQLException {
 		Statement stmt = null;
 		try {
 			stmt = dbConn.createStatement();
 			return stmt.executeUpdate(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				stmt.close();
@@ -93,6 +87,5 @@ public class Database {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		}
-		return 0;
 	}
 }
