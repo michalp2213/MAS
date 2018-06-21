@@ -201,10 +201,7 @@ BEGIN
                 p.id_pracownika <> NEW.id_pracownika
           LIMIT 1);
     m = r."do";
-    UPDATE pacjenci_lpk
-    SET "do" = DATE(NEW.zatrudniony_do)
-    WHERE id_pacjenta = r.idp AND id_lekarza = NEW.id_pracownika AND od = r.od;
-    INSERT INTO pacjenci_lpk VALUES (r.idp, id, DATE(NEW.zatrudniony_do + INTERVAL '1 DAYS'), m);
+    INSERT INTO pacjenci_lpk VALUES (r.idp, id, DATE(NEW.zatrudniony_do), m);
   END LOOP;
   RETURN NEW;
 
@@ -227,15 +224,33 @@ BEGIN
   THEN RAISE EXCEPTION 'Nie aktywny lekarz';
   END IF;
   d1 = NEW.od;
-  d2 = coalesce(New."do", DATE(current_timestamp + INTERVAL '100 YEARS'));
-  IF (SELECT count(*)
-      FROM pacjenci_lpk p
-      WHERE p.id_pacjenta = NEW.id_pacjenta
-            AND NEW.od <> p.od AND
-            (d1, d2) OVERLAPS (p.od, coalesce(p."do", DATE(CURRENT_TIMESTAMP + INTERVAL '100 YEARS')))) > 0
-  THEN RAISE EXCEPTION 'Pacjent posiada lpk w zadanym terminie';
-  ELSE RETURN NEW;
+  d2 = coalesce(New."do", DATE(current_timestamp + INTERVAL '1000 YEARS'));
+  IF (TG_OP = 'INSERT')
+  THEN
+    IF (SELECT count(*)
+        FROM pacjenci_lpk
+        WHERE id_pacjenta = NEW.id_pacjenta AND od = NEW.od) > 0
+    THEN
+      DELETE FROM pacjenci_lpk
+      WHERE id_pacjenta = NEW.id_pacjenta AND od = NEW.od;
+      RETURN NEW;
+    ELSE
+      UPDATE pacjenci_lpk
+      SET "do" = NEW.od - INTERVAL '1 DAY'
+      WHERE
+        id_pacjenta = NEW.id_pacjenta AND coalesce("do", DATE(current_timestamp + INTERVAL '1000 YEARS')) >= NEW.od;
+      RETURN NEW;
+    END IF;
+  ELSE
+    IF (SELECT count(*)
+        FROM pacjenci_lpk p
+        WHERE p.id_pacjenta = NEW.id_pacjenta
+              AND NEW.od <> p.od AND
+              (d1, d2) OVERLAPS (p.od, coalesce(p."do", DATE(CURRENT_TIMESTAMP + INTERVAL '100 YEARS')))) > 0
+    THEN RAISE EXCEPTION 'Pacjent posiada lpk w zadanym terminie';
+    END IF;
   END IF;
+  RETURN NEW;
 END;
 $pacjent_lpk_check$
 language plpgsql;
@@ -255,11 +270,24 @@ BEGIN
   IF NEW.DATA > current_timestamp
   THEN RAISE EXCEPTION 'Wizyta musiala sie odbyc w przeszlosci';
   END IF;
+  IF (SELECT count(*)
+      FROM lekarze_specjalizacje ls
+        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja) = 0
+  THEN RAISE EXCEPTION 'Lekarz nie posiada specjalizacji';
+  END IF;
+  IF (SELECT count(*)
+      FROM wizyty_odbyte wo
+      WHERE
+        wo.id_pacjenta = NEW.id_pacjenta AND
+        (wo.data, wo.data + wo.czas_trwania) OVERLAPS (NEW.data, NEW.data + NEW.czas_trwania) AND
+        NEW.id_wizyty <> wo.id_wizyty) > 0
+  THEN RAISE EXCEPTION 'Pacjent posiada wizyte w zadanym terminie';
+  END IF;
   FOR r in SELECT
              data                AS d1,
              data + czas_trwania AS d2
            FROM wizyty_odbyte
-           WHERE id_lekarza = NEW.id_lekarza LOOP
+           WHERE id_lekarza = NEW.id_lekarza AND id_wizyty <> NEW.id_wizyty LOOP
     IF (NEW.data, NEW.data + NEW.czas_trwania) OVERLAPS (r.d1, r.d2)
     THEN RAISE EXCEPTION 'Lekarz jest zajenty';
     END IF;
@@ -284,11 +312,24 @@ BEGIN
   IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.szacowany_czas)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
+  IF (SELECT count(*)
+      FROM lekarze_specjalizacje ls
+        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja) = 0
+  THEN RAISE EXCEPTION 'Lekarz nie posiada specjalizacji';
+  END IF;
+  IF (SELECT count(*)
+      FROM wizyty_planowane wp
+      WHERE
+        wp.id_pacjenta = NEW.id_pacjenta AND
+        (wp.data, wp.data + wp.szacowany_czas) OVERLAPS (NEW.data, NEW.data + NEW.szacowany_czas) AND
+        NEW.id_wizyty <> wp.id_wizyty) > 0
+  THEN RAISE EXCEPTION 'Pacjent posiada wizyte w zadanym terminie';
+  END IF;
   FOR r in SELECT
              data                  AS d1,
              data + szacowany_czas AS d2
            FROM wizyty_planowane
-           WHERE id_lekarza = NEW.id_lekarza LOOP
+           WHERE id_lekarza = NEW.id_lekarza AND id_wizyty <> NEW.id_wizyty LOOP
     IF (NEW.data, NEW.data + NEW.szacowany_czas) OVERLAPS (r.d1, r.d2)
     THEN RAISE EXCEPTION 'Lekarz jest zajenty';
     END IF;
@@ -610,7 +651,7 @@ $$
 language plpgsql;
 
 CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
-  WHERE old.id_roli = 1 DO INSTEAD NOTHING ;
+  WHERE old.id_roli = 1 DO INSTEAD NOTHING;
 
 CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
-  WHERE OLD.id_roli = 1 DO INSTEAD NOTHING ;
+  WHERE OLD.id_roli = 1 DO INSTEAD NOTHING;

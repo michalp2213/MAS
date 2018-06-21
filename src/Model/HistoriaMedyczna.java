@@ -43,12 +43,10 @@ public class HistoriaMedyczna implements Table {
 	}
 	
 	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) throws SQLException {
-		String fromStr = from == null ? "NULL" : "'" + from + "'";
 		String sql = "DELETE FROM historia_medyczna WHERE "
 				+ "id_pacjenta = " + pacjentId + "and "
 				+ "id_wydarzenia = " + wydarzenieId + "and "
-				+ "od = " + fromStr + ";";
-		System.out.println(sql);
+				+ "od = " + Tables.nullCheck(from) + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	
