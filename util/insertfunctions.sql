@@ -608,3 +608,9 @@ BEGIN
 END;
 $$
 language plpgsql;
+
+CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
+  WHERE old.id_roli = 1 DO INSTEAD NOTHING ;
+
+CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
+  WHERE OLD.id_roli = 1 DO INSTEAD NOTHING ;
