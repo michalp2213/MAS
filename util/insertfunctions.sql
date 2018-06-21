@@ -657,7 +657,7 @@ CREATE OR REPLACE FUNCTION lrul()
   RETURNS INTEGER AS
 $$
 BEGIN
-  RETURN (SELECT p.id_pracownika
+  RETURN (SELECT p.id_pracownika, p.imie, p.nazwisko
           FROM pracownicy p LEFT JOIN pacjenci_lpk l on p.id_pracownika = l.id_lekarza
           WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(current_timestamp), DATE(current_timestamp + INTERVAL '1 DAY'))
           GROUP BY p.id_pracownika
