@@ -26,7 +26,7 @@ INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informac
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 44, '2003-04-06', null, 1, null, 1);
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 26, '2016-02-09', null, 3, 3, 1);
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 36, '2009-07-23', 3, 3, 2, 4);
-INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 10, '2018-08-20', null, 5, 4, null);
+INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 10, '2017-08-20', null, 5, 4, null);
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 48, '2003-11-28', null, 4, 1, 5);
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 68, '2015-06-26', 3, 5, 1, 2);
 INSERT INTO ankiety_lekarze ( id_lekarza, data, uprzejmosc, opanowanie, informacyjnosc, dokladnosc_badan) VALUES ( 4, '2003-12-09', null, 4, 3, 1);

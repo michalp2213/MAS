@@ -12,7 +12,7 @@ CREATE TABLE pacjenci
     UNIQUE,
   nr_paszportu   VARCHAR
     UNIQUE,
-  data_urodzenia DATE    NOT NULL,
+  data_urodzenia DATE    NOT NULL CHECK (data_urodzenia <= now()),
   plec           CHAR(1) NOT NULL
     CHECK ((plec = 'M' :: bpCHAR) OR (plec = 'F' :: bpCHAR)),
   CHECK ((pesel IS NOT NULL) OR (nr_paszportu IS NOT NULL))
@@ -26,7 +26,7 @@ CREATE TABLE pracownicy
   nazwisko      VARCHAR  NOT NULL,
   pesel         CHAR(11) NOT NULL
     UNIQUE,
-  zatrudniony_od DATE NOT NULL DEFAULT(DATE(current_timestamp)),
+  zatrudniony_od DATE NOT NULL DEFAULT(DATE(current_timestamp)) CHECK (zatrudniony_od <= now()),
   zatrudniony_do DATE CHECK (zatrudniony_od <= zatrudniony_do)
 );
 
@@ -53,7 +53,7 @@ CREATE TABLE pacjenci_lpk
     REFERENCES pacjenci (id_pacjenta),
   id_lekarza  INTEGER NOT NULL
     REFERENCES pracownicy (id_pracownika),
-  od          DATE    NOT NULL,
+  od          DATE    NOT NULL CHECK (od <= now()),
   "do"        DATE CHECK (od <= "do"),
   PRIMARY KEY (id_pacjenta, od)
 );
@@ -96,7 +96,7 @@ CREATE TABLE wizyty_odbyte
     REFERENCES cele_wizyty (id_celu),
   specjalizacja INTEGER   NOT NULL
     REFERENCES specjalizacje (id_specjalizacji),
-  data          TIMESTAMP NOT NULL,
+  data          TIMESTAMP NOT NULL CHECK (data < now()),
   czas_trwania  INTERVAL  NOT NULL CHECK (czas_trwania > INTERVAL '0'),
   UNIQUE (id_pacjenta, id_lekarza, data)
 );
@@ -113,7 +113,7 @@ CREATE TABLE wizyty_planowane
     REFERENCES cele_wizyty (id_celu),
   specjalizacja  INTEGER   NOT NULL
     REFERENCES specjalizacje (id_specjalizacji),
-  data           TIMESTAMP NOT NULL,
+  data           TIMESTAMP NOT NULL CHECK (data >= now()),
   szacowany_czas INTERVAL CHECK (szacowany_czas > INTERVAL '0' ),
   UNIQUE (id_pacjenta, id_lekarza, data)
 );
@@ -134,7 +134,7 @@ CREATE TABLE historia_medyczna
     REFERENCES wydarzenia_medyczne (id_wydarzenia),
   wizyta        INTEGER
     REFERENCES wizyty_odbyte (id_wizyty),
-  od            TIMESTAMP NOT NULL,
+  od            TIMESTAMP NOT NULL CHECK (od <= now()),
   "do"          TIMESTAMP,
   PRIMARY KEY (id_pacjenta, id_wydarzenia, od),
   CHECK (od < "do")
@@ -158,7 +158,7 @@ CREATE TABLE ankiety_lekarze
 (
   id_ankiety       SERIAL  NOT NULL PRIMARY KEY,
   id_lekarza       INTEGER NOT NULL REFERENCES pracownicy (id_pracownika),
-  data             DATE    NOT NULL,
+  data             DATE    NOT NULL CHECK (data <= now()),
   uprzejmosc       INTEGER CHECK (uprzejmosc >= 1 AND uprzejmosc <= 5),
   opanowanie       INTEGER CHECK (opanowanie >= 1 AND opanowanie <= 5),
   informacyjnosc   INTEGER CHECK (informacyjnosc >= 1 AND informacyjnosc <= 5),
@@ -172,7 +172,8 @@ CREATE OR REPLACE VIEW terminarz AS
     id_pacjenta,
     cel,
     specjalizacja,
-    data
+    data,
+    id_lekarza
   FROM wizyty_planowane
   WHERE FALSE;
 

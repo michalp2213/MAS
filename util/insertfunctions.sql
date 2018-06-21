@@ -231,7 +231,8 @@ BEGIN
   IF (SELECT count(*)
       FROM pacjenci_lpk p
       WHERE p.id_pacjenta = NEW.id_pacjenta
-            AND NEW.od <> p.od AND (d1, d2) OVERLAPS (p.od, coalesce(p."do", DATE(CURRENT_TIMESTAMP+INTERVAL '100 YEARS')))) >0
+            AND NEW.od <> p.od AND
+            (d1, d2) OVERLAPS (p.od, coalesce(p."do", DATE(CURRENT_TIMESTAMP + INTERVAL '100 YEARS')))) > 0
   THEN RAISE EXCEPTION 'Pacjent posiada lpk w zadanym terminie';
   ELSE RETURN NEW;
   END IF;
@@ -251,7 +252,8 @@ BEGIN
   IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.czas_trwania)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
-  IF NEW.DATA>current_timestamp THEN RAISE EXCEPTION 'DeLorean';
+  IF NEW.DATA > current_timestamp
+  THEN RAISE EXCEPTION 'DeLorean';
   END IF;
   FOR r in SELECT
              data                AS d1,
@@ -337,17 +339,32 @@ BEGIN
   ELSE val = val / s;
   END IF;
   i = make_interval(mins := (val :: INT));
-  id = coalesce((SELECT ls.id_lekarza
-                 FROM lekarze_specjalizacje ls
-                 WHERE ls.id_specjalizacji = NEW.specjalizacja
-                       AND (SELECT count(*)
-                            FROM wizyty_planowane w
-                            WHERE ls.id_lekarza = w.id_lekarza AND
-                                  (w.data, w.data + w.szacowany_czas)
-                                  OVERLAPS
-                                  (New.data, New.data + i)) = 0
-                 ORDER BY id_lekarza
-                 LIMIT 1), -1);
+  id = -1;
+  IF NEW.id_lekarza IS NOT NULL
+  THEN
+    IF (SELECT count(*)
+        FROM wizyty_planowane wp
+        WHERE
+          wp.id_lekarza = NEW.id_lekarza AND
+          (NEW.data, NEW.data + i) OVERLAPS (wp.data, wp.data + wp.szacowany_czas)) > 0
+    THEN id = -1;
+    ELSE id = NEW.id_lekarza;
+    END IF;
+  END IF;
+  IF id = -1
+  THEN
+    id = coalesce((SELECT ls.id_lekarza
+                   FROM lekarze_specjalizacje ls
+                   WHERE ls.id_specjalizacji = NEW.specjalizacja
+                         AND (SELECT count(*)
+                              FROM wizyty_planowane w
+                              WHERE ls.id_lekarza = w.id_lekarza AND
+                                    (w.data, w.data + w.szacowany_czas)
+                                    OVERLAPS
+                                    (New.data, New.data + i)) = 0
+                   ORDER BY id_lekarza
+                   LIMIT 1), -1);
+  END IF;
   IF id = -1
   THEN RAISE EXCEPTION 'Nie mamy specjalisty';
   END IF;
@@ -556,3 +573,33 @@ CREATE OR REPLACE RULE pracownicy_delete AS ON DELETE TO pracownicy
 DO INSTEAD UPDATE pracownicy
 SET zatrudniony_do = least(DATE(current_timestamp), coalesce(zatrudniony_do, DATE(current_timestamp)))
 WHERE id_pracownika = OLD.id_pracownika;
+
+CREATE OR REPLACE FUNCTION ankiety_check()
+  RETURNS TRIGGER AS $ankety_check$
+BEGIN
+  IF czy_aktywny_lekarz(NEW.id_lekarza, NEW.data, NULL)
+  THEN RETURN NEW;
+  ELSE RAISE EXCEPTION 'Nie aktywny lekarz';
+  END IF;
+END;
+$ankety_check$
+language plpgsql;
+
+CREATE TRIGGER ankiety_check
+  BEFORE INSERT OR UPDATE
+  ON ankiety_lekarze
+  FOR EACH ROW EXECUTE PROCEDURE ankiety_check();
+
+CREATE OR REPLACE FUNCTION lrul()
+  RETURNS INTEGER AS
+$$
+BEGIN
+  RETURN (SELECT p.id_pracownika
+          FROM pracownicy p LEFT JOIN pacjenci_lpk l on p.id_pracownika = l.id_lekarza
+          WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(current_timestamp), DATE(current_timestamp + INTERVAL '1 DAY'))
+          GROUP BY p.id_pracownika
+          ORDER BY count(p.id_pracownika), p.id_pracownika
+          LIMIT 1);
+END;
+$$
+language plpgsql;
