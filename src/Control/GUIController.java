@@ -875,6 +875,15 @@ public class GUIController {
         updateComboBox(LPKPacjenciComboBox, getSmallPacjenci());
     }
 
+    @FXML
+    private void updateWizytyPlanowaneMenuSpecjalizacjeComboBox() {
+        if (wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem() == null ) {
+            return;
+        }
+        String id_lek = toStringArray(wizytyPlanowaneLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+        updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, getSpecLekarza(id_lek));
+    }
+
     private void updateWizytyPlanowaneMenuVolatile() {
         try {
             updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.getContents(5));
@@ -1209,8 +1218,8 @@ public class GUIController {
                     nazwisko == null ? fields[2] : nazwisko,
                     pesel == null ? fields[3] : pesel,
                     nr_paszportu == null ? fields[4] : nr_paszportu,
-                    data_ur == null ? fields[4] : data_ur,
-                    plec == null ? fields[5] : plec
+                    data_ur == null ? fields[5] : data_ur,
+                    plec == null ? fields[6] : plec
             );
             updatePacjenciMenuVolatile();
         } catch (SQLException e) {
@@ -1338,8 +1347,8 @@ public class GUIController {
                     String data = toStringArray(b.getText())[2];
                     Tables.pacjenci_lpk.deleteItem(id_pac, data);
                 }
-                updateLPKMenuVolatile();
             }
+            updateLPKMenuVolatile();
         } catch (SQLException e ) {
             showError(e.getMessage());
         }
@@ -1908,7 +1917,8 @@ public class GUIController {
                     "where pr.id_roli = ( " +
                     "select r.id_roli " +
                     "from role r " +
-                    "where r.nazwa = 'Lekarz'));");
+                    "where r.nazwa = 'Lekarz'))" +
+                    "order by p.id_pracownika;");
         } catch (SQLException e) {
             showError(e.getMessage());
             return null;
@@ -1924,6 +1934,21 @@ public class GUIController {
         }
     }
 
+    private ArrayList<ArrayList<String>> getSpecLekarza(String id_lek) {
+        try {
+            return Database.executeQuery(
+                    "select s.nazwa " +
+                            "from lekarze_specjalizacje ls " +
+                            "join specjalizacje s " +
+                            "on ls.id_specjalizacji = s.id_specjalizacji " +
+                            "where ls.id_lekarza = " + id_lek +
+                            " order by s.nazwa;"
+            );
+        } catch (SQLException e) {
+            showError(e.getMessage());
+            return null;
+        }
+    }
     private String celNameToId(String cel) {
         try {
             if (cel == null) {
@@ -1988,10 +2013,11 @@ public class GUIController {
 
     private void showError(String mess) {
         new Thread(() -> {
+            Platform.runLater(() ->errorMessage.setWrapText(true));
             Platform.runLater(() ->errorMessage.setText(mess));
             Platform.runLater(() -> errorMessage.setVisible(true));
             try {
-                Thread.sleep(10000);
+                Thread.sleep(2000 + 50*mess.length());
             } catch (InterruptedException e) {
                 Platform.runLater(() -> errorMessage.setVisible(false));
                 return;
