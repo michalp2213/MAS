@@ -53,7 +53,7 @@ CREATE TABLE pacjenci_lpk
     REFERENCES pacjenci (id_pacjenta),
   id_lekarza  INTEGER NOT NULL
     REFERENCES pracownicy (id_pracownika),
-  od          DATE    NOT NULL CHECK (od <= now()) DEFAULT (DATE(current_timestamp)),
+  od          DATE    NOT NULL DEFAULT (DATE(current_timestamp)),
   "do"        DATE CHECK (od <= "do"),
   PRIMARY KEY (id_pacjenta, od)
 );
@@ -98,7 +98,8 @@ CREATE TABLE wizyty_odbyte
     REFERENCES specjalizacje (id_specjalizacji),
   data          TIMESTAMP NOT NULL CHECK (data < now()),
   czas_trwania  INTERVAL  NOT NULL CHECK (czas_trwania > INTERVAL '0'),
-  UNIQUE (id_pacjenta, id_lekarza, data)
+  UNIQUE (id_pacjenta, id_lekarza, data),
+  CHECK (data+czas_trwania<now())
 );
 
 CREATE TABLE wizyty_planowane
