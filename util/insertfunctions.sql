@@ -146,7 +146,7 @@ BEGIN
             (SELECT count(*)
              FROM wizyty_planowane
              WHERE specjalizacja = s.id_specjalizazji AND data + szacowany_czas > NEW.zatrudniony_do) > 0) > 0
-  THEN RAISE EXCEPTION 'Ma wizyte';
+  THEN RAISE EXCEPTION 'Nie da sie przeniesc wizyte';
   END IF;
   m = (SELECT "do"
        FROM pacjenci_lpk
@@ -156,7 +156,7 @@ BEGIN
   IF (SELECT count(*)
       FROM pracownicy
       WHERE czy_aktywny_lekarz(id_pracownika, DATE(current_timestamp + INTERVAL '1 DAY'), m)) = 0
-  THEN RAISE EXCEPTION 'Jest lpk';
+  THEN RAISE EXCEPTION 'Nie da sie zmienic lpk';
   END IF;
   FOR r IN (SELECT
               id_wizyty      AS idw,
@@ -253,7 +253,7 @@ BEGIN
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
   END IF;
   IF NEW.DATA > current_timestamp
-  THEN RAISE EXCEPTION 'DeLorean';
+  THEN RAISE EXCEPTION 'Wizyta musiala sie odbyc w przeszlosci';
   END IF;
   FOR r in SELECT
              data                AS d1,
@@ -279,7 +279,7 @@ CREATE OR REPLACE FUNCTION wizyta_planowana_check()
 DECLARE r RECORD;
 BEGIN
   IF NEW.data < current_timestamp
-  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean.';
+  THEN RAISE EXCEPTION 'Wizyta musi sie odbyc w przyszlosci';
   END IF;
   IF czy_aktywny_lekarz(NEW.id_lekarza, DATE(NEW.data), DATE(NEW.data + NEW.szacowany_czas)) = FALSE
   THEN RAISE EXCEPTION 'Nie jest lekarzem';
@@ -315,7 +315,7 @@ DECLARE r   RECORD;
         id  INTEGER;
 BEGIN
   IF NEW.data < current_timestamp
-  THEN RAISE EXCEPTION 'Potrzebuje Panstwo DeLorean';
+  THEN RAISE EXCEPTION 'Wizyta musi sie odbyc w przyszlosci';
   END IF;
   s = 0;
   val = 0;
