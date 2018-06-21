@@ -44,12 +44,11 @@ public class LekarzeSpecjalizacje implements Table {
 	}
 	
 	public boolean deleteItem (String specjalizacjaName, String lekarzId) throws SQLException {
-		String specjalizacjaStr = specjalizacjaName == null ? "NULL" : "'" + specjalizacjaName + "'";
 		String sql = "DELETE FROM lekarze_specjalizacje WHERE "
 				+ "id_lekarza = " + lekarzId
 				+ " AND (SELECT nazwa FROM specjalizacje WHERE "
 					+ "id_specjalizacji = lekarze_specjalizacje.id_specjalizacji"
-				+ ") = " + specjalizacjaStr + ";";
+				+ ") = " + Tables.nullCheck(specjalizacjaName) + ";";
 		return Database.executeUpdate(sql) != 0;
 	}
 	

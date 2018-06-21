@@ -28,13 +28,13 @@ public class Pracownicy implements Table {
 	}
 	
 	public boolean updateItem (String id, String newName, String newSurname, String newPesel, String newZatrudniony_od, String newZatrudniony_do) throws SQLException {
-		String zatrudniony_doStr = newZatrudniony_do == null ? "NULL" : "'" + newZatrudniony_do + "'";
 		String sql = "UPDATE pracownicy SET (imie, nazwisko, pesel, zatrudniony_od, zatrudniony_do) = ("
 				+ Tables.nullCheck(newName) + ", "
 				+ Tables.nullCheck(newSurname) + ", "
 				+ Tables.nullCheck(newPesel) + ", " 
 				+ Tables.nullCheck(newZatrudniony_od) + ", " 
-				+ zatrudniony_doStr + ") WHERE id_pracownika = " + id + ";";
+				+ Tables.nullCheck(newZatrudniony_do) + ") WHERE id_pracownika = " + id + ";";
+		System.out.println(sql);
 		return Database.executeUpdate(sql) != 0;
 	}
 		
