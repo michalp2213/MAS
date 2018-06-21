@@ -34,7 +34,6 @@ public class Pracownicy implements Table {
 				+ Tables.nullCheck(newPesel) + ", " 
 				+ Tables.nullCheck(newZatrudniony_od) + ", " 
 				+ Tables.nullCheck(newZatrudniony_do) + ") WHERE id_pracownika = " + id + ";";
-		System.out.println(sql);
 		return Database.executeUpdate(sql) != 0;
 	}
 		
