@@ -2,7 +2,9 @@ package Model;
 
 public class Tables {
 	static String nullCheck (String str) {
-		return str == null ? "NULL" : "'" + str + "'";
+		if (str == null || str.equals("null")) // java is crap
+			return "NULL";
+		return "'" + str + "'";
 	}
 	
 	public static Pacjenci pacjenci = new Pacjenci();
