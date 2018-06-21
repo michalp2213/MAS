@@ -53,7 +53,7 @@ CREATE TABLE pacjenci_lpk
     REFERENCES pacjenci (id_pacjenta),
   id_lekarza  INTEGER NOT NULL
     REFERENCES pracownicy (id_pracownika),
-  od          DATE    NOT NULL CHECK (od <= now()),
+  od          DATE    NOT NULL CHECK (od <= now()) DEFAULT (DATE(current_timestamp)),
   "do"        DATE CHECK (od <= "do"),
   PRIMARY KEY (id_pacjenta, od)
 );
