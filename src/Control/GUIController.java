@@ -1956,10 +1956,10 @@ public class GUIController {
             }
             return Database.executeQuery(
                     "select c.id_celu " +
-                            "from cele c " +
-                            "where c.nazwa = " +
+                            "from cele_wizyty c " +
+                            "where c.nazwa = '" +
                             cel +
-                            ";"
+                            "';"
             ).get(1).get(0);
         } catch (SQLException e) {
             showError(e.getMessage());
