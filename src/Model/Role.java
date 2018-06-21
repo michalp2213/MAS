@@ -28,13 +28,13 @@ public class Role implements Table {
 	}
 	
 	public boolean updateItem (String oldName, String newName) throws SQLException {
-		return Database.executeUpdate("UPDATE role SET nazwa = '" + Tables.nullCheck(newName) + " WHERE nazwa = " + Tables.nullCheck(oldName) + ";") != 0;
+		return Database.executeUpdate("UPDATE role SET nazwa = " + Tables.nullCheck(newName) + " WHERE nazwa = " + Tables.nullCheck(oldName) + ";") != 0;
 	}
 		
 	public boolean insertItem (String name) throws SQLException {
 		String sql = "INSERT INTO role VALUES ("
 				+ "DEFAULT, "
-				+ Tables.nullCheck(name) + "');";
+				+ Tables.nullCheck(name) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}
 }
