@@ -654,10 +654,10 @@ CREATE TRIGGER ankiety_check
   FOR EACH ROW EXECUTE PROCEDURE ankiety_check();
 
 CREATE OR REPLACE FUNCTION lrul()
-  RETURNS INTEGER AS
+  RETURNS TABLE(id_pracownka INTEGER, imie VARCHAR, nazwisko VARCHAR ) AS
 $$
 BEGIN
-  RETURN (SELECT p.id_pracownika, p.imie, p.nazwisko
+  RETURN QUERY (SELECT p.id_pracownika, p.imie, p.nazwisko
           FROM pracownicy p LEFT JOIN pacjenci_lpk l on p.id_pracownika = l.id_lekarza
           WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(current_timestamp), DATE(current_timestamp + INTERVAL '1 DAY'))
           GROUP BY p.id_pracownika
