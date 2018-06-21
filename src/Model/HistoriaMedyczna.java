@@ -45,9 +45,10 @@ public class HistoriaMedyczna implements Table {
 	public boolean deleteItem (String pacjentId, String wydarzenieId, String from) throws SQLException {
 		String fromStr = from == null ? "NULL" : "'" + from + "'";
 		String sql = "DELETE FROM historia_medyczna WHERE "
-				+ "id_pacjenta = " + pacjentId + ","
-				+ "id_wydarzenia = " + wydarzenieId + ","
+				+ "id_pacjenta = " + pacjentId + "and "
+				+ "id_wydarzenia = " + wydarzenieId + "and "
 				+ "od = " + fromStr + ";";
+		System.out.println(sql);
 		return Database.executeUpdate(sql) != 0;
 	}
 	
@@ -57,7 +58,7 @@ public class HistoriaMedyczna implements Table {
 				+ "id_pacjenta, "
 				+ "id_wydarzenia, "
 				+ "od, "
-				+ "do, "
+				+ "\"do\", "
 				+ "wizyta) = ("
 				+ newPacjentId + ", "
 				+ newWydarzenieId + ", "
@@ -72,10 +73,10 @@ public class HistoriaMedyczna implements Table {
 	
 	public boolean insertItem (String pacjentId, String wydarzenieId, String wizytaId, String from, String to) throws SQLException {
 		String sql = "INSERT INTO historia_medyczna VALUES ("
-				+ pacjentId + ","
-				+ wydarzenieId + ","
-				+ wizytaId + ","
-				+ Tables.nullCheck(from) + ","
+				+ pacjentId + ", "
+				+ wydarzenieId + ", "
+				+ wizytaId + ", "
+				+ Tables.nullCheck(from) + ", "
 				+ Tables.nullCheck(to) + ");";
 		return Database.executeUpdate(sql) != 0;
 	}

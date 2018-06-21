@@ -1345,7 +1345,7 @@ public class GUIController {
             for (Object o : LPKList.getItems()) {
                 CheckBox b = (CheckBox) o;
                 if (b.isSelected()) {
-                    String id_pac = toStringArray(b.getText())[0];
+                    String id_pac = nicePersonToId(toStringArray(b.getText())[0]);
                     String data = toStringArray(b.getText())[2];
                     Tables.pacjenci_lpk.deleteItem(id_pac, data);
                 }
@@ -1536,7 +1536,7 @@ public class GUIController {
                 return;
             }
             String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
-            String wydarzenie_id = toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            String wydarzenie_id = wydarzenieNameToId(toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0]);
             String from = toEmptyString(historiaMedycznaOdDataField.getText());
             String to = toEmptyString(historiaMedycznaDoDataField.getText());
             String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
@@ -1563,20 +1563,20 @@ public class GUIController {
             String pacjent_id = historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ? null :
                     toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
             String wydarzenie_id = historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null ? null :
-                    toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0];
+                    wydarzenieNameToId(toStringArray(historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem().toString())[0]);
             String from = toEmptyString(historiaMedycznaOdDataField.getText());
             String to = toEmptyString(historiaMedycznaDoDataField.getText());
             String id_wizyty = toEmptyString(historiaMedycznaWizytyComboBox.getText());
-            Tables.historia_medyczna.updateItem(fields[0],
-                    nicePersonToId(fields[1]),
-                    nicePersonToId(fields[3]),
-                    pacjent_id == null ? fields[0] : pacjent_id,
-                    wydarzenie_id == null ? fields[1] : wydarzenie_id,
+            Tables.historia_medyczna.updateItem(nicePersonToId(fields[0]),
+                    wydarzenieNameToId(fields[1]),
+                    fields[3],
+                    pacjent_id == null ? nicePersonToId(fields[0]) : pacjent_id,
+                    wydarzenie_id == null ? wydarzenieNameToId(fields[1]) : wydarzenie_id,
                     id_wizyty == null ? fields[2] : id_wizyty,
                     from == null ? fields[3] : from,
                     to == null ? fields[4] : to
             );
-            updateSkierowaniaMenuVolatile();
+            updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -1589,10 +1589,10 @@ public class GUIController {
                 CheckBox b = (CheckBox) o;
                 if (b.isSelected()) {
                     String[] fields = toStringArray(b.getText());
-                    Tables.historia_medyczna.deleteItem(fields[0], fields[1], fields[3]);
+                    Tables.historia_medyczna.deleteItem(nicePersonToId(fields[0]), wydarzenieNameToId(fields[1]), fields[3]);
                 }
             }
-            updateSkierowaniaMenuVolatile();
+            updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
             showError(e.getMessage());
         }
@@ -2020,7 +2020,7 @@ public class GUIController {
         }
     }
 
-    public String wydarzenieNameToId(String wydarzenie) {
+    private String wydarzenieNameToId(String wydarzenie) {
         try {
             if (wydarzenie == null) {
                 return null;
@@ -2028,9 +2028,9 @@ public class GUIController {
             return Database.executeQuery(
                     "select w.id_wydarzenia " +
                             "from wydarzenia_medyczne w " +
-                            "where w.nazwa = " +
+                            "where w.nazwa = '" +
                             wydarzenie +
-                            ";"
+                            "';"
             ).get(1).get(0);
         } catch (SQLException e) {
             showError(e.getMessage());
