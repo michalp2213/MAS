@@ -677,13 +677,13 @@ CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
   WHERE old.id_roli = 1 AND ((SELECT count(*)
                               FROM pacjenci_lpk p
                               WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                               FROM wizyty_odbyte
-                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
+                                                                              FROM wizyty_odbyte
+                                                                              WHERE id_lekarza = OLD.id_pracownika) > 0
                              OR (SELECT count(*)
                                  FROM lekarze_specjalizacje
                                  WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                           FROM wizyty_planowane
-                                                                           WHERE id_lekarza = OLD.id_pracownika) > 0
+                                                                               FROM wizyty_planowane
+                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
                              OR (SELECT count(*)
                                  FROM ankiety_lekarze
                                  WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
@@ -692,16 +692,34 @@ CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
   WHERE old.id_roli = 1 AND ((SELECT count(*)
                               FROM pacjenci_lpk p
                               WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                               FROM wizyty_odbyte
-                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
+                                                                              FROM wizyty_odbyte
+                                                                              WHERE id_lekarza = OLD.id_pracownika) > 0
                              OR (SELECT count(*)
                                  FROM lekarze_specjalizacje
                                  WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                           FROM wizyty_planowane
-                                                                           WHERE id_lekarza = OLD.id_pracownika) > 0
+                                                                               FROM wizyty_planowane
+                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
                              OR (SELECT count(*)
                                  FROM ankiety_lekarze
                                  WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
+
+CREATE RULE specjalizacje_lekarze_delete AS ON DELETE TO lekarze_specjalizacje
+  WHERE (SELECT count(*)
+         FROM wizyty_planowane
+         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_planowane.id_lekarza = OLD.id_lekarza) > 0 OR
+        (SELECT count(*)
+         FROM wizyty_odbyte
+         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_odbyte.id_lekarza = OLD.id_lekarza) > 0
+DO INSTEAD NOTHING;
+
+CREATE RULE specjalizacje_lekarze_update AS ON UPDATE TO lekarze_specjalizacje
+  WHERE (SELECT count(*)
+         FROM wizyty_planowane
+         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_planowane.id_lekarza = OLD.id_lekarza) > 0 OR
+        (SELECT count(*)
+         FROM wizyty_odbyte
+         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_odbyte.id_lekarza = OLD.id_lekarza) > 0
+DO INSTEAD NOTHING;
 
 CREATE OR REPLACE FUNCTION historia_check()
   RETURNS TRIGGER AS $historia_check$
