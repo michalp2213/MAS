@@ -6,10 +6,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Control.GUIController"
+            fx:id="mainPane"
             prefHeight="400.0" prefWidth="600.0">
 
     <VBox fx:id="tableButtons">
@@ -1891,6 +1891,8 @@
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="5"
                AnchorPane.leftAnchor="145"
+               AnchorPane.rightAnchor="5"
+               AnchorPane.bottomAnchor="5"
                minWidth="1150"
                maxWidth="1150"
                minHeight="590"

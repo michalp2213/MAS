@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -147,6 +148,7 @@ public class GUIController {
     public ComboBox wizytyOdbyteOdbyteComboBox;
     public TextField wizytyOdbyteOdbyteCzasField;
     public Label errorMessage;
+    public AnchorPane mainPane;
 
     private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 
