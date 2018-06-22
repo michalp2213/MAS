@@ -104,9 +104,9 @@ language plpgsql;
 
 CREATE OR REPLACE FUNCTION pacjent_check()
   RETURNS TRIGGER AS $pacjent_check$
-DECLARE pesel CHAR[];
-  p INTEGER;
-  d DATE;
+DECLARE pesel CHAR [];
+        p     INTEGER;
+        d     DATE;
 BEGIN
   IF NEW.pesel IS NULL OR length(NEW.pesel) <> 11
   THEN RETURN NEW; END IF;
@@ -114,17 +114,19 @@ BEGIN
   THEN RAISE EXCEPTION 'Niepoprawny PESEL';
   END IF;
   pesel = string_to_array(NEW.pesel, NULL);
-  p = pesel[10]::INTEGER;
+  p = pesel [10] :: INTEGER;
   IF (p % 2 = 0 AND NEW.plec = 'M') OR (p % 2 = 1 AND NEW.plec = 'F')
-    THEN RAISE EXCEPTION 'Zla plec';
-    END IF ;
-  p = pesel[3]::INT*10 + pesel[4]::INT;
-  IF p > 20 THEN
-    d = DATE('20'||pesel[1]||pesel[2]||'.'||(p-20)::TEXT||'.'||pesel[5]||pesel[6]);
-    ELSE
-    d = DATE('19'||pesel[1]||pesel[2]||'.'||p::TEXT||'.'||pesel[5]||pesel[6]);
+  THEN RAISE EXCEPTION 'Zla plec';
   END IF;
-  IF d <> NEW.data_urodzenia THEN
+  p = pesel [3] :: INT * 10 + pesel [4] :: INT;
+  IF p > 20
+  THEN
+    d = DATE('20' || pesel [1] || pesel [2] || '.' || (p - 20) :: TEXT || '.' || pesel [5] || pesel [6]);
+  ELSE
+    d = DATE('19' || pesel [1] || pesel [2] || '.' || p :: TEXT || '.' || pesel [5] || pesel [6]);
+  END IF;
+  IF d <> NEW.data_urodzenia
+  THEN
     RAISE EXCEPTION 'Nie poprawna data urodzenia';
   END IF;
   RETURN NEW;
@@ -640,7 +642,7 @@ BEGIN
   END IF;
   IF (SELECT count(*)
       FROM wizyty_odbyte
-      WHERE DATE(data) = NEW.data) = 0
+      WHERE DATE(data) = NEW.data AND wizyty_odbyte.id_lekarza = NEW.id_lekarza) = 0
   THEN RAISE EXCEPTION 'Nie mial wizyty';
   END IF;
   RETURN NEW;
@@ -654,24 +656,52 @@ CREATE TRIGGER ankiety_check
   FOR EACH ROW EXECUTE PROCEDURE ankiety_check();
 
 CREATE OR REPLACE FUNCTION lrul()
-  RETURNS TABLE(id_pracownka INTEGER, imie VARCHAR, nazwisko VARCHAR ) AS
+  RETURNS TABLE(id_pracownka INTEGER, imie VARCHAR, nazwisko VARCHAR) AS
 $$
 BEGIN
-  RETURN QUERY (SELECT p.id_pracownika, p.imie, p.nazwisko
-          FROM pracownicy p LEFT JOIN pacjenci_lpk l on p.id_pracownika = l.id_lekarza
-          WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(current_timestamp), DATE(current_timestamp + INTERVAL '1 DAY'))
-          GROUP BY p.id_pracownika
-          ORDER BY count(p.id_pracownika), p.id_pracownika
-          LIMIT 1);
+  RETURN QUERY (SELECT
+                  p.id_pracownika,
+                  p.imie,
+                  p.nazwisko
+                FROM pracownicy p LEFT JOIN pacjenci_lpk l on p.id_pracownika = l.id_lekarza
+                WHERE czy_aktywny_lekarz(p.id_pracownika, DATE(current_timestamp),
+                                         DATE(current_timestamp + INTERVAL '1 DAY'))
+                GROUP BY p.id_pracownika
+                ORDER BY count(p.id_pracownika), p.id_pracownika
+                LIMIT 1);
 END;
 $$
 language plpgsql;
 
 CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
-  WHERE old.id_roli = 1 DO INSTEAD NOTHING;
+  WHERE old.id_roli = 1 AND ((SELECT count(*)
+                              FROM pacjenci_lpk p
+                              WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                               FROM wizyty_odbyte
+                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
+                             OR (SELECT count(*)
+                                 FROM lekarze_specjalizacje
+                                 WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                           FROM wizyty_planowane
+                                                                           WHERE id_lekarza = OLD.id_pracownika) > 0
+                             OR (SELECT count(*)
+                                 FROM ankiety_lekarze
+                                 WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
 
 CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
-  WHERE OLD.id_roli = 1 DO INSTEAD NOTHING;
+  WHERE old.id_roli = 1 AND ((SELECT count(*)
+                              FROM pacjenci_lpk p
+                              WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                               FROM wizyty_odbyte
+                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
+                             OR (SELECT count(*)
+                                 FROM lekarze_specjalizacje
+                                 WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                           FROM wizyty_planowane
+                                                                           WHERE id_lekarza = OLD.id_pracownika) > 0
+                             OR (SELECT count(*)
+                                 FROM ankiety_lekarze
+                                 WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
 
 CREATE OR REPLACE FUNCTION historia_check()
   RETURNS TRIGGER AS $historia_check$
