@@ -21,6 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GUIController {
+    final private boolean SIMPLE_EXCEPTIONS = true;
+
     public TableView tableView;
     public VBox tableButtons;
     public Button rolePracownikowButton;
@@ -630,7 +632,8 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.pracownicy.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -640,7 +643,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.pacjenci.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -650,7 +653,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.pracownicy_role.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -660,7 +663,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.lekarze_specjalizacje.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -670,7 +673,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.pacjenci_lpk.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -680,7 +683,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.wizyty_planowane.niceGetContents(5));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -690,7 +693,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.wizyty_odbyte.niceGetContents(5));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -700,7 +703,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.skierowania.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -710,7 +713,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.historia_medyczna.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -720,7 +723,7 @@ public class GUIController {
         hideAllMenus();
         showTable(Tables.ankiety_lekarze.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -730,7 +733,7 @@ public class GUIController {
             hideAllMenus();
             showTable(Tables.role.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -740,7 +743,7 @@ public class GUIController {
             hideAllMenus();
             showTable(Tables.specjalizacje.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -750,7 +753,7 @@ public class GUIController {
             hideAllMenus();
             showTable(Tables.wydarzenia_medyczne.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -760,7 +763,7 @@ public class GUIController {
             hideAllMenus();
             showTable(Tables.cele_wizyty.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -769,7 +772,7 @@ public class GUIController {
             updateListView(pracownicyList, Tables.pracownicy.getContents(1));
             updateComboBox(pracownicyBox, Tables.pracownicy.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -782,7 +785,7 @@ public class GUIController {
             updateListView(pacjenciList, Tables.pacjenci.getContents(1));
             updateComboBox(pacjenciBox, Tables.pacjenci.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -814,7 +817,7 @@ public class GUIController {
                 updateListView(pracownicyRoleRoleList, roles);
             }
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -824,7 +827,7 @@ public class GUIController {
             updateComboBox(pracownicyRolePracownicyComboBox, filterTable(Tables.pracownicy.getContents(1), "id_pracownika", "imie", "nazwisko"));
             updateComboBox(pracownicyRoleRoleComboBox, filterTable(Tables.role.getContents(2), "nazwa"));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -849,7 +852,7 @@ public class GUIController {
                 updateListView(lekarzeSpecjalizacjeRoleList, roles);
             }
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -859,7 +862,7 @@ public class GUIController {
             updateComboBox(lekarzeSpecjalizacjeLekarzeComboBox, getSmallLekarze());
             updateComboBox(lekarzeSpecjalizacjeRoleComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -867,7 +870,7 @@ public class GUIController {
         try {
             updateListView(LPKList, Tables.pacjenci_lpk.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -880,7 +883,7 @@ public class GUIController {
             String sklejonyKozak = kozak.get(1).get(0) + ", " + kozak.get(1).get(1) + ", " + kozak.get(1).get(2);
             LPKLekarzeComboBox.getSelectionModel().select(sklejonyKozak);
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -898,7 +901,7 @@ public class GUIController {
             updateListView(wizytyPlanowaneList, Tables.wizyty_planowane.niceGetContents(6));
             updateComboBox(wizytyPlanowaneBox, Tables.wizyty_planowane.niceGetContents(6));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -910,7 +913,7 @@ public class GUIController {
             updateComboBox(wizytyPlanowanePacjenciComboBox, getSmallPacjenci());
             updateComboBox(wizytyPlanowaneSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(2), "nazwa"));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -919,7 +922,7 @@ public class GUIController {
             updateComboBox(wizytyOdbytePlanowaneComboBox, Tables.wizyty_planowane.niceGetContents(6));
             updateComboBox(wizytyOdbyteOdbyteComboBox, Tables.wizyty_odbyte.niceGetContents(6));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -952,7 +955,7 @@ public class GUIController {
             updateListView(skierowaniaList, Tables.skierowania.niceGetContents(1));
             updateComboBox(skierowaniaBox, Tables.skierowania.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -962,7 +965,7 @@ public class GUIController {
             updateComboBox(skierowaniaCeleComboBox, filterTable(Tables.cele_wizyty.getContents(1), "nazwa"));
             updateComboBox(skierowaniaSpecjalizacjeComboBox, filterTable(Tables.specjalizacje.getContents(1), "nazwa"));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -971,7 +974,7 @@ public class GUIController {
             updateListView(historiaMedycznaList, Tables.historia_medyczna.niceGetContents(1));
             updateComboBox(historiaMedycznaBox, Tables.historia_medyczna.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -981,7 +984,7 @@ public class GUIController {
             updateComboBox(historiaMedycznaPacjenciComboBox, getSmallPacjenci());
             updateComboBox(historiaMedycznaWydarzeniaComboBox, filterTable(Tables.wydarzenia_medyczne.getContents(2), "nazwa"));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1000,7 +1003,7 @@ public class GUIController {
                             " order by w.data;")
             );
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
     private void updateAnkietyMenuVolatile() {
@@ -1008,7 +1011,7 @@ public class GUIController {
             updateListView(ankietyList, Tables.ankiety_lekarze.niceGetContents(1));
             updateComboBox(ankietyBox, Tables.ankiety_lekarze.niceGetContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1032,7 +1035,7 @@ public class GUIController {
             updateListView(roleList, Tables.role.getContents(1));
             updateComboBox(roleBox, Tables.role.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1045,7 +1048,7 @@ public class GUIController {
             updateListView(specjalizacjeList, Tables.specjalizacje.getContents(1));
             updateComboBox(specjalizacjeBox, Tables.specjalizacje.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1058,7 +1061,7 @@ public class GUIController {
             updateListView(wydarzeniaMedyczneList, Tables.wydarzenia_medyczne.getContents(1));
             updateComboBox(wydarzeniaMedyczneBox, Tables.wydarzenia_medyczne.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1071,7 +1074,7 @@ public class GUIController {
             updateListView(celeWizytList, Tables.cele_wizyty.getContents(1));
             updateComboBox(celeWizytBox, Tables.cele_wizyty.getContents(1));
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1099,7 +1102,7 @@ public class GUIController {
             rankingiOpcjeBox.setVisible(true);
         }
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
         }
     }
 
@@ -1127,7 +1130,7 @@ public class GUIController {
     private void showRankingPressed() {
         try {
             if (rankingiTypBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz typ rankingu");
+                showError("ERROR: Wybierz typ rankingu");
                 return;
             }
             switch (rankingiTypBox.getSelectionModel().getSelectedItem().toString()) {
@@ -1160,7 +1163,7 @@ public class GUIController {
             }
             hideRankingiMenu();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1176,7 +1179,7 @@ public class GUIController {
             );
             updatePracownicyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1184,7 +1187,7 @@ public class GUIController {
     private void pracownicyMenuUpdatePressed() {
         try {
             if (pracownicyBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pracownika");
+                showError("ERROR: Wybierz pracownika");
                 return;
             }
             String imie = toEmptyString(pracownicyImieField.getText());
@@ -1202,7 +1205,7 @@ public class GUIController {
             );
             updatePracownicyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1217,7 +1220,7 @@ public class GUIController {
             }
             updatePracownicyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1239,7 +1242,7 @@ public class GUIController {
             );
             updatePacjenciMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1247,7 +1250,7 @@ public class GUIController {
     private void pacjenciMenuUpdatePressed() {
         try {
             if (pacjenciBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pacjenta");
+                showError("ERROR: Wybierz pacjenta");
                 return;
             }
             String imie = toEmptyString(pacjenciImieField.getText());
@@ -1267,7 +1270,7 @@ public class GUIController {
             );
             updatePacjenciMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1282,7 +1285,7 @@ public class GUIController {
             }
             updatePacjenciMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1291,7 +1294,7 @@ public class GUIController {
         try {
             if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null ||
                     pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pracownika i rolę");
+                showError("ERROR: Wybierz pracownika i rolę");
                 return;
             }
             String chosenRole = pracownicyRoleRoleComboBox.getSelectionModel().getSelectedItem().toString();
@@ -1299,7 +1302,7 @@ public class GUIController {
             Tables.pracownicy_role.insertItem(chosenRole, id_prac);
             updatePracownicyRoleMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1307,7 +1310,7 @@ public class GUIController {
     private void pracownicyRoleMenuDeletePressed() {
         try {
             if (pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pracownika");
+                showError("ERROR: Wybierz pracownika");
                 return;
             }
             String id_prac = toStringArray(pracownicyRolePracownicyComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1320,7 +1323,7 @@ public class GUIController {
             }
             updatePracownicyRoleMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1329,7 +1332,7 @@ public class GUIController {
         try {
             if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
                     lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz lekarza i specjalizację");
+                showError("ERROR: Wybierz lekarza i specjalizację");
                 return;
             }
             String chosenRole = lekarzeSpecjalizacjeRoleComboBox.getSelectionModel().getSelectedItem().toString();
@@ -1337,7 +1340,7 @@ public class GUIController {
             Tables.lekarze_specjalizacje.insertItem(chosenRole, id_lek);
             updateLekarzeSpecjalizacjeMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1345,7 +1348,7 @@ public class GUIController {
     private void lekarzeSpecjalizacjeMenuDeletePressed() {
         try {
             if (lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz lekarza");
+                showError("ERROR: Wybierz lekarza");
                 return;
             }
             String id_lek = toStringArray(lekarzeSpecjalizacjeLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1358,7 +1361,7 @@ public class GUIController {
             }
             updateLekarzeSpecjalizacjeMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1367,7 +1370,7 @@ public class GUIController {
         try {
             if (LPKPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                     LPKLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pacjenta i lekarza");
+                showError("ERROR: Wybierz pacjenta i lekarza");
                 return;
             }
             String id_pac = toStringArray(LPKPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1375,7 +1378,7 @@ public class GUIController {
             Tables.pacjenci_lpk.insertItem(id_pac, id_lek);
             updateLPKMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1392,7 +1395,7 @@ public class GUIController {
             }
             updateLPKMenuVolatile();
         } catch (SQLException e ) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1402,7 +1405,7 @@ public class GUIController {
             if (wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                     wizytyPlanowaneCelComboBox.getSelectionModel().getSelectedItem() == null ||
                     wizytyPlanowaneSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pacjenta, cel i specjalizację");
+                showError("ERROR: Wybierz pacjenta, cel i specjalizację");
                 return;
             }
             String id_pac = toStringArray(toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem()))[0];
@@ -1417,7 +1420,7 @@ public class GUIController {
             );
             updateWizytyPlanowaneMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1425,7 +1428,7 @@ public class GUIController {
     private void wizytyPlanowaneMenuUpdatePressed() {
         try {
             if (wizytyPlanowaneBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz wizytę");
+                showError("ERROR: Wybierz wizytę");
                 return;
             }
             String id_pac = toNullString(wizytyPlanowanePacjenciComboBox.getSelectionModel().getSelectedItem());
@@ -1445,7 +1448,7 @@ public class GUIController {
             );
             updateWizytyPlanowaneMenuVolatile();
         } catch (SQLException e ) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1461,7 +1464,7 @@ public class GUIController {
             }
             updateWizytyPlanowaneMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1469,7 +1472,7 @@ public class GUIController {
     public void wizytyOdbyteMenuUpdatePressed() {
         try {
             if (wizytyOdbyteOdbyteComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz wizytę");
+                showError("ERROR: Wybierz wizytę");
                 return;
             }
             String czas = toEmptyString(wizytyOdbyteOdbyteCzasField.getText());
@@ -1484,7 +1487,7 @@ public class GUIController {
             );
             updateWizytyOdbyteMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1492,7 +1495,7 @@ public class GUIController {
     public void wizytyOdbyteMenuInsertPressed() {
         try {
             if (wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz wizytę");
+                showError("ERROR: Wybierz wizytę");
                 return;
             }
             String id_wiz = toStringArray(wizytyOdbytePlanowaneComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1500,7 +1503,7 @@ public class GUIController {
             Tables.wizyty_planowane.moveToWizytyOdbyte(id_wiz, czas);
             updateWizytyOdbyteMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1509,7 +1512,7 @@ public class GUIController {
         try {
             if (skierowaniaSpecjalizacjeComboBox.getSelectionModel().getSelectedItem() == null ||
                     skierowaniaCeleComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz specjalizację i cel");
+                showError("ERROR: Wybierz specjalizację i cel");
                 return;
             }
             String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
@@ -1523,7 +1526,7 @@ public class GUIController {
             );
             updateSkierowaniaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1531,7 +1534,7 @@ public class GUIController {
     private void skierowaniaMenuUpdatePressed() {
         try {
             if (skierowaniaBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz skierowanie");
+                showError("ERROR: Wybierz skierowanie");
                 return;
             }
             String wiz_id = toEmptyString(skierowaniaWizytyComboBox.getText());
@@ -1548,7 +1551,7 @@ public class GUIController {
             );
             updateSkierowaniaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1563,7 +1566,7 @@ public class GUIController {
             }
             updateSkierowaniaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1572,7 +1575,7 @@ public class GUIController {
         try {
             if (historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem() == null ||
                     historiaMedycznaWydarzeniaComboBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz pacjenta i wydarzenie");
+                showError("ERROR: Wybierz pacjenta i wydarzenie");
                 return;
             }
             String pacjent_id = toStringArray(historiaMedycznaPacjenciComboBox.getSelectionModel().getSelectedItem().toString())[0];
@@ -1588,7 +1591,7 @@ public class GUIController {
             );
             updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1596,7 +1599,7 @@ public class GUIController {
     private void historiaMedycznaMenuUpdatePressed() {
         try {
             if (historiaMedycznaBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz wpis historii");
+                showError("ERROR: Wybierz wpis historii");
                 return;
             }
             String[] fields = toStringArray(historiaMedycznaBox.getSelectionModel().getSelectedItem().toString());
@@ -1618,7 +1621,7 @@ public class GUIController {
             );
             updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1634,7 +1637,7 @@ public class GUIController {
             }
             updateHistoriaMedycznaMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1642,7 +1645,7 @@ public class GUIController {
     private void ankietyMenuInsertPressed() {
         if (ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
                 ankietyDataComboBox.getSelectionModel().getSelectedItem() == null) {
-            showError("Wybierz lekarza i datę");
+            showError("ERROR: Wybierz lekarza i datę");
             return;
         }
         try {
@@ -1661,7 +1664,7 @@ public class GUIController {
             );
             updateAnkietyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1669,7 +1672,7 @@ public class GUIController {
     private void ankietyMenuUpdatePressed() {
         try {
             if (ankietyBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz ankietę");
+                showError("ERROR: Wybierz ankietę");
                 return;
             }
             String id_lekarza = ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null :
@@ -1690,7 +1693,7 @@ public class GUIController {
             );
             updateAnkietyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1705,7 +1708,7 @@ public class GUIController {
             }
             updateAnkietyMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1715,7 +1718,7 @@ public class GUIController {
             Tables.role.insertItem(toEmptyString(roleNazwaField.getText()));
             updateRoleMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1723,7 +1726,7 @@ public class GUIController {
     private void roleMenuUpdatePressed() {
         try {
             if (roleBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz rolę");
+                showError("ERROR: Wybierz rolę");
                 return;
             }
             String[] fields = toStringArray(roleBox.getSelectionModel().getSelectedItem().toString());
@@ -1732,7 +1735,7 @@ public class GUIController {
             );
             updateRoleMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1747,7 +1750,7 @@ public class GUIController {
             }
             updateRoleMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1757,7 +1760,7 @@ public class GUIController {
             Tables.specjalizacje.insertItem(toEmptyString(specjalizacjeNazwaField.getText()));
             updateSpecjalizacjeMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1765,7 +1768,7 @@ public class GUIController {
     private void specjalizacjeMenuUpdatePressed() {
         try {
             if (specjalizacjeBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz specjalizację");
+                showError("ERROR: Wybierz specjalizację");
                 return;
             }
             String[] fields = toStringArray(specjalizacjeBox.getSelectionModel().getSelectedItem().toString());
@@ -1774,7 +1777,7 @@ public class GUIController {
             );
             updateSpecjalizacjeMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1789,7 +1792,7 @@ public class GUIController {
             }
             updateSpecjalizacjeMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1799,7 +1802,7 @@ public class GUIController {
             Tables.wydarzenia_medyczne.insertItem(toEmptyString(wydarzeniaMedyczneNazwaField.getText()));
             updateWydarzeniaMedyczneMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1807,7 +1810,7 @@ public class GUIController {
     private void wydarzeniaMedyczneMenuUpdatePressed() {
         try {
             if (wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz wydarzenie");
+                showError("ERROR: Wybierz wydarzenie");
                 return;
             }
             String[] fields = toStringArray(wydarzeniaMedyczneBox.getSelectionModel().getSelectedItem().toString());
@@ -1816,7 +1819,7 @@ public class GUIController {
             );
             updateWydarzeniaMedyczneMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1831,7 +1834,7 @@ public class GUIController {
             }
             updateWydarzeniaMedyczneMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1841,7 +1844,7 @@ public class GUIController {
             Tables.cele_wizyty.insertItem(toEmptyString(celeWizytNazwaField.getText()));
             updateCeleWizytMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1849,7 +1852,7 @@ public class GUIController {
     private void celeWizytMenuUpdatePressed() {
         try {
             if (celeWizytBox.getSelectionModel().getSelectedItem() == null) {
-                showError("Wybierz cel");
+                showError("ERROR: Wybierz cel");
                 return;
             }
             String[] fields = toStringArray(celeWizytBox.getSelectionModel().getSelectedItem().toString());
@@ -1858,7 +1861,7 @@ public class GUIController {
             );
             updateCeleWizytMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -1873,7 +1876,7 @@ public class GUIController {
             }
             updateCeleWizytMenuVolatile();
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(e.getMessage().length() <= 50 ? e.getMessage() : "ERROR: Błędne dane");
         }
     }
 
@@ -2000,7 +2003,7 @@ public class GUIController {
                     "where r.nazwa = 'Lekarz'))" +
                     "order by p.id_pracownika;");
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
@@ -2009,7 +2012,7 @@ public class GUIController {
         try {
             return filterTable(Tables.pacjenci.getContents(1), "id_pacjenta", "imie", "nazwisko");
         } catch (SQLException e){
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
@@ -2025,7 +2028,7 @@ public class GUIController {
                             " order by s.nazwa;"
             );
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
@@ -2043,7 +2046,7 @@ public class GUIController {
                             "';"
             ).get(1).get(0);
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
@@ -2061,7 +2064,7 @@ public class GUIController {
                             ";"
             ).get(1).get(0);
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
@@ -2079,7 +2082,7 @@ public class GUIController {
                             "';"
             ).get(1).get(0);
         } catch (SQLException e) {
-            showError(e.getMessage());
+            showError(SIMPLE_EXCEPTIONS ? "ERROR: Wewnętrzny błąd bazy" : e.getMessage());
             return null;
         }
     }
