@@ -33,3 +33,6 @@ DROP FUNCTION IF EXISTS wizyta_planowana_check();
 DROP FUNCTION IF EXISTS nulls(ANYARRAY);
 DROP FUNCTION IF EXISTS ankiety_check();
 DROP FUNCTION IF EXISTS lrul();
+DROP FUNCTION IF EXISTS historia_check();
+DROP FUNCTION IF EXISTS pracownicy_role_check();
+DROP FUNCTION IF EXISTS lekarze_specjalizacje_check();

@@ -161,3 +161,5 @@ INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data
 INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) VALUES ( 119, 2, 63, 8, '2019-05-28 00:00:00.000000', '0 years 0 mons 0 days 0 hours 30 mins 0.00 secs');
 INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) VALUES ( 120, 54, 72, 11, '2021-02-09 00:00:00.000000', '0 years 0 mons 0 days 0 hours 49 mins 0.00 secs');
 INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) VALUES ( 120, 4, 17, 18, '2026-04-02 00:00:00.000000', '0 years 0 mons 0 days 0 hours 30 mins 0.00 secs');
+INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) VALUES ( 80, 4, 17, 18, '2018-06-22 10:00:00.000000', '0 years 0 mons 0 days 0 hours 30 mins 0.00 secs');
+INSERT INTO wizyty_planowane ( id_pacjenta, id_lekarza, cel, specjalizacja, data, szacowany_czas) VALUES ( 118, 60, 34, 17, '2018-06-22 11:00:00.000000', '0 years 0 mons 0 days 0 hours 8 mins 0.00 secs');
