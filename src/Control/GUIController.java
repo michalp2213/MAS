@@ -876,7 +876,7 @@ public class GUIController {
         updateComboBox(LPKLekarzeComboBox, getSmallLekarze());
         updateComboBox(LPKPacjenciComboBox, getSmallPacjenci());
         try {
-            ArrayList<ArrayList<String>> kozak = Database.executeQuery("select lrul();");
+            ArrayList<ArrayList<String>> kozak = Database.executeQuery("select * from lrul();");
             String sklejonyKozak = kozak.get(1).get(0) + ", " + kozak.get(1).get(1) + ", " + kozak.get(1).get(2);
             LPKLekarzeComboBox.getSelectionModel().select(sklejonyKozak);
         } catch (SQLException e) {
