@@ -1466,13 +1466,14 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   minWidth="150"
-                  maxWidth="150"/>
+                  maxWidth="150"
+                onAction="#updateAnkietyManuDataComboBox"/>
 
-        <TextField fx:id="ankietyDataDataField"
+        <ComboBox fx:id="ankietyDataComboBox"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="1"
-                   maxWidth="100"
-                   minWidth="100"/>
+                   maxWidth="150"
+                   minWidth="150"/>
 
         <ComboBox fx:id="ankietyUprzejmoscComboBox"
                   GridPane.columnIndex="2"
@@ -1511,8 +1512,8 @@
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="2"
                   GridPane.columnSpan="7"
-                  maxWidth="850"
-                  minWidth="850"/>
+                  maxWidth="900"
+                  minWidth="900"/>
 
         <Button fx:id="ankietyUpdateButton"
                 text="Ustaw"
@@ -1527,8 +1528,8 @@
                   GridPane.rowIndex="3"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="7"
-                  maxWidth="850"
-                  minWidth="850"
+                  maxWidth="900"
+                  minWidth="900"
                   maxHeight="200"/>
 
         <Button fx:id="ankietyDeleteButton"

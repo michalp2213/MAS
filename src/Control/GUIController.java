@@ -119,7 +119,7 @@ public class GUIController {
     public GridPane ankietyMenu;
     public Button closeAnkietyButton;
     public ComboBox ankietyLekarzeComboBox;
-    public TextField ankietyDataDataField;
+    public ComboBox ankietyDataComboBox;
     public ComboBox ankietyUprzejmoscComboBox;
     public ComboBox ankietyOpanowanieComboBox;
     public ComboBox ankietyInformacyjnoscComboBox;
@@ -985,6 +985,24 @@ public class GUIController {
         }
     }
 
+    @FXML
+    private void updateAnkietyManuDataComboBox() {
+        if (ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        try {
+            String id_lek = toStringArray(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem().toString())[0];
+            updateComboBox(ankietyDataComboBox,
+                    Database.executeQuery("select w.data::date " +
+                            "from wizyty_odbyte w " +
+                            "where w.id_lekarza = " +
+                            id_lek +
+                            " order by w.data;")
+            );
+        } catch (SQLException e) {
+            showError(e.getMessage());
+        }
+    }
     private void updateAnkietyMenuVolatile() {
         try {
             updateListView(ankietyList, Tables.ankiety_lekarze.niceGetContents(1));
@@ -1003,6 +1021,10 @@ public class GUIController {
         ankietyInformacyjnoscComboBox.setItems(vals);
         ankietyOpanowanieComboBox.setItems(vals);
         ankietyUprzejmoscComboBox.setItems(vals);
+        ankietyDokladnoscBadanComboBox.getSelectionModel().clearSelection();
+        ankietyInformacyjnoscComboBox.getSelectionModel().clearSelection();
+        ankietyOpanowanieComboBox.getSelectionModel().clearSelection();
+        ankietyUprzejmoscComboBox.getSelectionModel().clearSelection();
     }
 
     private void updateRoleMenuVolatile() {
@@ -1087,8 +1109,7 @@ public class GUIController {
         rankingiTypBox.setItems(typItems);
     }
 
-    @FXML
-    public String zdepolonizujCeche(String s) {
+    private String zdepolonizujCeche(String s) {
         switch (s) {
             case "uprzejmość":
                 return "uprzejmosc";
@@ -1619,9 +1640,14 @@ public class GUIController {
 
     @FXML
     private void ankietyMenuInsertPressed() {
+        if (ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ||
+                ankietyDataComboBox.getSelectionModel().getSelectedItem() == null) {
+            showError("Wybierz lekarza i datę");
+            return;
+        }
         try {
-            String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
-            String data = toEmptyString(ankietyDataDataField.getText());
+            String id_lekarza = toStringArray(toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem()))[0];
+            String data = toNullString(ankietyDataComboBox.getSelectionModel().getSelectedItem());
             String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
             String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
             String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
@@ -1646,8 +1672,9 @@ public class GUIController {
                 showError("Wybierz ankietę");
                 return;
             }
-            String id_lekarza = toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem());
-            String data = toEmptyString(ankietyDataDataField.getText());
+            String id_lekarza = ankietyLekarzeComboBox.getSelectionModel().getSelectedItem() == null ? null :
+                    toStringArray(toNullString(ankietyLekarzeComboBox.getSelectionModel().getSelectedItem()))[0];
+            String data = toNullString(ankietyDataComboBox.getSelectionModel().getSelectedItem());
             String up = toNullString(ankietyUprzejmoscComboBox.getSelectionModel().getSelectedItem());
             String op = toNullString(ankietyOpanowanieComboBox.getSelectionModel().getSelectedItem());
             String inf = toNullString(ankietyInformacyjnoscComboBox.getSelectionModel().getSelectedItem());
