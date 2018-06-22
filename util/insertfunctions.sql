@@ -291,7 +291,8 @@ BEGIN
   END IF;
   IF (SELECT count(*)
       FROM lekarze_specjalizacje ls
-        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja) = 0
+        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja AND
+                             p.id_pracownika = NEW.id_lekarza) = 0
   THEN RAISE EXCEPTION 'Lekarz nie posiada specjalizacji';
   END IF;
   IF (SELECT count(*)
@@ -333,7 +334,8 @@ BEGIN
   END IF;
   IF (SELECT count(*)
       FROM lekarze_specjalizacje ls
-        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja) = 0
+        JOIN pracownicy p ON ls.id_lekarza = p.id_pracownika AND ls.id_specjalizacji = NEW.specjalizacja AND
+                             p.id_pracownika = NEW.id_lekarza) = 0
   THEN RAISE EXCEPTION 'Lekarz nie posiada specjalizacji';
   END IF;
   IF (SELECT count(*)
@@ -673,53 +675,54 @@ END;
 $$
 language plpgsql;
 
-CREATE RULE pracownicy_role_delete AS ON DELETE TO pracownicy_role
-  WHERE old.id_roli = 1 AND ((SELECT count(*)
-                              FROM pacjenci_lpk p
-                              WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                              FROM wizyty_odbyte
-                                                                              WHERE id_lekarza = OLD.id_pracownika) > 0
-                             OR (SELECT count(*)
-                                 FROM lekarze_specjalizacje
-                                 WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                               FROM wizyty_planowane
-                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
-                             OR (SELECT count(*)
-                                 FROM ankiety_lekarze
-                                 WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
+CREATE OR REPLACE FUNCTION pracownicy_role_check()
+  RETURNS TRIGGER AS $pracownicy_role_check$
+BEGIN
+  IF OLD.id_roli = 1 AND ((SELECT count(*)
+                           FROM pacjenci_lpk p
+                           WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                           FROM wizyty_odbyte
+                                                                           WHERE id_lekarza = OLD.id_pracownika) > 0
+                          OR (SELECT count(*)
+                              FROM lekarze_specjalizacje
+                              WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
+                                                                            FROM wizyty_planowane
+                                                                            WHERE id_lekarza = OLD.id_pracownika) > 0
+                          OR (SELECT count(*)
+                              FROM ankiety_lekarze
+                              WHERE id_lekarza = OLD.id_pracownika) > 0)
+  THEN RAISE EXCEPTION 'Nie mozna usunac roli';
+  END IF;
+  RETURN OLD;
+END;
+$pracownicy_role_check$
+language plpgsql;
 
-CREATE RULE pracownicy_update AS ON UPDATE TO pracownicy_role
-  WHERE old.id_roli = 1 AND ((SELECT count(*)
-                              FROM pacjenci_lpk p
-                              WHERE p.id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                              FROM wizyty_odbyte
-                                                                              WHERE id_lekarza = OLD.id_pracownika) > 0
-                             OR (SELECT count(*)
-                                 FROM lekarze_specjalizacje
-                                 WHERE id_lekarza = OLD.id_pracownika) > 0 OR (SELECT count(*)
-                                                                               FROM wizyty_planowane
-                                                                               WHERE id_lekarza = OLD.id_pracownika) > 0
-                             OR (SELECT count(*)
-                                 FROM ankiety_lekarze
-                                 WHERE id_lekarza = OLD.id_pracownika) > 0) DO INSTEAD NOTHING;
+CREATE TRIGGER pracownicy_role_check
+  BEFORE DELETE OR UPDATE
+  ON pracownicy_role
+  FOR EACH ROW EXECUTE PROCEDURE pracownicy_role_check();
 
-CREATE RULE specjalizacje_lekarze_delete AS ON DELETE TO lekarze_specjalizacje
-  WHERE (SELECT count(*)
-         FROM wizyty_planowane
-         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_planowane.id_lekarza = OLD.id_lekarza) > 0 OR
-        (SELECT count(*)
-         FROM wizyty_odbyte
-         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_odbyte.id_lekarza = OLD.id_lekarza) > 0
-DO INSTEAD NOTHING;
+CREATE OR REPLACE FUNCTION specjalizacje_lekarze_check()
+  RETURNS TRIGGER AS $specjalizacje_lekarze_check$
+BEGIN
+  IF (SELECT count(*)
+      FROM wizyty_planowane
+      WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_planowane.id_lekarza = OLD.id_lekarza) > 0 OR
+     (SELECT count(*)
+      FROM wizyty_odbyte
+      WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_odbyte.id_lekarza = OLD.id_lekarza) > 0
+  THEN RAISE EXCEPTION 'Nie mozna usunac specjalizacji';
+  END IF;
+  RETURN OLD;
+END;
+$specjalizacje_lekarze_check$
+language plpgsql;
 
-CREATE RULE specjalizacje_lekarze_update AS ON UPDATE TO lekarze_specjalizacje
-  WHERE (SELECT count(*)
-         FROM wizyty_planowane
-         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_planowane.id_lekarza = OLD.id_lekarza) > 0 OR
-        (SELECT count(*)
-         FROM wizyty_odbyte
-         WHERE specjalizacja = OLD.id_specjalizacji AND wizyty_odbyte.id_lekarza = OLD.id_lekarza) > 0
-DO INSTEAD NOTHING;
+CREATE TRIGGER specjalizacje_lekarze_check
+  BEFORE DELETE OR UPDATE
+  ON lekarze_specjalizacje
+  FOR EACH ROW EXECUTE PROCEDURE specjalizacje_lekarze_check();
 
 CREATE OR REPLACE FUNCTION historia_check()
   RETURNS TRIGGER AS $historia_check$
